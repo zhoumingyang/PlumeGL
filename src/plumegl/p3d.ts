@@ -1,4 +1,4 @@
-import { Mesh } from './mesh';
+import { Primitive } from './primitive';
 import { Texture } from './texture';
 import { State } from './state';
 import { Util } from './util';
@@ -6,17 +6,17 @@ import { CONSTANT } from './constant';
 
 let uuid = 0;
 export class P3D {
-    public mesh: Mesh;
+    public primitive: Primitive;
     public texture: Texture;
     public state: State;
     public ready: boolean;
     public uid: string;
     public type: Symbol;
 
-    constructor(mesh: Mesh, texture?: Texture, state?: State) {
-        this.mesh = mesh;
+    constructor(primitive: Primitive, texture?: Texture, state?: State) {
+        this.primitive = primitive;
         this.texture = texture;
-        this.state = state || new State(mesh.gl);
+        this.state = state || new State(primitive.gl);
         this.ready = false;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
@@ -24,7 +24,7 @@ export class P3D {
     }
 
     private _prepareInner(slots: number[] = [0]): void {
-        this.mesh && this.mesh.prepare();
+        this.primitive && this.primitive.prepare();
         if (this.texture) {
             slots.forEach((slot) => {
                 this.texture.bind(slot);
@@ -48,15 +48,15 @@ export class P3D {
     }
 
     public unPrepare(): void {
-        this.mesh && this.mesh.unPrepare();
-        if (this.texture && this.mesh) {
-            Texture.unBind(this.mesh.gl);
+        this.primitive && this.primitive.unPrepare();
+        if (this.texture && this.primitive) {
+            Texture.unBind(this.primitive.gl);
         }
         this.ready = false;
     }
 
-    public changeMesh(mesh: Mesh) {
-        this.mesh = mesh;
+    public changeMesh(mesh: Primitive) {
+        this.primitive = mesh;
         this.ready = false;
     }
 
@@ -72,7 +72,7 @@ export class P3D {
 
     public draw(arrayArg?: any, elementArg?: any, option?: any): void {
         if (this.ready) {
-            this.mesh && this.mesh.draw(arrayArg, elementArg, option);
+            this.primitive && this.primitive.draw(arrayArg, elementArg, option);
         }
     }
 
@@ -98,9 +98,9 @@ export class P3D {
     }
 
     public disposeMesh(): void {
-        if (this.mesh) {
-            this.mesh.dispose();
-            this.mesh = null;
+        if (this.primitive) {
+            this.primitive.dispose();
+            this.primitive = null;
         }
     }
 }
