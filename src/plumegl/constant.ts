@@ -1,0 +1,21 @@
+export const CONSTANT = {
+    ARRAYBUFFER: Symbol('ArrayBuffer'),
+    FRAMEBUFFER: Symbol('FrameBuffer'),
+    INDEXBUFFER: Symbol('IndexBuffer'),
+    RENDERBUFFER: Symbol('RenderBuffer'),
+    UNIFORMBUFFER: Symbol('UniformBuffer'),
+    TEXTURE: Symbol('Texture'),
+    TEXTURE2D: Symbol('Texture2D'),
+    TEXTURECUBE: Symbol('TextureCube'),
+    SAMPLER: Symbol('Sampler'),
+    PRIMITIVE: Symbol('Primitive'),
+    MESH: Symbol('Mesh'),
+    LINE: Symbol('Line'),
+    POINT: Symbol('Point'),
+    SCENE: Symbol('Scene'),
+    P3D: Symbol('P3D'),
+    SHADER: Symbol('Shader'),
+    STATE: Symbol('State'),
+    VAO: Symbol('Vao'),
+};
+Object.freeze(CONSTANT);
