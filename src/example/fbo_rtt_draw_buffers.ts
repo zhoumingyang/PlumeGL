@@ -88,7 +88,7 @@ export const FboRttDrawBuffers = () => {
     texture0.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
     texture0.setTextureFromData(null, windowSize.x, windowSize.y);
     texture0.wrapMode(true);
-    texture0.setFilterMode(false);
+    texture0.filterMode(false);
     PlumeGL.Texture2D.unBind(gl);
     texture0.attachTo(gl.DRAW_FRAMEBUFFER);
 
@@ -97,7 +97,7 @@ export const FboRttDrawBuffers = () => {
     texture1.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
     texture1.setTextureFromData(null, windowSize.x, windowSize.y);
     texture1.wrapMode(true);
-    texture1.setFilterMode(false);
+    texture1.filterMode(false);
     PlumeGL.Texture2D.unBind(gl);
     texture1.attachTo(gl.DRAW_FRAMEBUFFER);
 

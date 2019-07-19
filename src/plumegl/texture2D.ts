@@ -70,11 +70,15 @@ export class Texture2D extends Texture {
         _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, mode);
     }
 
-    public setFilterMode(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false): void {
+    public setFilterMode(minFiler: number, magFiler?: number): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        const filter = this.textureFilter(!!linear, !!mipmap, !!mipmapLinear);
-        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, this.textureFilter(!!linear, false, false));
-        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, filter);
+        if (!minFiler && !magFiler) {
+            this.filterMode();
+            return;
+        }
+        magFiler = magFiler || minFiler;
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, minFiler);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, magFiler);
     }
 
     public mipmap(): void {

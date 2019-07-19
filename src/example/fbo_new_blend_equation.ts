@@ -117,7 +117,7 @@ export const FboNewBlenEquation = () => {
     ImageLoader.load('../res/Di-3d.png', (image: any) => {
         texture.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
         texture.setTextureFromImage(image);
-        texture.setFilterMode(true, false, false);
+        texture.filterMode(true, false, false);
         texture.mipmap();
         render();
     });

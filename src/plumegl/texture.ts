@@ -142,13 +142,21 @@ export class Texture {
         this.setWrapMode(_gl.MIRRORED_REPEAT);
     }
 
+    public wrapMode(clampEdge: boolean = true) {
+
+    }
+
+    public filterMode(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false) {
+
+    }
+
     public setWrapMode(mode: number): void {
         if (mode === undefined) {
             return;
         }
     }
 
-    public setFilterMode(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false): void {
+    public setFilterMode(minFiler: number, magFiler?: number): void {
 
     }
 
