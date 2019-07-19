@@ -95,7 +95,7 @@ export const FboMultiSample = () => {
     };
     const tmpTexture = new PlumeGL.Texture2D(gl);
     tmpTexture.setTextureFromData(null, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
-    tmpTexture.setFilterMode(false, false, false);
+    tmpTexture.filterMode(false, false, false);
     PlumeGL.Texture2D.unBind(gl);
 
     // -- Init Frame Buffers

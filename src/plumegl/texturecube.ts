@@ -30,6 +30,20 @@ export class TextureCube extends Texture {
         gl && gl.bindTexture(gl.TEXTURE_CUBE_MAP, 0);
     }
 
+    public wrapMode(clampEdge: boolean = true): void {
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const mode: number = clampEdge === true ? _gl.CLAMP_TO_EDGE : _gl.REPEAT;
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_S, mode);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, mode);
+    }
+
+    public filterMode(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false): void {
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const filter = this.textureFilter(!!linear, !!mipmap, !!mipmapLinear);
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, this.textureFilter(!!linear, false, false));
+        _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, filter);
+    }
+
     public setWrapMode(mode: number): void {
         if (mode === undefined) {
             return;
@@ -39,11 +53,15 @@ export class TextureCube extends Texture {
         _gl.texParameteri(_gl.TEXTURE_CUBE_MAP, _gl.TEXTURE_WRAP_T, mode);
     }
 
-    public setFilterMode(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false): void {
+    public setFilterMode(minFiler: number, magFiler?: number): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        const filter = this.textureFilter(!!linear, !!mipmap, !!mipmapLinear);
-        _gl.texParameteri(_gl.TEXTURE_CUBE_MAP, _gl.TEXTURE_MAG_FILTER, this.textureFilter(!!linear, false, false));
-        _gl.texParameteri(_gl.TEXTURE_CUBE_MAP, _gl.TEXTURE_MIN_FILTER, filter);
+        if (!minFiler && !magFiler) {
+            this.filterMode();
+            return;
+        }
+        magFiler = magFiler || minFiler;
+        _gl.texParameteri(_gl.TEXTURE_CUBE_MAP, _gl.TEXTURE_MIN_FILTER, minFiler);
+        _gl.texParameteri(_gl.TEXTURE_CUBE_MAP, _gl.TEXTURE_MAG_FILTER, magFiler);
     }
 
     public setTextureFromImage(image: TexImageSource, index?: number): void {
