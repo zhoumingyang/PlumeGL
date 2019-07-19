@@ -66,8 +66,10 @@ export class FrameBuffer {
 
     public dispose(): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        _gl.bindFramebuffer(_gl.FRAMEBUFFER, null);
-        _gl.deleteFramebuffer(this.instance);
+        if(_gl) {
+            _gl.bindFramebuffer(_gl.FRAMEBUFFER, null);
+            _gl.deleteFramebuffer(this.instance);
+        }
         const mountArray = this.mountArray;
         mountArray.forEach((mount: (Texture | RenderBuffer)) => {
             mount.dispose();
@@ -116,7 +118,7 @@ export class FrameBuffer {
         }
     }
 
-    static blitFrameBUffer(gl: WebGL2RenderingContext,
+    static blitFrameBuffer(gl: WebGL2RenderingContext,
         srcX0: GLint, srcY0: GLint, srcX1: GLint, srcY1: GLint,
         dstX0: GLint, dstY0: GLint, dstX1: GLint, dstY1: GLint,
         mask: number, filter: GLenum): void {

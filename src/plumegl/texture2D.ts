@@ -27,7 +27,7 @@ export class Texture2D extends Texture {
     }
 
     static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl.bindTexture(gl.TEXTURE_2D, null);
+        gl && gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
     public setTextureFromImage(image: TexImageSource, index?: number): void {

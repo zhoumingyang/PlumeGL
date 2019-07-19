@@ -31,12 +31,12 @@ export class RenderBuffer {
     }
 
     static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+        gl && gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     }
 
     public dispose(): void {
         RenderBuffer.unBind(this.gl);
-        this.gl.deleteRenderbuffer(this.instance);
+        this.gl && this.gl.deleteRenderbuffer(this.instance);
         this.instance = null;
         this.gl = null;
     }
@@ -56,10 +56,24 @@ export class RenderBuffer {
         }
     }
 
+    public allocateMultisample(samples: number = 4): void {
+        if (!this._valid && this.width > 0 && this.height > 0) {
+            this._renderBufferStorageMultisample(samples);
+            this._valid = true;
+        }
+    }
+
     private _renderBufferStorage(): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
         _gl.bindRenderbuffer(_gl.RENDERBUFFER, this.instance);
         _gl.renderbufferStorage(_gl.RENDERBUFFER, this.format, this.width, this.height);
+        _gl.bindRenderbuffer(_gl.RENDERBUFFER, null);
+    }
+
+    private _renderBufferStorageMultisample(samples: number = 4): void {
+        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        _gl.bindRenderbuffer(_gl.RENDERBUFFER, this.instance);
+        _gl.renderbufferStorageMultisample(_gl.RENDERBUFFER, samples, this.format, this.width, this.height);
         _gl.bindRenderbuffer(_gl.RENDERBUFFER, null);
     }
 }

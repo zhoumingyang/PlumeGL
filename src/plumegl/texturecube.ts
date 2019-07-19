@@ -27,7 +27,7 @@ export class TextureCube extends Texture {
     }
 
     static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl.bindTexture(gl.TEXTURE_CUBE_MAP, 0);
+        gl && gl.bindTexture(gl.TEXTURE_CUBE_MAP, 0);
     }
 
     public setWrapMode(mode: number): void {

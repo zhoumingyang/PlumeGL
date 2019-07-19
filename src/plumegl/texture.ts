@@ -23,9 +23,9 @@ export class Texture {
         if (uuid >= 10) uuid = 0;
         this.width = 0;
         this.height = 0;
-        this.format = gl.UNSIGNED_BYTE;
-        this.internal = gl.UNSIGNED_BYTE;
-        this.colorType = gl.RGB;
+        this.format = gl.RGBA;
+        this.internal = gl.RGBA;
+        this.colorType = gl.UNSIGNED_BYTE;
         this.samplers = {};
         this.attachBuffer = undefined;
         this.type = CONSTANT.TEXTURE;
@@ -108,7 +108,7 @@ export class Texture {
 
     public dispose(): void {
         Texture.unBind(this.gl);
-        this.gl.deleteTexture(this.instance);
+        this.gl && this.gl.deleteTexture(this.instance);
         for (let key in this.samplers) {
             const sampler = this.samplers[key];
             sampler && sampler.dispose();

@@ -363,9 +363,11 @@ export class Shader {
     public dispose(): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
         this.unUse();
-        _gl.deleteProgram(this.instance);
-        _gl.deleteShader(this.vertexShader);
-        _gl.deleteShader(this.fragmentShader);
+        if(_gl) {
+            _gl.deleteProgram(this.instance);
+            _gl.deleteShader(this.vertexShader);
+            _gl.deleteShader(this.fragmentShader);
+        }
         this.uniformBufferMap.forEach((uniformBuffer) => {
             uniformBuffer.dispose();
         });

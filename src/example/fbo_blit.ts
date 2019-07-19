@@ -132,7 +132,7 @@ export const FboBlit = () => {
                 if ((i + j) % 2) {
                     continue;
                 }
-                PlumeGL.FrameBuffer.blitFrameBUffer(gl,
+                PlumeGL.FrameBuffer.blitFrameBuffer(gl,
                     0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
                     FRAMEBUFFER_SIZE.x / TILE * (i + 0) + BORDER,
                     FRAMEBUFFER_SIZE.x / TILE * (j + 0) + BORDER,

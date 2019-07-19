@@ -24,7 +24,7 @@ export class UniformBuffer {
     }
 
     static unBind(gl: WebGL2RenderingContext): void {
-        gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+        gl && gl.bindBuffer(gl.UNIFORM_BUFFER, null);
     }
 
     public setBufferData(_array: any, option?: any): void {
@@ -51,7 +51,7 @@ export class UniformBuffer {
     public dispose(): void {
         const _gl: WebGL2RenderingContext = this.gl;
         UniformBuffer.unBind(_gl);
-        _gl.deleteBuffer(this.instance);
+        _gl && _gl.deleteBuffer(this.instance);
         this.instance = undefined;
         this.gl = undefined;
         this.drawType = undefined;
