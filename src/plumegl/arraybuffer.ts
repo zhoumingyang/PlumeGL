@@ -51,7 +51,7 @@ export class ArrayBuffer {
     }
 
     static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+        gl && gl.bindBuffer(gl.ARRAY_BUFFER, null);
     }
 
     public setBufferData(_array: any): void {
@@ -100,7 +100,7 @@ export class ArrayBuffer {
 
     public dispose(): void {
         ArrayBuffer.unBind(this.gl);
-        this.gl.deleteBuffer(this.instance);
+        this.gl && this.gl.deleteBuffer(this.instance);
         this.instance = null;
         this.gl = null;
         this.attribs = [];

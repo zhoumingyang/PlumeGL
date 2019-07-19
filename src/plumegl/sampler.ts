@@ -47,7 +47,7 @@ export class Sampler {
     }
 
     public dispose(): void {
-        this.gl.deleteSampler(this.instance);
+        this.gl && this.gl.deleteSampler(this.instance);
         this.instance = null;
         this.gl = null;
     }

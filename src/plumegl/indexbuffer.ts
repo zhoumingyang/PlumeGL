@@ -39,7 +39,7 @@ export class IndexBuffer {
 
     public dispose(): void {
         this.unBind();
-        this.gl.deleteBuffer(this.instance);
+        this.gl && this.gl.deleteBuffer(this.instance);
         this.instance = null;
         this.gl = null;
     }
