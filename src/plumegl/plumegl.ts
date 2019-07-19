@@ -17,7 +17,7 @@ import { State } from './state';
 import { P3D } from './p3d';
 import { UniformBuffer } from './uniformbuffer';
 import { Scene } from './scene';
-import { CONSTANT } from './constant';
+import { CONSTANT, STATE } from './constant';
 
 export const PlumeGL = {
     ArrayBuffer,
@@ -39,5 +39,6 @@ export const PlumeGL = {
     State,
     P3D,
     Scene,
-    CONSTANT
+    CONSTANT,
+    STATE
 };

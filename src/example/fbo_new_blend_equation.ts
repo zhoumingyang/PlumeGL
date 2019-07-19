@@ -130,8 +130,8 @@ export const FboNewBlenEquation = () => {
 
     const matrix = new Float32Array(matrixData);
     function render() {
-        scene.stateChange('colorclear');
-        scene.stateChange('sceneclear');
+        scene.stateChange(PlumeGL.STATE.COLORCLERA);
+        scene.stateChange(PlumeGL.STATE.SCENECLEAR);
         scene.forEachRender((shaderObj: any) => {
             shaderObj.use();
             shaderObj.setUniformData("mvp", [matrix, false]);
@@ -149,11 +149,11 @@ export const FboNewBlenEquation = () => {
                         _p3d.draw({ start: 0, cnt: 6 });
                     }
                     else if (i == Corners.BOTTOM_RIGHT) {
-                        _p3d.state.setBlendFunc('min').change();
+                        _p3d.state.setBlendFunc(PlumeGL.STATE.FUNC_MIN).change();
                         _p3d.draw({ start: 0, cnt: 6 });
                     }
                     else if (i == Corners.BOTTOM_LEFT) {
-                        _p3d.state.setBlendFunc('max').change();
+                        _p3d.state.setBlendFunc(PlumeGL.STATE.FUNC_MAX).change();
                         _p3d.draw({ start: 0, cnt: 6 });
                     }
                 }

@@ -129,7 +129,7 @@ export const FboMultiSample = () => {
 
     tmpFrameBuffers[FRAMEBUFFER.RENDERBUFFER].setReadBuffer();
     tmpFrameBuffers[FRAMEBUFFER.COLORBUFFER].setDrawBuffer();
-    sceneState.setClearBuffer('color', 0, [0.0, 0.0, 0.0, 1.0]).change();
+    sceneState.setClearBuffer(PlumeGL.STATE.COLOR_BUFFER, 0, [0.0, 0.0, 0.0, 1.0]).change();
     PlumeGL.FrameBuffer.blitFrameBuffer(gl,
         0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
         0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
