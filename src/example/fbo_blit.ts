@@ -106,8 +106,8 @@ export const FboBlit = () => {
         // Pass 1
         framebufferRender.bind();
         scene.state.setViewPort(0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y).change();
-        scene.state.setClearBuffer('color', 0, [0.3, 0.3, 0.3, 1.0]).change();
-        scene.state.setMark('viewport', false);
+        scene.state.setClearBuffer(PlumeGL.STATE.COLOR_BUFFER, 0, [0.3, 0.3, 0.3, 1.0]).change();
+        scene.state.setMark(PlumeGL.STATE.VIEWPORT, false);
         const SCALE = new Float32Array(sclData);
         scene.forEachRender((shaderObj: any) => {
             shaderObj.use();
@@ -124,7 +124,7 @@ export const FboBlit = () => {
         // Blit framebuffers
         framebufferRender.setReadBuffer();
         framebufferResolve.setDrawBuffer();
-        scene.state.setClearBuffer('color', 0, [0.7, 0.0, 0.0, 1.0]).change();
+        scene.state.setClearBuffer(PlumeGL.STATE.COLOR_BUFFER, 0, [0.7, 0.0, 0.0, 1.0]).change();
         const TILE = 4;
         const BORDER = 2;
         for (let j = 0; j < TILE; j++) {
@@ -146,7 +146,7 @@ export const FboBlit = () => {
         // Pass 2
         PlumeGL.FrameBuffer.unBind(gl);
         scene.state.setViewPort(0, 0, cav.width, cav.height).change();
-        scene.state.setClearBuffer('color', 0, [0.7, 0.0, 0.0, 1.0]).change();
+        scene.state.setClearBuffer(PlumeGL.STATE.COLOR_BUFFER, 0, [0.7, 0.0, 0.0, 1.0]).change();
         const IDENTITY = new Float32Array(idenData);
         scene.forEachRender((shaderObj: any) => {
             shaderObj.use();

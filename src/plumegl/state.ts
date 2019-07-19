@@ -1,4 +1,4 @@
-import { CONSTANT } from './constant';
+import { CONSTANT, STATE } from './constant';
 
 interface state {
     value: any,
@@ -8,28 +8,9 @@ interface state {
     setFunction?: Function;
 }
 
-const DEPTHFUNC = {
-    NeverDepth: 'never',
-    AlwaysDepth: 'alway',
-    LessDepth: 'less',
-    LessEqualDepth: 'lessEqual',
-    EqualDepth: 'equal',
-    GreaterEqualDepth: 'greaterEqual',
-    GreaterDepth: 'greater',
-    NotEqualDepth: 'notEqual'
-};
-
-const BLENDFUNC = {
-    Add: 'add',
-    Substract: 'substract',
-    ReverseSubstract: 'reverseSubstract',
-    Min: 'min',
-    Max: 'max',
-};
-
 export class State {
     public gl: WebGLRenderingContext | WebGL2RenderingContext;
-    public type:Symbol;
+    public type: Symbol;
     public sceneClear: state;
     public viewport: state;
     public bufferClear: state;
@@ -61,7 +42,7 @@ export class State {
             value: gl.COLOR_BUFFER_BIT,
             defalutValue: gl.COLOR_BUFFER_BIT,
             setMark: false,
-            stateName: 'sceneclear',
+            stateName: STATE.SCENECLEAR,
             setFunction: (option?: any) => {
                 this.glClear(option);
             }
@@ -81,7 +62,7 @@ export class State {
                 height: 0
             },
             setMark: false,
-            stateName: 'viewport',
+            stateName: STATE.VIEWPORT,
             setFunction: (option?: any) => {
                 this.glViewPort(option);
             }
@@ -98,7 +79,7 @@ export class State {
                 drawBuffer: 0,
                 param: [0, 0, 0, 1.0],
             },
-            stateName: 'bufferclear',
+            stateName: STATE.BUFFERCLEAR,
             setMark: false,
             setFunction: (option?: any) => {
                 this.glClearBuffer(option);
@@ -110,7 +91,7 @@ export class State {
             value: { r: 0, g: 0, b: 0, a: 0 },
             defalutValue: { r: 0, g: 0, b: 0, a: 0 },
             setMark: false,
-            stateName: 'colorclear',
+            stateName: STATE.COLORCLERA,
             setFunction: (option?: any) => {
                 this.glClearColor(option);
             }
@@ -120,7 +101,7 @@ export class State {
             value: { r: false, g: false, b: false, a: false },
             defalutValue: { r: false, g: false, b: false, a: false },
             setMark: false,
-            stateName: 'colormask',
+            stateName: STATE.COLORMASK,
             setFunction: (option?: any) => {
                 this.glColorMask(option);
             }
@@ -131,7 +112,7 @@ export class State {
             value: true,
             defalutValue: true,
             setMark: false,
-            stateName: 'depthtest',
+            stateName: STATE.DEPTHTEST,
             setFunction: (option?: any) => {
                 this.glDepthTest(option);
             }
@@ -141,17 +122,17 @@ export class State {
             value: false,
             defalutValue: false,
             setMark: false,
-            stateName: 'depthmask',
+            stateName: STATE.DEPTHMASK,
             setFunction: (option?: any) => {
                 this.glDepthMask(option);
             }
         };
 
         this.depthFunc = {
-            value: DEPTHFUNC.LessEqualDepth,
-            defalutValue: DEPTHFUNC.LessEqualDepth,
+            value: STATE.FUNC_LESSEQUAL,
+            defalutValue: STATE.FUNC_LESSEQUAL,
             setMark: false,
-            stateName: 'depthfunc',
+            stateName: STATE.DEPTHFUNC,
             setFunction: (option?: any) => {
                 this.glDepthFunc(option);
             }
@@ -161,7 +142,7 @@ export class State {
             value: 0,
             defalutValue: 0,
             setMark: false,
-            stateName: 'depthclear',
+            stateName: STATE.DEPTHCLEAR,
             setFunction: (option?: any) => {
                 this.glClearDepth(option);
             }
@@ -172,7 +153,7 @@ export class State {
             value: false,
             defalutValue: false,
             setMark: false,
-            stateName: 'stenciltest',
+            stateName: STATE.STENCILCLEAR,
             setFunction: (option?: any) => {
                 this.glStencilTest(option);
             }
@@ -182,7 +163,7 @@ export class State {
             value: 1,
             defalutValue: 1,
             setMark: false,
-            stateName: 'stencilmask',
+            stateName: STATE.STENCILMASK,
             setFunction: (option?: any) => {
                 this.glStencilMask(option);
             }
@@ -190,17 +171,17 @@ export class State {
 
         this.stencilFunc = {
             value: {
-                func: DEPTHFUNC.AlwaysDepth,
+                func: STATE.FUNC_ALWAYS,
                 ref: 0,
                 mask: 1
             },
             defalutValue: {
-                func: DEPTHFUNC.AlwaysDepth,
+                func: STATE.FUNC_ALWAYS,
                 ref: 0,
                 mask: 1
             },
             setMark: false,
-            stateName: 'stencilfunc',
+            stateName: STATE.STENCILFUNC,
             setFunction: (option?: any) => {
                 this.glStencilFunc(option);
             }
@@ -218,7 +199,7 @@ export class State {
                 zpass: gl.KEEP
             },
             setMark: false,
-            stateName: 'stencilop',
+            stateName: STATE.STENCILOP,
             setFunction: (option?: any) => {
                 this.glStencilOp(option);
             }
@@ -228,7 +209,7 @@ export class State {
             value: 0,
             defalutValue: 0,
             setMark: false,
-            stateName: 'stencilclear',
+            stateName: STATE.STENCILCLEAR,
             setFunction: (option?: any) => {
                 this.glStencilClear(option);
             }
@@ -237,14 +218,14 @@ export class State {
         this.cullFace = {
             value: {
                 able: true,
-                mode: 'back',
+                mode: STATE.CULLFACE_BACK,
             },
             defalutValue: {
                 able: true,
-                mode: 'back',
+                mode: STATE.CULLFACE_BACK,
             },
             setMark: false,
-            stateName: 'cullface',
+            stateName: STATE.CULLFACE,
             setFunction: (option?: any) => {
                 this.glCullFace(option);
             }
@@ -262,7 +243,7 @@ export class State {
                 units: 0,
             },
             setMark: false,
-            stateName: 'polygonoffset',
+            stateName: STATE.STENCILCLEAR,
             setFunction: (option?: any) => {
                 this.glPolygonOffset(option);
             }
@@ -272,17 +253,17 @@ export class State {
             value: false,
             defalutValue: false,
             setMark: false,
-            stateName: 'blendtest',
+            stateName: STATE.BLENDTEST,
             setFunction: (option?: any) => {
                 this.glBlendTest(option);
             }
         };
 
         this.blendFunc = {
-            value: BLENDFUNC.Add,
-            defalutValue: BLENDFUNC.Add,
+            value: STATE.FUNC_ADD,
+            defalutValue: STATE.FUNC_ADD,
             setMark: false,
-            stateName: 'blendfunc',
+            stateName: STATE.BLENDFUNC,
             setFunction: (option?: any) => {
                 this.glBlendFunc(option);
             }
@@ -301,11 +282,11 @@ export class State {
                 }
             }
         } else {
-            const curState: any = changeStates[stateName];
+            const curState: any = changeStates[stateName.toString()];
             if (curState.setMark) {
                 curState.setFunction();
             } else {
-                delete changeStates[stateName];
+                delete changeStates[stateName.toString()];
             }
         }
     }
@@ -382,7 +363,7 @@ export class State {
             curState.setMark = mark;
         }
         if (mark === false) {
-            delete this.changeStates[name];
+            delete this.changeStates[name.toString()];
         }
     }
 
@@ -447,14 +428,14 @@ export class State {
         //TODO much methods to be used we need consider
         if (_gl instanceof WebGL2RenderingContext) {
             switch (name) {
-                case 'color':
+                case STATE.COLOR_BUFFER:
                     _gl.clearBufferfv(_gl.COLOR, drawBuffer, param);
                     break;
-                case 'depth':
+                case STATE.DEPTH_BUFFER:
                     break;
-                case 'stencil':
+                case STATE.STENCIL_BUFFER:
                     break;
-                case 'depth_stencil':
+                case STATE.DEPTH_STENCIL_BUFFER:
                 default:
                     break;
             }
@@ -513,25 +494,25 @@ export class State {
         }
         const value = (option && option.default) ? depthFunc.defalutValue : depthFunc.value;
         switch (value) {
-            case DEPTHFUNC.NeverDepth:
+            case STATE.FUNC_NEVER:
                 _gl.depthFunc(_gl.NEVER);
                 break;
-            case DEPTHFUNC.AlwaysDepth:
+            case STATE.FUNC_ALWAYS:
                 _gl.depthFunc(_gl.ALWAYS);
                 break;
-            case DEPTHFUNC.LessDepth:
+            case STATE.FUNC_LESS:
                 _gl.depthFunc(_gl.LESS);
                 break;
-            case DEPTHFUNC.LessEqualDepth:
+            case STATE.FUNC_LESSEQUAL:
                 _gl.depthFunc(_gl.LEQUAL);
                 break;
-            case DEPTHFUNC.GreaterEqualDepth:
+            case STATE.FUNC_GREATEREQUAL:
                 _gl.depthFunc(_gl.GEQUAL)
                 break;
-            case DEPTHFUNC.GreaterDepth:
+            case STATE.FUNC_GREATER:
                 _gl.depthFunc(_gl.GREATER);
                 break;
-            case DEPTHFUNC.NotEqualDepth:
+            case STATE.FUNC_NOTEQUAL:
                 _gl.depthFunc(_gl.NOTEQUAL);
                 break;
             default:
@@ -585,25 +566,25 @@ export class State {
         const ref = value.ref;
         const mask = value.mask;
         switch (func) {
-            case DEPTHFUNC.NeverDepth:
+            case STATE.FUNC_NEVER:
                 _gl.stencilFunc(_gl.NEVER, ref, mask);
                 break;
-            case DEPTHFUNC.AlwaysDepth:
+            case STATE.FUNC_ALWAYS:
                 _gl.stencilFunc(_gl.ALWAYS, ref, mask);
                 break;
-            case DEPTHFUNC.LessDepth:
+            case STATE.FUNC_LESS:
                 _gl.stencilFunc(_gl.LESS, ref, mask);
                 break;
-            case DEPTHFUNC.LessEqualDepth:
+            case STATE.FUNC_LESSEQUAL:
                 _gl.stencilFunc(_gl.LEQUAL, ref, mask);
                 break;
-            case DEPTHFUNC.GreaterEqualDepth:
+            case STATE.FUNC_GREATEREQUAL:
                 _gl.stencilFunc(_gl.GEQUAL, ref, mask)
                 break;
-            case DEPTHFUNC.GreaterDepth:
+            case STATE.FUNC_GREATER:
                 _gl.stencilFunc(_gl.GREATER, ref, mask);
                 break;
-            case DEPTHFUNC.NotEqualDepth:
+            case STATE.FUNC_EQUAL:
                 _gl.stencilFunc(_gl.NOTEQUAL, ref, mask);
                 break;
             default:
@@ -647,13 +628,13 @@ export class State {
         if (able) {
             this.stateEnbale(_gl.CULL_FACE);
             switch (mode) {
-                case 'front':
+                case STATE.CULLFACE_FRONT:
                     _gl.cullFace(_gl.FRONT);
                     break;
-                case 'back':
+                case STATE.CULLFACE_BACK:
                     _gl.cullFace(_gl.BACK);
                     break;
-                case 'front_and_back':
+                case STATE.CULLFACE_FRONT_AND_BACK:
                     _gl.cullFace(_gl.FRONT_AND_BACK);
                     break;
                 default:
@@ -704,21 +685,21 @@ export class State {
         }
         const value = (option && option.default) ? blendFunc.defalutValue : blendFunc.value;
         switch (value) {
-            case BLENDFUNC.Add:
+            case STATE.FUNC_ADD:
                 _gl.blendEquation(_gl.FUNC_ADD);
                 break;
-            case BLENDFUNC.Substract:
+            case STATE.FUNC_SUBSTRACT:
                 _gl.blendEquation(_gl.FUNC_SUBTRACT);
                 break;
-            case BLENDFUNC.ReverseSubstract:
+            case STATE.FUNC_REVERSESUBSTRACT:
                 _gl.blendEquation(_gl.FUNC_REVERSE_SUBTRACT);
                 break;
-            case BLENDFUNC.Min:
+            case STATE.FUNC_MIN:
                 if (_gl instanceof WebGL2RenderingContext) {
                     _gl.blendEquation(_gl.MIN);
                 }
                 break;
-            case BLENDFUNC.Max:
+            case STATE.FUNC_MAX:
                 if (_gl instanceof WebGL2RenderingContext) {
                     _gl.blendEquation(_gl.MAX);
                 }
