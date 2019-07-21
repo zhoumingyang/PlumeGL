@@ -11,9 +11,11 @@ export class Texture {
     public colorType: number;
     public width: number;
     public height: number;
+    public depth: number;
     public uid: string;
     public samplers: any;
     public attachBuffer: number;
+    public textureType: number;
     public type: Symbol;
 
     constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
@@ -23,14 +25,15 @@ export class Texture {
         if (uuid >= 10) uuid = 0;
         this.width = 0;
         this.height = 0;
+        this.depth = 0;
         this.format = gl.RGBA;
         this.internal = gl.RGBA;
         this.colorType = gl.UNSIGNED_BYTE;
         this.samplers = {};
         this.attachBuffer = undefined;
         this.type = CONSTANT.TEXTURE;
+        this.textureType = null;
     }
-
 
     public attachTo(glBuffer: number) {
         this.attachBuffer = glBuffer;
@@ -94,8 +97,22 @@ export class Texture {
         }
     }
 
-    public bind(slot?: number): void {
-
+    public bind(slot?: number, sampler?: Sampler | string): void {
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        this.active(slot);
+        _gl.bindTexture(this.textureType, this.instance);
+        if (!this.samplers) {
+            return;
+        }
+        let curSampler: Sampler;
+        if (!sampler) {
+            const samplerArray: Sampler[] = Object.values(this.samplers);
+            curSampler = samplerArray[slot];
+            curSampler && curSampler.bind(slot);
+            return;
+        }
+        curSampler = this.findSampler(sampler);
+        curSampler && curSampler.bind(slot);
     }
 
     static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
@@ -123,7 +140,7 @@ export class Texture {
 
     }
 
-    public setTextureFromData(data: any, width: number, height: number, index?: number): void {
+    public setTextureFromData(data: any, width: number, height: number, depth?: number, index?: number): void {
 
     }
 
@@ -143,24 +160,47 @@ export class Texture {
     }
 
     public wrapMode(clampEdge: boolean = true) {
-
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const mode: number = clampEdge === true ? _gl.CLAMP_TO_EDGE : _gl.REPEAT;
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_S, mode);
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_T, mode);
     }
 
     public filterMode(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false) {
-
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const filter = this.textureFilter(!!linear, !!mipmap, !!mipmapLinear);
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_MAG_FILTER, this.textureFilter(!!linear, false, false));
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_MIN_FILTER, filter);
     }
 
     public setWrapMode(mode: number): void {
         if (mode === undefined) {
             return;
         }
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_S, mode);
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_T, mode);
     }
 
     public setFilterMode(minFiler: number, magFiler?: number): void {
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        if (!minFiler && !magFiler) {
+            this.filterMode();
+            return;
+        }
+        magFiler = magFiler || minFiler;
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_MIN_FILTER, minFiler);
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_MAG_FILTER, magFiler);
+    }
 
+    public setLevelSection(base: number = 0, max: number = 0): void {
+        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_BASE_LEVEL, base);
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_MAX_LEVEL, max);
     }
 
     public mipmap(): void {
-
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        _gl.generateMipmap(this.textureType);
     }
 }
