@@ -8,7 +8,7 @@ export const CONSTANT = {
     TEXTURE2D: Symbol('Texture2D'),
     TEXTURECUBE: Symbol('TextureCube'),
     TEXTURE3D: Symbol('Texture3D'),
-    TEXTURE2DARRAY:Symbol('Texture2DArray'),
+    TEXTURE2DARRAY: Symbol('Texture2DArray'),
     SAMPLER: Symbol('Sampler'),
     PRIMITIVE: Symbol('Primitive'),
     MESH: Symbol('Mesh'),
@@ -19,7 +19,7 @@ export const CONSTANT = {
     SHADER: Symbol('Shader'),
     STATE: Symbol('State'),
     VAO: Symbol('Vao'),
-    QUERY:Symbol('Query')
+    QUERY: Symbol('Query')
 };
 Object.freeze(CONSTANT);
 
@@ -63,3 +63,16 @@ export const STATE = {
     DEPTH_STENCIL_BUFFER: 'depth_stencil',
 };
 Object.freeze(STATE);
+
+export const TEXTURE = {
+    WRAP_S: 'WRAP_S',
+    WRAP_T: 'WRAP_T',
+    WRAP_R: 'WRAP_R',
+    MAG_FILTER: 'MAG_FILTER',
+    MIN_FILTER: 'MIN_FILTER',
+    MAX_LOD: 'MAX_LOD',
+    MIN_LOD: 'MIN_LOD',
+    COMPARE_MODE: 'COMPARE_MODE',
+    COMPARE_FUNC: 'COMPARE_FUNC'
+};
+Object.freeze(TEXTURE);

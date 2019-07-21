@@ -211,6 +211,12 @@ export class Texture {
         _gl.texParameteri(this.textureType, _gl.TEXTURE_MAX_LEVEL, max);
     }
 
+    public setLod(minLod: number = 0, maxLod: number = 0): void {
+        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_MIN_LOD, minLod);
+        _gl.texParameteri(this.textureType, _gl.TEXTURE_MAX_LOD, maxLod);
+    }
+
     public mipmap(): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
         _gl.generateMipmap(this.textureType);
