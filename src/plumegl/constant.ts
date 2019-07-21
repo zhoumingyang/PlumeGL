@@ -19,6 +19,7 @@ export const CONSTANT = {
     SHADER: Symbol('Shader'),
     STATE: Symbol('State'),
     VAO: Symbol('Vao'),
+    QUERY:Symbol('Query')
 };
 Object.freeze(CONSTANT);
 

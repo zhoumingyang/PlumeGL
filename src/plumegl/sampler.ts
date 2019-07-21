@@ -49,7 +49,6 @@ export class Sampler {
     public dispose(): void {
         this.gl && this.gl.deleteSampler(this.instance);
         this.instance = null;
-        this.gl = null;
     }
 
     public repeat(): void {

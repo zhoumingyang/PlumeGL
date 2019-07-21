@@ -74,7 +74,6 @@ export class FrameBuffer {
         mountArray.forEach((mount: (Texture | RenderBuffer)) => {
             mount.dispose();
         });
-        this.gl = null;
         this.instance = null;
     }
 

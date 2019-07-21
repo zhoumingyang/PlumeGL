@@ -131,7 +131,6 @@ export class Texture {
             sampler && sampler.dispose();
         }
         this.instance = null;
-        this.gl = null;
         this.width = 0;
         this.height = 0;
     }
@@ -202,5 +201,9 @@ export class Texture {
     public mipmap(): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
         _gl.generateMipmap(this.textureType);
+    }
+
+    static pixelStorei(gl: WebGLRenderingContext | WebGL2RenderingContext, pname: number, param: number) {
+        gl.pixelStorei(pname, param);
     }
 }

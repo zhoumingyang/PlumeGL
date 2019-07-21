@@ -53,7 +53,6 @@ export class UniformBuffer {
         UniformBuffer.unBind(_gl);
         _gl && _gl.deleteBuffer(this.instance);
         this.instance = undefined;
-        this.gl = undefined;
         this.drawType = undefined;
     }
 }

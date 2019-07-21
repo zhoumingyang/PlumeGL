@@ -41,7 +41,6 @@ export class IndexBuffer {
         this.unBind();
         this.gl && this.gl.deleteBuffer(this.instance);
         this.instance = null;
-        this.gl = null;
     }
 
     public setElementData(_array: any): void {

@@ -38,7 +38,6 @@ export class RenderBuffer {
         RenderBuffer.unBind(this.gl);
         this.gl && this.gl.deleteRenderbuffer(this.instance);
         this.instance = null;
-        this.gl = null;
     }
 
     public setSize(w: number, h: number): void {
