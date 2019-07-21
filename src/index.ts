@@ -8,6 +8,7 @@ import { DrawLine } from './example/draw_line';
 import { DrawPoints } from './example/draw_points';
 import { FboMultiSample } from './example/fbo_multisample';
 import { DrawTexture3D } from './example/texture_3d';
+import { DrawTexture2DArray } from './example/texture_2d_array';
 
 const appRun = () => {
     // SampleObject();
@@ -19,6 +20,7 @@ const appRun = () => {
     // DrawLine();
     // DrawPoints();
     // FboMultiSample();
-    DrawTexture3D();
+    // DrawTexture3D();
+    DrawTexture2DArray();
 };
 appRun();

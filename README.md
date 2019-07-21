@@ -24,6 +24,7 @@
 >>|- state.ts  
 >>|- texture.ts  
 >>|- texture2D.ts  
+>>|- texture2Darray.ts  
 >>|- texture3D.ts  
 >>|- texturecube.ts  
 >>|- uniform.ts  
@@ -45,7 +46,7 @@ Shader -- |- drawObjects:[P3D, Primitive, ...]
 >>>>>>>>>>|- attributes  
 >>>>>>>>>>|- program  
 P3D -- |- Primitive: {Mesh, Line, Point}  
->>>>>>>|- Texture: {Texture2D, Texture3D, TextureCube}  
+>>>>>>>|- Texture: {Texture2D, Texture2DArray, Texture3D, TextureCube}  
 >>>>>>>|- State  
 Primitive -- |- vao VAO  
 >>>>>>>>>>>>>|- vbo ArrayBuffer    
