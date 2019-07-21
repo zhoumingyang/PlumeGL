@@ -102,7 +102,6 @@ export class ArrayBuffer {
         ArrayBuffer.unBind(this.gl);
         this.gl && this.gl.deleteBuffer(this.instance);
         this.instance = null;
-        this.gl = null;
         this.attribs = [];
         this.stride = 0;
         this.byteLength = 0;

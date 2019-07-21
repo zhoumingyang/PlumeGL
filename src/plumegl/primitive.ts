@@ -163,7 +163,6 @@ export class Primitive {
             }
             this.buffers = {};
         }
-        this.gl = null;
         this.uid = null;
         if (this.indexBuffer) {
             this.indexBuffer.dispose();

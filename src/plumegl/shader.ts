@@ -347,7 +347,7 @@ export class Shader {
 
     public unUse(): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        _gl.useProgram(null);
+        _gl && _gl.useProgram(null);
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {
@@ -363,7 +363,7 @@ export class Shader {
     public dispose(): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
         this.unUse();
-        if(_gl) {
+        if (_gl) {
             _gl.deleteProgram(this.instance);
             _gl.deleteShader(this.vertexShader);
             _gl.deleteShader(this.fragmentShader);
@@ -371,7 +371,6 @@ export class Shader {
         this.uniformBufferMap.forEach((uniformBuffer) => {
             uniformBuffer.dispose();
         });
-        this.gl = null;
         this.vertexSource = null;
         this.fragmentSource = null;
         this.instance = null;

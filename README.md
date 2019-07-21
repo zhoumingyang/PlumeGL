@@ -31,6 +31,7 @@
 >>|- uniformbuffer.ts  
 >>|- util.st  
 >>|- vao.ts  
+>>|- query.ts  
 >|- /loader  
 >>|- imageloader.ts  
 >|- /example  
