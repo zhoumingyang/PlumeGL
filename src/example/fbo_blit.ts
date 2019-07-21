@@ -90,7 +90,7 @@ export const FboBlit = () => {
         textureDiffuse.filterMode(true, false, false);
 
         textureColorBuffer.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
-        textureColorBuffer.setTextureFromData(null, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
+        textureColorBuffer.setTextureFromData(null, [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]);
         textureColorBuffer.filterMode(true, false, false);
         PlumeGL.Texture2D.unBind(gl);
 

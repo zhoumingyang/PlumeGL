@@ -94,7 +94,7 @@ export const FboMultiSample = () => {
         y: cav.height
     };
     const tmpTexture = new PlumeGL.Texture2D(gl);
-    tmpTexture.setTextureFromData(null, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
+    tmpTexture.setTextureFromData(null, [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]);
     tmpTexture.filterMode(false, false, false);
     PlumeGL.Texture2D.unBind(gl);
 

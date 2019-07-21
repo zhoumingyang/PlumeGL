@@ -16,6 +16,8 @@ export class Texture {
     public samplers: any;
     public attachBuffer: number;
     public textureType: number;
+    public levels: number;
+    public level: number;
     public type: Symbol;
 
     constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
@@ -33,6 +35,13 @@ export class Texture {
         this.attachBuffer = undefined;
         this.type = CONSTANT.TEXTURE;
         this.textureType = null;
+        this.levels = 1;
+        this.level = 0;
+    }
+
+    public setLevelInfo(level?: number, levels?: number): void {
+        this.level = level || 0;
+        this.levels = levels || 1;
     }
 
     public attachTo(glBuffer: number) {
@@ -139,7 +148,11 @@ export class Texture {
 
     }
 
-    public setTextureFromData(data: any, width: number, height: number, depth?: number, index?: number): void {
+    public setTextureFromData(data: any, sizes: number[], index?: number): void {
+
+    }
+
+    public subStorage(data: any, offsets: number[], sizes: number[]): void {
 
     }
 

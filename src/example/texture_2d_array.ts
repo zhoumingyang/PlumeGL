@@ -79,7 +79,7 @@ export const DrawTexture2DArray = () => {
 
         // -- Init Texture
         tmpTexture.active(0);
-        tmpTexture.setTextureFromData(pixels, IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES);
+        tmpTexture.setTextureFromData(pixels, [IMAGE_SIZE.width, IMAGE_SIZE.height, NUM_IMAGES]);
         tmpTexture.filterMode(true, false, false);
 
         shaderObj.use();
@@ -90,13 +90,13 @@ export const DrawTexture2DArray = () => {
             0.0, 0.0, 1.0, 0.0,
             0.0, 0.0, 0.0, 1.0
         ]);
-        shaderObj.setUniformData('MVP',[matrix, false]);
-        shaderObj.setUniformData('diffuse',[0]);
+        shaderObj.setUniformData('MVP', [matrix, false]);
+        shaderObj.setUniformData('diffuse', [0]);
         let frame = 0;
         (function render() {
             // -- Render
             sceneState.stateChange();
-            shaderObj.setUniformData('layer',[frame]);
+            shaderObj.setUniformData('layer', [frame]);
             frame = (frame + 1) % NUM_IMAGES;
             quadMesh.draw({ start: 0, cnt: 6 });
             setTimeout(function () {

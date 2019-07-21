@@ -366,7 +366,7 @@ export const DrawTexture3D = () => {
     const tmpTexture = new PlumeGL.Texture3D(gl);
     tmpTexture.setFormat(gl.RED, gl.R8, gl.UNSIGNED_BYTE);
     tmpTexture.active(0);
-    tmpTexture.setTextureFromData(data, SIZE, SIZE, SIZE);
+    tmpTexture.setTextureFromData(data, [SIZE, SIZE, SIZE]);
     tmpTexture.setLevelSection(0, Math.log2(SIZE));
     tmpTexture.filterMode(true, false, true);
     tmpTexture.mipmap();

@@ -18,15 +18,20 @@ export class TextureCube extends Texture {
         this.width = image.width;
         this.height = image.height;
         _gl.bindTexture(this.textureType, this.instance);
-        _gl.texImage2D(_gl.TEXTURE_CUBE_MAP_POSITIVE_X + index, 0, this.internal, this.format, this.colorType, image);
+        _gl.texImage2D(_gl.TEXTURE_CUBE_MAP_POSITIVE_X + index, this.level, this.internal, this.format, this.colorType, image);
     }
 
-    public setTextureFromData(data: any, width: number, height: number, depth?: number, index?: number): void {
+    public setTextureFromData(data: any, sizes: number[], index?: number): void {
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        this.width = width;
-        this.height = height;
+        if (sizes && sizes.length >= 2) {
+            this.width = sizes[0] || this.width;
+            this.height = sizes[1] || this.height;
+        } else {
+            console.warn('sizes at least include 2 param: width, height');
+        }
         data = data || null;
         _gl.bindTexture(this.textureType, this.instance);
-        _gl.texImage2D(_gl.TEXTURE_CUBE_MAP_POSITIVE_X + index, 0, this.internal, width, height, 0, this.format, this.colorType, data);
+        _gl.texImage2D(_gl.TEXTURE_CUBE_MAP_POSITIVE_X + index, this.level, this.internal, this.width,
+            this.height, 0, this.format, this.colorType, data);
     }
 }
