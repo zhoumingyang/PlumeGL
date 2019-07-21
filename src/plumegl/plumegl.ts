@@ -4,6 +4,7 @@ import { RenderBuffer } from './renderbuffer';
 import { IndexBuffer } from './indexbuffer';
 import { Texture } from './texture';
 import { Texture2D } from './texture2D';
+import { Texture3D } from './texture3D';
 import { TextureCube } from './texturecube';
 import { Sampler } from './sampler';
 import { Shader } from './shader';
@@ -27,6 +28,7 @@ export const PlumeGL = {
     UniformBuffer,
     Texture,
     Texture2D,
+    Texture3D,
     TextureCube,
     Sampler,
     Shader,

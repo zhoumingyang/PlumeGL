@@ -7,6 +7,7 @@ export const CONSTANT = {
     TEXTURE: Symbol('Texture'),
     TEXTURE2D: Symbol('Texture2D'),
     TEXTURECUBE: Symbol('TextureCube'),
+    TEXTURE3D: Symbol('Texture3D'),
     SAMPLER: Symbol('Sampler'),
     PRIMITIVE: Symbol('Primitive'),
     MESH: Symbol('Mesh'),
