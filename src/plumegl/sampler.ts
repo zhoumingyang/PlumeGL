@@ -1,5 +1,5 @@
 import { Util } from './util';
-import { CONSTANT } from './constant';
+import { CONSTANT, TEXTURE } from './constant';
 
 interface WrapType {
     WRAP_S?: number;
@@ -85,15 +85,15 @@ export class Sampler {
             for (let key in mode) {
                 let value;
                 switch (key) {
-                    case 'WRAP_S':
+                    case TEXTURE.WRAP_S:
                         value = mode.WRAP_S;
                         _gl.samplerParameteri(this.instance, _gl.TEXTURE_WRAP_S, value);
                         break;
-                    case 'WRAP_T':
+                    case TEXTURE.WRAP_T:
                         value = mode.WRAP_T;
                         _gl.samplerParameteri(this.instance, _gl.TEXTURE_WRAP_T, value);
                         break;
-                    case 'WRAP_R':
+                    case TEXTURE.WRAP_R:
                         value = mode.WRAP_R;
                         _gl.samplerParameteri(this.instance, _gl.TEXTURE_WRAP_R, value);
                         break;
@@ -121,11 +121,11 @@ export class Sampler {
         for (let key in filter) {
             let value;
             switch (key) {
-                case 'MAG_FILTER':
+                case TEXTURE.MAG_FILTER:
                     value = filter.MAG_FILTER;
                     _gl.samplerParameteri(this.instance, _gl.TEXTURE_MAG_FILTER, value);
                     break;
-                case 'MIN_FILTER':
+                case TEXTURE.MIN_FILTER:
                     value = filter.MIN_FILTER;
                     _gl.samplerParameteri(this.instance, _gl.TEXTURE_MIN_FILTER, value);
                     break;
@@ -141,11 +141,11 @@ export class Sampler {
         for (let key in lod) {
             let value;
             switch (key) {
-                case 'MIN_LOD':
+                case TEXTURE.MIN_LOD:
                     value = lod.MIN_LOD;
                     _gl.samplerParameteri(this.instance, _gl.TEXTURE_MIN_LOD, value);
                     break;
-                case 'MAX_LOD':
+                case TEXTURE.MAX_LOD:
                     value = lod.MAX_LOD;
                     _gl.samplerParameteri(this.instance, _gl.TEXTURE_MAX_LOD, value);
                     break;
@@ -161,11 +161,11 @@ export class Sampler {
         for (let key in compare) {
             let value;
             switch (key) {
-                case 'COMPARE_MODE':
+                case TEXTURE.COMPARE_MODE:
                     value = compare.COMPARE_MODE;
                     _gl.samplerParameteri(this.instance, _gl.TEXTURE_COMPARE_MODE, value);
                     break;
-                case 'COMPARE_FUNC':
+                case TEXTURE.COMPARE_FUNC:
                     value = compare.COMPARE_FUNC;
                     _gl.samplerParameteri(this.instance, _gl.TEXTURE_COMPARE_FUNC, value);
                     break;
