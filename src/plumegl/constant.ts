@@ -40,6 +40,7 @@ export const STATE = {
     CULLFACE: 'cullface',
     POLYGONOFFSET: 'polygonoffset',
     BLENDTEST: 'blendtest',
+    RASTERDISCARD: 'rasterDiscard',
     BLENDFUNC: 'blendfunc',
     FUNC_NEVER: 'never',
     FUNC_ALWAYS: 'alway',

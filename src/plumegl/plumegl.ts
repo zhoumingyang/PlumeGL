@@ -21,6 +21,7 @@ import { UniformBuffer } from './uniformbuffer';
 import { Scene } from './scene';
 import { Query } from './query';
 import { CONSTANT, STATE } from './constant';
+import { FeedBack } from './feedback';
 
 export const PlumeGL = {
     ArrayBuffer,
@@ -46,5 +47,6 @@ export const PlumeGL = {
     Scene,
     Query,
     CONSTANT,
-    STATE
+    STATE,
+    FeedBack
 };

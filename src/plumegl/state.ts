@@ -21,6 +21,7 @@ export class State {
     public depthFunc: state;
     public depthClear: state;
     public stencilTest: state;
+    public rasterDiscard: state;
     public stencilMask: state;
     public stencilFunc: state;
     public stencilOp: state;
@@ -267,7 +268,17 @@ export class State {
             setFunction: (option?: any) => {
                 this.glBlendFunc(option);
             }
-        }
+        };
+
+        this.rasterDiscard = {
+            value: false,
+            defalutValue: false,
+            setMark: false,
+            stateName: STATE.RASTERDISCARD,
+            setFunction: (option?: any) => {
+                this.glRasterDiscard(option);
+            }
+        };
     }
 
     public stateChange(stateName?: string): void {
@@ -708,7 +719,20 @@ export class State {
                 _gl.blendEquation(_gl.FUNC_ADD);
                 break;
         }
+    }
 
+    private glRasterDiscard(option?: any): void {
+        const _gl:WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const rasterDiscard = this.rasterDiscard;
+        if (!rasterDiscard.setMark) {
+            return;
+        }
+        const value = (option && option.default) ? rasterDiscard.defalutValue : rasterDiscard.value;
+        if (value) {
+            this.stateEnbale(_gl.RASTERIZER_DISCARD);
+        } else {
+            this.stateDisable(_gl.RASTERIZER_DISCARD);
+        }
     }
 
     private stateEnbale(id: number): void {
@@ -895,6 +919,15 @@ export class State {
         blendFunc.setMark = true;
         this.changeStates[blendFunc.stateName] = blendFunc;
         this.currentState = blendFunc;
+        return this;
+    }
+
+    public setRasterDiscard(discard: boolean): State {
+        const rasterDiscard = this.rasterDiscard;
+        rasterDiscard.value = discard;
+        rasterDiscard.setMark = true;
+        this.changeStates[rasterDiscard.stateName] = rasterDiscard;
+        this.currentState = rasterDiscard;
         return this;
     }
 }
