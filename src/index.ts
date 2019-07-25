@@ -10,6 +10,7 @@ import { FboMultiSample } from './example/fbo_multisample';
 import { DrawTexture3D } from './example/texture_3d';
 import { DrawTexture2DArray } from './example/texture_2d_array';
 import { QueryOcclusion } from './example/query_occlusion';
+import { TransformFeedbackInterleaved } from './example/transform_feedback_interleaved';
 
 const appRun = () => {
     // SampleObject();
@@ -23,6 +24,7 @@ const appRun = () => {
     // FboMultiSample();
     // DrawTexture3D();
     // DrawTexture2DArray();
-    QueryOcclusion();
+    // QueryOcclusion();
+    TransformFeedbackInterleaved();
 };
 appRun();

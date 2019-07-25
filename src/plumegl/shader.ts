@@ -5,7 +5,7 @@ import { P3D } from './p3d';
 import { Primitive } from './primitive';
 import { CONSTANT } from './constant';
 
-interface uniformInfo {
+interface UniformInfo {
     uniformName: string;
     uniformDefineName: string;
     defineArray: boolean;
@@ -13,6 +13,11 @@ interface uniformInfo {
     type?: number;
     location?: WebGLUniformLocation;
     setter?: Function;
+}
+
+interface FeedBack {
+    vars: string[],
+    bufferMode: GLenum;
 }
 
 let uuid: number = 0;
@@ -31,13 +36,16 @@ export class Shader {
     public uniformBufferMap: Map<string, UniformBuffer>;
     private p3ds: Map<string, P3D | Primitive>;
     public type: Symbol;
+    public fb: FeedBack;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext, vertexSource: string, fragmentSource: string) {
+    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext,
+        vertexSource: string, fragmentSource: string, fb?: FeedBack) {
         this.gl = gl;
         this.vertexSource = vertexSource;
         this.fragmentSource = fragmentSource;
         this.instance = gl.createProgram();
         this.readyState = false;
+        this.fb = fb;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
         this.attribsInfo = new Map();
@@ -66,12 +74,15 @@ export class Shader {
     private compileShader(): boolean {
         const vertexSource: string = this.vertexSource;
         const fragmentSource: string = this.fragmentSource;
-        const _gl: WebGLRenderingContext = this.gl;
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
         const _program: WebGLProgram = this.instance;
         this.vertexShader = this.compileSource(vertexSource, _gl.VERTEX_SHADER);
         this.fragmentShader = this.compileSource(fragmentSource, _gl.FRAGMENT_SHADER);
         this.vertexShader && _gl.attachShader(_program, this.vertexShader);
         this.fragmentShader && _gl.attachShader(_program, this.fragmentShader);
+        if (this.fb && this.instance && (_gl instanceof WebGL2RenderingContext)) {
+            _gl.transformFeedbackVaryings(this.instance, this.fb.vars, this.fb.bufferMode);
+        }
         _gl.linkProgram(_program);
         if (!_gl.getProgramParameter(_program, _gl.LINK_STATUS)) {
             console.warn('link error: ' + _gl.getProgramInfoLog(_program));
@@ -144,7 +155,7 @@ export class Shader {
         }
     }
 
-    private parseUniformArrayVar(uniform: uniformInfo, source: string): string[] {
+    private parseUniformArrayVar(uniform: UniformInfo, source: string): string[] {
         if (!uniform || !source || !source.length) {
             return [];
         }
@@ -358,6 +369,11 @@ export class Shader {
         this.p3ds.forEach((p3d: P3D | Primitive, key: string) => {
             callback.call(this, p3d, key);
         });
+    }
+
+    public feedBackVary(varyings: string[], operation: number): void {
+        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        _gl.transformFeedbackVaryings(this.instance, varyings, operation);
     }
 
     public dispose(): void {

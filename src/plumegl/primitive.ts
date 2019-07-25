@@ -4,6 +4,13 @@ import { Shader } from './shader';
 import { IndexBuffer } from './indexbuffer';
 import { CONSTANT } from './constant';
 
+interface Attribute {
+    name: string;
+    size: number;
+    type: number;
+    normalize: boolean;
+};
+
 export class Primitive {
     public gl: WebGLRenderingContext | WebGL2RenderingContext;
     public type: Symbol;
@@ -15,6 +22,7 @@ export class Primitive {
     public modelMatrix: number[];  // TODO, now do not consider the matrix
     public vao: VAO;
     public indexBuffer: IndexBuffer;
+    public uniqueBuffer: ArrayBuffer;
     protected drawType: number;
 
     constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
@@ -25,6 +33,7 @@ export class Primitive {
         this.attributes = {};
         this.buffers = {};
         this.modelMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+        this.uniqueBuffer = undefined;
         if (gl instanceof WebGL2RenderingContext) {
             this.vao = new VAO(gl);
         }
@@ -42,6 +51,33 @@ export class Primitive {
         return this.drawType;
     }
 
+    //buffer data与attrib多对一的关系
+    public setGeometryAttributes(datas: number[] | Float32Array | number, attribs: Attribute[], drawType?: number): void {
+        if (!datas) {
+            console.warn(`data is undefined in setGeometryAttribute`);
+            return;
+        }
+
+        if (!attribs || !attribs.length) {
+            console.warn(`no attribute infos`);
+            return;
+        }
+        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        drawType = drawType || _gl.STATIC_DRAW;
+        const arrayBuffer = new ArrayBuffer(_gl, drawType);
+        arrayBuffer.setBufferData(datas);
+        attribs.forEach((ab: Attribute) => {
+            this.attributes[ab.name] = datas;
+            arrayBuffer.attrib(ab.name, ab.size || 3, ab.type || _gl.FLOAT, ab.normalize || false);
+            this.buffers[ab.name] = arrayBuffer;
+        });
+        if (this.vao) {
+            this.vao.addBuffer(arrayBuffer);
+        }
+        this.uniqueBuffer = arrayBuffer;
+    }
+
+    //buffer data与attrib是一对一的关系
     public setGeometryAttribute(datas: number[] | Float32Array, name: string, drawType?: number, size?: number, type?: number, normalize?: boolean): void {
         if (!datas) {
             console.warn(`data is undefined in setGeometryAttribute`);
@@ -58,15 +94,15 @@ export class Primitive {
             datas = new Float32Array(datas);
         }
         this.attributes[name] = datas;
-        drawType = drawType || this.drawType;
+        drawType = drawType || _gl.STATIC_DRAW;
         const arrayBuffer = new ArrayBuffer(_gl, drawType);
         arrayBuffer.setBufferData(datas);
         arrayBuffer.attrib(name, size || 3, type || _gl.FLOAT, normalize || false);
         if (this.vao) {
             this.vao.addBuffer(arrayBuffer);
-        } else {
-            this.buffers[name] = arrayBuffer;
         }
+        this.buffers[name] = arrayBuffer;
+        this.uniqueBuffer = arrayBuffer;
     }
 
     public initBufferAttributePoint(program: Shader): void {
@@ -156,17 +192,17 @@ export class Primitive {
         if (this.vao) {
             this.vao.dispose();
             this.vao = null;
-        } else {
-            const buffers = this.buffers;
-            for (let key in buffers) {
-                buffers[key].dispose();
-            }
-            this.buffers = {};
         }
+        const buffers = this.buffers;
+        for (let key in buffers) {
+            buffers[key].dispose();
+        }
+        this.buffers = {};
         this.uid = null;
         if (this.indexBuffer) {
             this.indexBuffer.dispose();
             this.indexBuffer = null;
         }
+        this.uniqueBuffer = null;
     }
 }
