@@ -32,6 +32,7 @@
 >>|- util.st  
 >>|- vao.ts  
 >>|- query.ts  
+>>|- feedback.ts  
 >|- /loader  
 >>|- imageloader.ts  
 >|- /example  
@@ -46,6 +47,7 @@ Shader -- |- drawObjects:[P3D, Primitive, ...]
 >>>>>>>>>>|- UniformBuffer  
 >>>>>>>>>>|- attributes  
 >>>>>>>>>>|- program  
+>>>>>>>>>>|- FeedBack  
 P3D -- |- Primitive: {Mesh, Line, Point}  
 >>>>>>>|- Texture: {Texture2D, Texture2DArray, Texture3D, TextureCube}  
 >>>>>>>|- State  
