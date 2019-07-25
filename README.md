@@ -47,7 +47,7 @@ Shader -- |- drawObjects:[P3D, Primitive, ...]
 >>>>>>>>>>|- UniformBuffer  
 >>>>>>>>>>|- attributes  
 >>>>>>>>>>|- program  
->>>>>>>>>>|- feedback  
+>>>>>>>>>>|- FeedBack  
 P3D -- |- Primitive: {Mesh, Line, Point}  
 >>>>>>>|- Texture: {Texture2D, Texture2DArray, Texture3D, TextureCube}  
 >>>>>>>|- State  
