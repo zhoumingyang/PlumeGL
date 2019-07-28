@@ -78,7 +78,7 @@ export class Primitive {
     }
 
     //buffer data与attrib是一对一的关系
-    public setGeometryAttribute(datas: number[] | Float32Array, name: string, drawType?: number, size?: number, type?: number, normalize?: boolean): void {
+    public setGeometryAttribute(datas: number[] | Float32Array | number, name: string, drawType?: number, size?: number, type?: number, normalize?: boolean): void {
         if (!datas) {
             console.warn(`data is undefined in setGeometryAttribute`);
             return;
@@ -90,9 +90,6 @@ export class Primitive {
         }
 
         const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        if (!(datas instanceof Float32Array)) {
-            datas = new Float32Array(datas);
-        }
         this.attributes[name] = datas;
         drawType = drawType || _gl.STATIC_DRAW;
         const arrayBuffer = new ArrayBuffer(_gl, drawType);
@@ -102,7 +99,6 @@ export class Primitive {
             this.vao.addBuffer(arrayBuffer);
         }
         this.buffers[name] = arrayBuffer;
-        this.uniqueBuffer = arrayBuffer;
     }
 
     public initBufferAttributePoint(program: Shader): void {
