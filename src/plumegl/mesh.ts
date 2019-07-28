@@ -25,7 +25,7 @@ export class Mesh extends Primitive {
         }
         this.attributes['indices'] = datas;
         if (!this.indexBuffer) {
-            this.indexBuffer = new IndexBuffer(drawType, dataType);
+            this.indexBuffer = new IndexBuffer(drawType, dataType, this.gl);
         }
         this.indexBuffer.setElementData(datas);
     }

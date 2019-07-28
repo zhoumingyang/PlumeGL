@@ -41,6 +41,10 @@ export class Shader {
 
     constructor(vertexSource: string, fragmentSource: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
         this.gl = gl || this.gl;
+        if (!this.gl) {
+            console.error('no gl context', this.type);
+            return;
+        }
         this.vertexSource = vertexSource;
         this.fragmentSource = fragmentSource;
         this.instance = this.gl.createProgram();

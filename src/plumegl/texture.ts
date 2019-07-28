@@ -23,6 +23,10 @@ export class Texture {
 
     constructor(gl?: WGL | WGL2) {
         this.gl = gl || this.gl;
+        if (!this.gl) {
+            console.error('no gl context', this.type);
+            return;
+        }
         this.instance = this.gl.createTexture();
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
@@ -48,7 +52,7 @@ export class Texture {
         if (!(this.gl instanceof WebGL2RenderingContext)) {
             return;
         }
-        const sampler = new Sampler();
+        const sampler = new Sampler(this.gl);
         this.samplers[sampler.uid] = sampler;
         return sampler;
     }

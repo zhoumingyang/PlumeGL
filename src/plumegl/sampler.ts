@@ -32,6 +32,10 @@ export class Sampler {
 
     constructor(gl?: WGL2) {
         this.gl = gl || this.gl;
+        if (!this.gl) {
+            console.error('no gl context', this.type);
+            return;
+        }
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
         this.instance = this.gl.createSampler();

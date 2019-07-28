@@ -28,6 +28,10 @@ export class Primitive {
 
     constructor(gl?: WGL | WGL2) {
         this.gl = gl || this.gl;
+        if (!this.gl) {
+            console.error('no gl context', this.type);
+            return;
+        }
         if (this.gl instanceof WebGL2RenderingContext) {
             this.vao = new VAO(undefined, this.gl);
         }
@@ -45,7 +49,6 @@ export class Primitive {
         return this.drawType;
     }
 
-    //buffer data与attrib多对一的关系
     public setGeometryAttributes(datas: number[] | Float32Array | number, attribs: Attribute[], drawType?: number): void {
         if (!datas) {
             console.warn(`data is undefined in setGeometryAttribute`);
@@ -71,7 +74,6 @@ export class Primitive {
         this.uniqueBuffer = arrayBuffer;
     }
 
-    //buffer data与attrib是一对一的关系
     public setGeometryAttribute(datas: number[] | Float32Array | number, name: string, drawType?: number, size?: number, type?: number, normalize?: boolean): void {
         if (!datas) {
             console.warn(`data is undefined in setGeometryAttribute`);

@@ -15,6 +15,10 @@ export class IndexBuffer {
 
     constructor(drawType: number = GL.gl.STATIC_DRAW, dataType: number = GL.gl.UNSIGNED_SHORT, gl?: WGL | WGL2) {
         this.gl = gl || GL.gl;
+        if (!this.gl) {
+            console.error('no gl context', this.type);
+            return;
+        }
         this.instance = this.gl.createBuffer();
         this.drawType = drawType;
         this.setDataType(dataType);

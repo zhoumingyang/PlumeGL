@@ -11,7 +11,7 @@ interface state {
 
 export class State {
     public gl: WGL | WGL2 = GL.gl;
-    public type: Symbol;
+    public type: Symbol = CONSTANT.STATE;
     public sceneClear: state;
     public viewport: state;
     public bufferClear: state;
@@ -31,8 +31,8 @@ export class State {
     public polygonOffset: state;
     public blendTest: state;
     public blendFunc: state;
-    public changeStates: any;
-    public currentState: state;
+    public changeStates: any = {};
+    public currentState: state = undefined;
 
     constructor(gl?: WGL | WGL2) {
         if (!gl) {
@@ -40,9 +40,10 @@ export class State {
         } else {
             this.gl = gl;
         }
-        this.type = CONSTANT.STATE;
-        this.changeStates = {};
-        this.currentState = undefined;
+        if (!this.gl) {
+            console.error('no gl context', this.type);
+            return;
+        }
         //scene state
         this.sceneClear = {
             value: gl.COLOR_BUFFER_BIT,

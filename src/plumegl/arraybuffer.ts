@@ -17,6 +17,10 @@ export class ArrayBuffer {
 
     constructor(drawType: number = GL.gl.STATIC_DRAW, gl?: WGL | WGL2) {
         this.gl = gl || this.gl;
+        if (!this.gl) {
+            console.error('no gl context', this.type);
+            return;
+        }
         this.instance = this.gl.createBuffer();
         this.drawType = drawType;
         this.uid = Util.random13(13, uuid++);
