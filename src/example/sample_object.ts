@@ -35,26 +35,23 @@ export const SampleObject = function () {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
+        return;
     }
-    const program = new PlumeGL.Shader(gl, sampleObjectVertexSource, sampleObjectFragmentSource);
+
+    const program = new PlumeGL.Shader(sampleObjectVertexSource, sampleObjectFragmentSource);
     program.initParameters();
 
     const positions: Float32Array = new Float32Array(posData);
     const texcoords: Float32Array = new Float32Array(uvData);
 
-    const Mesh = new PlumeGL.Mesh(gl);
+    const Mesh = new PlumeGL.Mesh();
     Mesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     Mesh.setGeometryAttribute(texcoords, 'textureCoordinates', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     Mesh.initBufferAttributePoint(program);
 
-    let texture = new PlumeGL.Texture2D(gl);
+    let texture = new PlumeGL.Texture2D();
     const samplerA = texture.generateSampler();
     samplerA.setFilterMode({
         MIN_FILTER: gl.NEAREST_MIPMAP_NEAREST,
@@ -85,7 +82,7 @@ export const SampleObject = function () {
         COMPARE_FUNC: gl.LEQUAL
     });
 
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
 
@@ -98,8 +95,8 @@ export const SampleObject = function () {
         sceneState.stateChange();
         program.use();
         const matrix: Float32Array = new Float32Array(matData);
-        program.setUniformData('mvp',[matrix]);
-        program.setUniformData('material.diffuse[0]',[0]);
+        program.setUniformData('mvp', [matrix]);
+        program.setUniformData('material.diffuse[0]', [0]);
         program.setUniformData('material.diffuse[1]', [1]);
         p3d.prepare([0, 1]);
         p3d.draw({ start: 0, cnt: 6 }, undefined, { instance: true, cnt: 1 });

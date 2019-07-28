@@ -2,29 +2,25 @@ import { Texture } from './texture';
 import { RenderBuffer } from './renderbuffer';
 import { Util } from './util';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 let uuid: number = 0;
 export class FrameBuffer {
-    public gl: WebGLRenderingContext | WebGL2RenderingContext;
+    public gl: WGL | WGL2 = GL.gl;
     public instance: WebGLFramebuffer;
-    public width: number;
-    public height: number;
-    public mounts: any;
-    public mountArray: (Texture | RenderBuffer)[];
+    public width: number = 0;
+    public height: number = 0;
+    public mounts: any = {};
+    public mountArray: (Texture | RenderBuffer)[] = [];
     public uid: string;
     public attachPoints: number[];
-    public type: Symbol;
+    public type: Symbol = CONSTANT.FRAMEBUFFER;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
-        this.gl = gl;
-        this.instance = gl.createFramebuffer();
-        this.width = 0;
-        this.height = 0;
-        this.mounts = {};
-        this.mountArray = [];
+    constructor(gl?: WGL | WGL2) {
+        this.gl = gl || this.gl;
+        this.instance = this.gl.createFramebuffer();
         this.uid = Util.random13(13, uuid++);
-        this.type = CONSTANT.FRAMEBUFFER;
-        if(uuid >= 10) uuid = 0;
+        if (uuid >= 10) uuid = 0;
     }
 
     public setReadBuffer(): void {
@@ -56,17 +52,18 @@ export class FrameBuffer {
     }
 
     public bind(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindFramebuffer(_gl.FRAMEBUFFER, this.instance);
     }
 
-    static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    static unBind(gl?: WGL | WGL2): void {
+        const tmpGl = gl || GL.gl;
+        tmpGl && tmpGl.bindFramebuffer(tmpGl.FRAMEBUFFER, null);
     }
 
     public dispose(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        if(_gl) {
+        const _gl: WGL | WGL2 = this.gl;
+        if (_gl) {
             _gl.bindFramebuffer(_gl.FRAMEBUFFER, null);
             _gl.deleteFramebuffer(this.instance);
         }
@@ -78,7 +75,7 @@ export class FrameBuffer {
     }
 
     public attachTexture(texture: Texture, attachPoint: GLenum, level: number = 0): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         texture.attachBuffer = texture.attachBuffer || _gl.FRAMEBUFFER;
         _gl.bindFramebuffer(texture.attachBuffer, this.instance);
         _gl.framebufferTexture2D(texture.attachBuffer, attachPoint, _gl.TEXTURE_2D, texture.instance, level);
@@ -88,7 +85,7 @@ export class FrameBuffer {
     }
 
     public attachRenderBuffer(renderbuffer: RenderBuffer, attachPoint: GLenum): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindFramebuffer(_gl.FRAMEBUFFER, this.instance);
         _gl.framebufferRenderbuffer(_gl.FRAMEBUFFER, attachPoint, _gl.RENDERBUFFER, renderbuffer.instance);
         this.mounts[attachPoint.toString()] = renderbuffer;
@@ -97,7 +94,7 @@ export class FrameBuffer {
     }
 
     public detach(attachPoint: GLenum, texture: boolean, level: number = 0): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const mount = this.mounts[attachPoint.toString()];
         if (mount === undefined) {
             return;
@@ -110,24 +107,26 @@ export class FrameBuffer {
     }
 
     public statusCheck(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const status: GLenum = _gl.checkFramebufferStatus(_gl.FRAMEBUFFER);
         if (status != _gl.FRAMEBUFFER_COMPLETE) {
             console.warn(`Can't initialize an FBO render texture. FBO initialization failed.`);
         }
     }
 
-    static blitFrameBuffer(gl: WebGL2RenderingContext,
+    static blitFrameBuffer(
         srcX0: GLint, srcY0: GLint, srcX1: GLint, srcY1: GLint,
         dstX0: GLint, dstY0: GLint, dstX1: GLint, dstY1: GLint,
-        mask: number, filter: GLenum): void {
-        gl.blitFramebuffer(srcX0, srcY0, srcX1, srcY1,
+        mask: number, filter: GLenum,
+        gl?: WebGL2RenderingContext): void {
+        const tmpGl = gl || <WebGL2RenderingContext>GL.gl;
+        tmpGl && tmpGl.blitFramebuffer(srcX0, srcY0, srcX1, srcY1,
             dstX0, dstY0, dstX1, dstY1,
             mask, filter);
     }
 
     public setDrawBuffers(attachPoints: number[]): void {
-        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WGL2 = <WGL2>this.gl;
         _gl.bindFramebuffer(_gl.DRAW_FRAMEBUFFER, this.instance);
         _gl.drawBuffers(attachPoints);
     }

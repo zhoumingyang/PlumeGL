@@ -9,18 +9,16 @@ export class P3D {
     public primitive: Primitive;
     public texture: Texture;
     public state: State;
-    public ready: boolean;
+    public ready: boolean = false;
     public uid: string;
-    public type: Symbol;
+    public type: Symbol = CONSTANT.P3D;
 
     constructor(primitive: Primitive, texture?: Texture, state?: State) {
         this.primitive = primitive;
         this.texture = texture;
-        this.state = state || new State(primitive.gl);
-        this.ready = false;
+        this.state = state || new State();
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
-        this.type = CONSTANT.P3D;
     }
 
     private _prepareInner(slots: number[] = [0]): void {

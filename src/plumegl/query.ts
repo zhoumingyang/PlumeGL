@@ -1,18 +1,18 @@
 import { Util } from './util';
 import { CONSTANT } from './constant';
+import { GL, WGL2 } from './gl';
 
 let uuid: number = 0;
 export class Query {
-    public gl: WebGL2RenderingContext;
+    public gl: WGL2 = <WGL2>GL.gl;
     public instance: WebGLQuery;
     public uid: string;
     public queryTarget: number;
-    public type: Symbol;
+    public type: Symbol = CONSTANT.QUERY;
 
-    constructor(gl: WebGL2RenderingContext) {
-        this.gl = gl;
-        this.instance = gl.createQuery();
-        this.type = CONSTANT.QUERY;
+    constructor(gl?: WGL2) {
+        this.gl = gl || this.gl;
+        this.instance = this.gl.createQuery();
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
     }
@@ -22,17 +22,17 @@ export class Query {
     }
 
     public begin(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.beginQuery(this.queryTarget, this.instance);
     }
 
     public end(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.endQuery(this.queryTarget);
     }
 
     public getParam(type: number): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         if (!_gl.getQueryParameter(this.instance, _gl.QUERY_RESULT_AVAILABLE)) {
             return;
         }
@@ -40,7 +40,7 @@ export class Query {
     }
 
     public dispose(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl && _gl.deleteQuery(this.instance);
         this.instance = null;
         this.uid = null;

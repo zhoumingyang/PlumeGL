@@ -10,14 +10,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -40,28 +33,28 @@ export const QueryOcclusion = () => {
     }
 
     const scene = new PlumeGL.Scene();
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
     sceneState.setDepthTest(true);
     scene.setSceneState(sceneState);
 
-    const shaderObj = new PlumeGL.Shader(gl, queryOcclusionVert, queryOcclusionFrag);
+    const shaderObj = new PlumeGL.Shader(queryOcclusionVert, queryOcclusionFrag);
     shaderObj.use();
     scene.add(shaderObj);
 
     const ver1 = new Float32Array(ver1Data);
     const ver2 = new Float32Array(ver2Data);
-    const triMesh1 = new PlumeGL.Mesh(gl);
+    const triMesh1 = new PlumeGL.Mesh();
     triMesh1.setGeometryAttribute(ver1, 'pos', gl.STATIC_DRAW, 3, gl.FLOAT, false);
     triMesh1.initBufferAttributePoint(shaderObj);
     shaderObj.addDrawObject(triMesh1);
-    const triMesh2 = new PlumeGL.Mesh(gl);
+    const triMesh2 = new PlumeGL.Mesh();
     triMesh2.setGeometryAttribute(ver2, 'pos', gl.STATIC_DRAW, 3, gl.FLOAT, false);
     triMesh2.initBufferAttributePoint(shaderObj);
     shaderObj.addDrawObject(triMesh2);
 
-    const tmpQuery = new PlumeGL.Query(gl);
+    const tmpQuery = new PlumeGL.Query();
     tmpQuery.setTarget(gl.ANY_SAMPLES_PASSED);
 
     // -- Render

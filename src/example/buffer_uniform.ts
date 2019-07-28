@@ -58,14 +58,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -74,7 +67,7 @@ export const BufferUniform = () => {
     if (!gl) {
         return;
     }
-    const shaderObj = new PlumeGL.Shader(gl, bufferUniformVert, bufferUniformFrag);
+    const shaderObj = new PlumeGL.Shader(bufferUniformVert, bufferUniformFrag);
     shaderObj.initParameters();
 
     // -- Init Buffer
@@ -82,7 +75,7 @@ export const BufferUniform = () => {
     const vertices = new Float32Array(pos);
     const normal = new Float32Array(nor);
     const color = new Float32Array(col);
-    const mesh = new PlumeGL.Mesh(gl);
+    const mesh = new PlumeGL.Mesh();
     mesh.setIndices(elementData, gl.STATIC_DRAW);
     mesh.setGeometryAttribute(vertices, 'position', gl.STATIC_DRAW, 3, gl.FLOAT, false);
     mesh.setGeometryAttribute(normal, 'normal', gl.STATIC_DRAW, 3, gl.FLOAT, false);
@@ -99,7 +92,7 @@ export const BufferUniform = () => {
 
     mesh.prepare();
     shaderObj.bindBase();
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
     shaderObj.use();

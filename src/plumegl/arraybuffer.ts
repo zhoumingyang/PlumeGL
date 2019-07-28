@@ -1,30 +1,26 @@
 import { Util } from './util';
 import { Shader } from './shader';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 let uuid = 0;
 export class ArrayBuffer {
-    public gl: WebGLRenderingContext | WebGL2RenderingContext;
+    public gl: WGL | WGL2 = GL.gl;
     public instance: WebGLBuffer;
     public drawType: number;
-    public attribs: any[];
-    public stride: number;
-    public byteLength: number;
-    public length: number;
+    public attribs: any[] = [];
+    public stride: number = 0;
+    public byteLength: number = 0;
+    public length: number = 0;
     public uid: string;
-    public type: Symbol;
+    public type: Symbol = CONSTANT.ARRAYBUFFER;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext, drawType?: number) {
-        this.gl = gl;
-        this.instance = gl.createBuffer();
-        this.drawType = drawType || gl.STATIC_DRAW;
-        this.attribs = [];
-        this.stride = 0;
-        this.byteLength = 0;
-        this.length = 0;
+    constructor(drawType: number = GL.gl.STATIC_DRAW, gl?: WGL | WGL2) {
+        this.gl = gl || this.gl;
+        this.instance = this.gl.createBuffer();
+        this.drawType = drawType;
         this.uid = Util.random13(13, uuid++);
-        this.type = CONSTANT.ARRAYBUFFER;
-        if(uuid >= 10) uuid = 0;
+        if (uuid >= 10) uuid = 0;
     }
 
     private _drawLengthChange(): void {
@@ -46,19 +42,20 @@ export class ArrayBuffer {
     }
 
     public bind(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
     }
 
-    static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl && gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    static unBind(gl?: WGL | WGL2): void {
+        const tmpGL = gl || GL.gl;
+        tmpGL && tmpGL.bindBuffer(tmpGL.ARRAY_BUFFER, null);
     }
 
     public setBufferData(_array: any): void {
         if (!_array) {
             return;
         }
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
         _gl.bufferData(_gl.ARRAY_BUFFER, _array, this.drawType);
         _gl.bindBuffer(_gl.ARRAY_BUFFER, null);
@@ -67,14 +64,14 @@ export class ArrayBuffer {
     }
 
     public setSubBufferData(_array: any, offset: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
         _gl.bufferSubData(_gl.ARRAY_BUFFER, offset, _array);
         _gl.bindBuffer(_gl.ARRAY_BUFFER, null);
     }
 
     public setAttributePoint(program: Shader): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
         const attribs: any[] = this.attribs;
         const attribsLength = attribs.length;
@@ -99,7 +96,7 @@ export class ArrayBuffer {
     }
 
     public dispose(): void {
-        ArrayBuffer.unBind(this.gl);
+        ArrayBuffer.unBind();
         this.gl && this.gl.deleteBuffer(this.instance);
         this.instance = null;
         this.attribs = [];

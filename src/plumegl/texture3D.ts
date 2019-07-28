@@ -1,20 +1,23 @@
 import { Texture } from './texture';
 import { CONSTANT } from './constant';
+import { GL, WGL2 } from './gl';
 
 export class Texture3D extends Texture {
 
-    constructor(gl: WebGL2RenderingContext) {
+    constructor(gl?: WGL2) {
         super(gl);
         this.type = CONSTANT.TEXTURE3D;
-        this.textureType = gl.TEXTURE_3D;
+        const tmpGl = <WGL2>this.gl;
+        this.textureType = tmpGl.TEXTURE_3D;
     }
 
-    static unBind(gl: WebGL2RenderingContext): void {
-        gl && gl.bindTexture(gl.TEXTURE_3D, null);
+    static unBind(gl: WGL2): void {
+        const tmpGl = gl || <WGL2>GL.gl;
+        tmpGl && tmpGl.bindTexture(tmpGl.TEXTURE_3D, null);
     }
 
     public setTextureFromData(data: any, sizes: number[], index?: number): void {
-        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WGL2 = <WGL2>this.gl;
         if (sizes && sizes.length >= 3) {
             this.width = sizes[0] || this.width;
             this.height = sizes[1] || this.height;
@@ -41,7 +44,7 @@ export class Texture3D extends Texture {
             h = sizes[1] || h;
             d = sizes[2] || d;
         }
-        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WGL2 = <WGL2>this.gl;
         _gl.bindTexture(this.textureType, this.instance);
         _gl.texStorage3D(this.textureType, this.levels, this.internal, w, h, d);
         _gl.texSubImage3D(this.textureType, this.level, x, y, z, w, h, d, this.format, this.colorType, data);

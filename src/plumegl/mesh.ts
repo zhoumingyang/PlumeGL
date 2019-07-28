@@ -2,21 +2,21 @@ import { Util } from './util';
 import { IndexBuffer } from './indexbuffer';
 import { Primitive } from './primitive';
 import { CONSTANT } from './constant';
+import { WGL, WGL2 } from './gl';
 
 let uuid = 0;
 export class Mesh extends Primitive {
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
+    constructor(gl?: WGL | WGL2) {
         super(gl);
         this.type = CONSTANT.MESH;
-        this.DrawTypes = [gl.TRIANGLES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN];
-        this.setDrawType(gl.TRIANGLES);
+        this.DrawTypes = [this.gl.TRIANGLES, this.gl.TRIANGLE_STRIP, this.gl.TRIANGLE_FAN];
+        this.setDrawType(this.gl.TRIANGLES);
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
     }
 
     public setIndices(datas: any, drawType?: number, dataType?: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
         if (!datas) {
             return;
         }
@@ -25,7 +25,7 @@ export class Mesh extends Primitive {
         }
         this.attributes['indices'] = datas;
         if (!this.indexBuffer) {
-            this.indexBuffer = new IndexBuffer(_gl, drawType, dataType);
+            this.indexBuffer = new IndexBuffer(drawType, dataType);
         }
         this.indexBuffer.setElementData(datas);
     }

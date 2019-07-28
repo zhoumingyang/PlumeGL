@@ -1,19 +1,22 @@
 import { Texture } from './texture';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 export class Texture2D extends Texture {
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
+
+    constructor(gl?: WGL | WGL2) {
         super(gl);
         this.type = CONSTANT.TEXTURE2D;
-        this.textureType = gl.TEXTURE_2D;
+        this.textureType = this.gl.TEXTURE_2D;
     }
 
-    static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl && gl.bindTexture(gl.TEXTURE_2D, null);
+    static unBind(gl?: WGL | WGL2): void {
+        const tmpGL = gl || GL.gl;
+        tmpGL && tmpGL.bindTexture(tmpGL.TEXTURE_2D, null);
     }
 
     public setTextureFromImage(image: TexImageSource, index?: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.width = image.width;
         this.height = image.height;
         _gl.bindTexture(this.textureType, this.instance);
@@ -21,7 +24,7 @@ export class Texture2D extends Texture {
     }
 
     public setTextureFromData(data: any, sizes: number[], index?: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         if (sizes && sizes.length >= 2) {
             this.width = sizes[0] || this.width;
             this.height = sizes[1] || this.height;
@@ -44,7 +47,7 @@ export class Texture2D extends Texture {
             w = sizes[0] || w;
             h = sizes[1] || h;
         }
-        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WGL2 = <WGL2>this.gl;
         _gl.bindTexture(this.textureType, this.instance);
         _gl.texStorage2D(this.textureType, this.levels, this.internal, w, h);
         _gl.texSubImage2D(this.textureType, this.level, x, y, w, h, this.format, this.colorType, data);

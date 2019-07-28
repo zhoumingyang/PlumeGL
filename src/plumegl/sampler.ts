@@ -1,5 +1,6 @@
 import { Util } from './util';
 import { CONSTANT, TEXTURE } from './constant';
+import { GL, WGL2 } from './gl';
 
 interface WrapType {
     WRAP_S?: number;
@@ -24,21 +25,20 @@ interface CompareType {
 
 let uuid = 0;
 export class Sampler {
-    private gl: WebGL2RenderingContext
+    public gl: WGL2 = <WGL2>GL.gl;
     public uid: string;
     public instance: WebGLSampler;
-    public type: Symbol;
+    public type: Symbol = CONSTANT.SAMPLER;
 
-    constructor(gl: WebGL2RenderingContext) {
-        this.gl = gl;
+    constructor(gl?: WGL2) {
+        this.gl = gl || this.gl;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
-        this.instance = gl.createSampler();
-        this.type = CONSTANT.SAMPLER;
+        this.instance = this.gl.createSampler();
     }
 
     public bind(unit: number): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.bindSampler(unit, this.instance);
     }
 
@@ -52,17 +52,17 @@ export class Sampler {
     }
 
     public repeat(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         this.setWrapMode(_gl.REPEAT);
     }
 
     public clamp(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         this.setWrapMode(_gl.CLAMP_TO_EDGE);
     }
 
     public mirror(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         this.setWrapMode(_gl.MIRRORED_REPEAT);
     }
 
@@ -74,7 +74,7 @@ export class Sampler {
         if (mode === undefined) {
             return;
         }
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         if (typeof mode === 'number') {
             _gl.samplerParameteri(this.instance, _gl.TEXTURE_WRAP_S, mode);
             _gl.samplerParameteri(this.instance, _gl.TEXTURE_WRAP_T, mode);
@@ -107,7 +107,7 @@ export class Sampler {
     }
 
     public setMagMinFilter(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         const filter = this.textureFilter(!!linear, !!mipmap, !!mipmapLinear);
         _gl.samplerParameteri(this.instance, _gl.TEXTURE_MAG_FILTER, this.textureFilter(!!linear, false, false));
         _gl.samplerParameteri(this.instance, _gl.TEXTURE_MIN_FILTER, filter);
@@ -117,7 +117,7 @@ export class Sampler {
         if (!filter) {
             return;
         }
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         for (let key in filter) {
             let value;
             switch (key) {
@@ -137,7 +137,7 @@ export class Sampler {
         if (!lod) {
             return;
         }
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         for (let key in lod) {
             let value;
             switch (key) {
@@ -157,7 +157,7 @@ export class Sampler {
         if (!compare) {
             return;
         }
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         for (let key in compare) {
             let value;
             switch (key) {

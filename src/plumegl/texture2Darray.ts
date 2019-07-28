@@ -1,21 +1,24 @@
 
 import { Texture } from './texture';
 import { CONSTANT } from './constant';
+import { GL, WGL2 } from './gl';
 
 export class Texture2DArray extends Texture {
 
-    constructor(gl: WebGL2RenderingContext) {
+    constructor(gl?: WGL2) {
         super(gl);
         this.type = CONSTANT.TEXTURE2DARRAY;
-        this.textureType = gl.TEXTURE_2D_ARRAY;
+        const tmpGl = <WGL2>this.gl;
+        this.textureType = tmpGl.TEXTURE_2D_ARRAY;
     }
 
-    static unBind(gl: WebGL2RenderingContext): void {
-        gl && gl.bindTexture(gl.TEXTURE_2D_ARRAY, null);
+    static unBind(gl?: WGL2): void {
+        const tmpGl = gl || <WGL2>GL.gl;
+        tmpGl && tmpGl.bindTexture(tmpGl.TEXTURE_2D_ARRAY, null);
     }
 
     public setTextureFromData(data: any, sizes: number[], index?: number): void {
-        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WGL2 = <WGL2>this.gl;
         if (sizes && sizes.length >= 3) {
             this.width = sizes[0] || this.width;
             this.height = sizes[1] || this.height;

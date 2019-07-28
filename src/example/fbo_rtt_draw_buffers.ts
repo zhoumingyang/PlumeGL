@@ -36,14 +36,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -57,8 +50,8 @@ export const FboRttDrawBuffers = () => {
         y: gl.drawingBufferHeight
     };
 
-    const drawBufferShader = new PlumeGL.Shader(gl, FboRttVsDrawBuffer, FboRttFsDrawBuffer);
-    const drawShader = new PlumeGL.Shader(gl, FboRttVsDraw, FboRttFsDraw);
+    const drawBufferShader = new PlumeGL.Shader(FboRttVsDrawBuffer, FboRttFsDrawBuffer);
+    const drawShader = new PlumeGL.Shader(FboRttVsDraw, FboRttFsDraw);
     drawBufferShader.initParameters();
     drawShader.initParameters();
 
@@ -69,47 +62,47 @@ export const FboRttDrawBuffers = () => {
 
     // -- Initialize buffer
     const triPositions = new Float32Array(triData);
-    const triMesh = new PlumeGL.Mesh(gl);
+    const triMesh = new PlumeGL.Mesh();
     triMesh.setGeometryAttribute(triPositions, 'position', gl.STATIC_DRAW, 3, gl.FLOAT, false);
     triMesh.initBufferAttributePoint(drawBufferShader);
     drawBufferShader.addDrawObject(triMesh);
 
     const quadPositions = new Float32Array(quadData);
     const quadTexcoords = new Float32Array(quadTexData);
-    const quadMesh = new PlumeGL.Mesh(gl);
+    const quadMesh = new PlumeGL.Mesh();
     quadMesh.setGeometryAttribute(quadPositions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.setGeometryAttribute(quadTexcoords, 'textureCoordinates', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.initBufferAttributePoint(drawShader);
     drawShader.addDrawObject(quadMesh);
 
     //init texture    
-    const texture0 = new PlumeGL.Texture2D(gl);
+    const texture0 = new PlumeGL.Texture2D();
     texture0.active(0);
     texture0.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
     texture0.setTextureFromData(null, [windowSize.x, windowSize.y]);
     texture0.wrapMode(true);
     texture0.filterMode(false);
-    PlumeGL.Texture2D.unBind(gl);
+    PlumeGL.Texture2D.unBind();
     texture0.attachTo(gl.DRAW_FRAMEBUFFER);
 
-    const texture1 = new PlumeGL.Texture2D(gl);
+    const texture1 = new PlumeGL.Texture2D();
     texture1.active(1);
     texture1.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
     texture1.setTextureFromData(null, [windowSize.x, windowSize.y]);
     texture1.wrapMode(true);
     texture1.filterMode(false);
-    PlumeGL.Texture2D.unBind(gl);
+    PlumeGL.Texture2D.unBind();
     texture1.attachTo(gl.DRAW_FRAMEBUFFER);
 
     // -- Initialize frame buffer
-    const tmpFrameBuffer = new PlumeGL.FrameBuffer(gl);
+    const tmpFrameBuffer = new PlumeGL.FrameBuffer();
     tmpFrameBuffer.attachTexture(texture0, gl.COLOR_ATTACHMENT0);
     tmpFrameBuffer.attachTexture(texture1, gl.COLOR_ATTACHMENT1);
     tmpFrameBuffer.setDrawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]);
     tmpFrameBuffer.statusCheck();
     tmpFrameBuffer.rmDrawBuffer();
 
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
     scene2.setSceneState(sceneState);

@@ -1,3 +1,4 @@
+import { WGL, WGL2 } from './gl';
 
 const uniformMap: any = {
     5126: '1f',     //FLOAT
@@ -19,7 +20,7 @@ const uniformMap: any = {
     35676: 'Matrix4f',  //FLOAT_MAT4
 };
 
-const glUniformFunction: Function = (funcName: string, gl: WebGLRenderingContext | WebGL2RenderingContext): Function => {
+const glUniformFunction: Function = (funcName: string, gl: WGL | WGL2): Function => {
 
     const uniformFunctionMap: any = {
         'uniform1f': gl.uniform1f,
@@ -49,7 +50,7 @@ const glUniformFunction: Function = (funcName: string, gl: WebGLRenderingContext
 export class UniformFactory {
 
     static uniformSetter(type: number, location: WebGLUniformLocation,
-        gl: WebGLRenderingContext | WebGL2RenderingContext, option: any): Function {
+        gl: WGL | WGL2, option: any): Function {
         switch (type) {
             case gl.FLOAT_MAT2:
             case gl.FLOAT_MAT3:
@@ -70,7 +71,7 @@ export class UniformFactory {
     }
 
     static oridinaryUniformSetter(type: number, location: WebGLUniformLocation,
-        gl: WebGLRenderingContext | WebGL2RenderingContext, option: any): Function {
+        gl: WGL | WGL2, option: any): Function {
         const param: string = uniformMap[type];
         const funcName: string = `uniform${param}`;
         return function () {
@@ -86,7 +87,7 @@ export class UniformFactory {
     }
 
     static matrixUniformSetter(type: number, location: WebGLUniformLocation,
-        gl: WebGLRenderingContext | WebGL2RenderingContext, option: any): Function {
+        gl: WGL | WGL2, option: any): Function {
         const param: string = uniformMap[type];
         const funcName: string = `uniform${param}`;
         return function () {
@@ -100,7 +101,7 @@ export class UniformFactory {
     }
 
     static sampleUniformSetter(type: number, location: WebGLUniformLocation,
-        gl: WebGLRenderingContext | WebGL2RenderingContext, option: any): Function {
+        gl: WGL | WGL2, option: any): Function {
         const unit: number = option.texCnt++;
         return function () {
             if (arguments.length === 1) {
@@ -114,7 +115,7 @@ export class UniformFactory {
         };
     }
 
-    static blockUniformSetter(index: number, gl: WebGL2RenderingContext, program: WebGLProgram, option: any) {
+    static blockUniformSetter(index: number, gl: WGL2, program: WebGLProgram, option: any) {
         const unit = option.ublockCnt++;
         return function () {
             if (arguments.length === 1) {

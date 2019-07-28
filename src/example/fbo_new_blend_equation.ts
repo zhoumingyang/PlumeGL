@@ -36,14 +36,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 }
 
@@ -98,19 +91,19 @@ export const FboNewBlenEquation = () => {
     const scene = new PlumeGL.Scene();
 
     // init shader program
-    const shaderObj = new PlumeGL.Shader(gl, fboBlendVert, fboBlendFrag);
+    const shaderObj = new PlumeGL.Shader(fboBlendVert, fboBlendFrag);
     shaderObj.initParameters();
     scene.add(shaderObj);
 
     // init P3D object includes {mesh, texture, state}
     const positions = new Float32Array(posData);
     const texcoords = new Float32Array(texCoordData);
-    const mesh = new PlumeGL.Mesh(gl);
+    const mesh = new PlumeGL.Mesh();
     mesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     mesh.setGeometryAttribute(texcoords, 'textureCoordinates', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     mesh.initBufferAttributePoint(shaderObj);
-    const texture = new PlumeGL.Texture2D(gl);
-    const state = new PlumeGL.State(gl);
+    const texture = new PlumeGL.Texture2D();
+    const state = new PlumeGL.State();
     const p3d = new PlumeGL.P3D(mesh, texture, state);
     shaderObj.addDrawObject(p3d);
 
@@ -123,7 +116,7 @@ export const FboNewBlenEquation = () => {
     });
 
     // init scene state
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.5, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
     scene.setSceneState(sceneState);

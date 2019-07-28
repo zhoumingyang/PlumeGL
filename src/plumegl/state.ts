@@ -1,4 +1,5 @@
 import { CONSTANT, STATE } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 interface state {
     value: any,
@@ -9,7 +10,7 @@ interface state {
 }
 
 export class State {
-    public gl: WebGLRenderingContext | WebGL2RenderingContext;
+    public gl: WGL | WGL2 = GL.gl;
     public type: Symbol;
     public sceneClear: state;
     public viewport: state;
@@ -33,8 +34,12 @@ export class State {
     public changeStates: any;
     public currentState: state;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
-        this.gl = gl;
+    constructor(gl?: WGL | WGL2) {
+        if (!gl) {
+            gl = GL.gl;
+        } else {
+            this.gl = gl;
+        }
         this.type = CONSTANT.STATE;
         this.changeStates = {};
         this.currentState = undefined;
@@ -722,7 +727,7 @@ export class State {
     }
 
     private glRasterDiscard(option?: any): void {
-        const _gl:WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
         const rasterDiscard = this.rasterDiscard;
         if (!rasterDiscard.setMark) {
             return;

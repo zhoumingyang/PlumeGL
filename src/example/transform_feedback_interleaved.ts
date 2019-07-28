@@ -21,14 +21,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 }
 
@@ -37,7 +30,7 @@ export const TransformFeedbackInterleaved = () => {
     if (!gl) {
         return;
     }
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
     sceneState.setRasterDiscard(true); // Disable rasterization, vertices processing only
@@ -48,9 +41,9 @@ export const TransformFeedbackInterleaved = () => {
         vars: ['gl_Position', 'v_color'],
         bufferMode: gl.INTERLEAVED_ATTRIBS
     };
-    const transformShaderObj = new PlumeGL.Shader(gl, interleavedTransformVert, interleavedTransformFrag, fb);
+    const transformShaderObj = new PlumeGL.Shader(interleavedTransformVert, interleavedTransformFrag, fb);
     transformShaderObj.initParameters();
-    const feedbackShaderObj = new PlumeGL.Shader(gl, interleavedFeedbackVert, interleavedFeedbackFrag);
+    const feedbackShaderObj = new PlumeGL.Shader(interleavedFeedbackVert, interleavedFeedbackFrag);
     feedbackShaderObj.initParameters();
     const shaderObjs = [transformShaderObj, feedbackShaderObj];
 
@@ -58,11 +51,11 @@ export const TransformFeedbackInterleaved = () => {
     const SIZE_V4C4 = 32;
     const VERTEX_COUNT = 6;
     const vertices = new Float32Array(verData);
-    const tfMesh = new PlumeGL.Mesh(gl);
+    const tfMesh = new PlumeGL.Mesh();
     tfMesh.setGeometryAttribute(vertices, 'position', gl.STATIC_DRAW, 4, gl.FLOAT, false);
     tfMesh.initBufferAttributePoint(shaderObjs[PROGRAM_TRANSFORM]);
 
-    const fbMesh = new PlumeGL.Mesh(gl);
+    const fbMesh = new PlumeGL.Mesh();
     fbMesh.setGeometryAttributes(SIZE_V4C4 * VERTEX_COUNT, [{
         name: 'position', size: 4,
         type: gl.FLOAT, normalize: false,
@@ -73,7 +66,7 @@ export const TransformFeedbackInterleaved = () => {
     fbMesh.initBufferAttributePoint(shaderObjs[PROGRAM_FEEDBACK]);
 
     // -- Init TransformFeedback: Track output buffer
-    const feedBack = new PlumeGL.FeedBack(gl);
+    const feedBack = new PlumeGL.FeedBack();
     feedBack.bindBuffer(fbMesh, 0);
 
     // -- Render

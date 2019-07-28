@@ -1,22 +1,30 @@
 import { ArrayBuffer } from './arraybuffer';
 import { Primitive } from './primitive';
 import { P3D } from './p3d';
+import { CONSTANT } from './constant';
+import { Util } from './util';
+import { GL, WGL2 } from './gl';
 
+let uuid = 0;
 export class FeedBack {
-    public gl: WebGL2RenderingContext;
+    public gl: WGL2 = <WGL2>GL.gl;
     public instance: WebGLTransformFeedback;
+    public type: Symbol = CONSTANT.FEEDBACK;
+    public uid: string;
 
-    constructor(gl: WebGL2RenderingContext) {
-        this.gl = gl;
-        this.instance = gl.createTransformFeedback();
+    constructor(gl?: WGL2) {
+        this.gl = gl || this.gl;
+        this.instance = this.gl.createTransformFeedback();
+        this.uid = Util.random13(13, uuid++);
+        if (uuid >= 10) uuid = 0;
     }
 
     public bind(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, this.instance);
     }
 
-    static unBind(_gl: WebGL2RenderingContext): void {
+    static unBind(_gl: WGL2): void {
         _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, null);
     }
 
@@ -51,7 +59,7 @@ export class FeedBack {
     }
 
     public bindBuffer(buffer: ArrayBuffer | WebGLBuffer | Primitive | P3D, index: number = 0): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         let tmpBuffer = this.getWebGLBuffers(buffer);
         if (tmpBuffer instanceof Array) {
             this.bindBuffers(tmpBuffer);
@@ -64,7 +72,7 @@ export class FeedBack {
     }
 
     public bindBuffers(buffers: (ArrayBuffer | WebGLBuffer | Primitive | P3D)[]): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, this.instance);
         buffers.forEach((buffer, i) => {
             const tmpBuffer = this.getWebGLBuffers(buffer);
@@ -90,20 +98,20 @@ export class FeedBack {
     }
 
     public begin(drawMode: number): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, this.instance);
         drawMode = drawMode || _gl.TRIANGLES;
         _gl.beginTransformFeedback(drawMode);
     }
 
     public end(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.endTransformFeedback();
         _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, null);
     }
 
     public dispose(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.deleteTransformFeedback(this.instance);
     }
 }

@@ -2,27 +2,26 @@ import { Util } from './util';
 import { ArrayBuffer } from './arraybuffer';
 import { Shader } from './shader';
 import { CONSTANT } from './constant';
+import { GL, WGL2 } from './gl';
 
 let uuid = 0;
 export class VAO {
-    public gl: WebGL2RenderingContext;
+    public gl: WGL2 = <WGL2>GL.gl;
     public arrayObject: WebGLVertexArrayObject;
     public uid: string;
-    public buffers: Map<string, ArrayBuffer>;
-    public type: Symbol;
+    public buffers: Map<string, ArrayBuffer> = new Map();
+    public type: Symbol = CONSTANT.VAO;
 
-    constructor(gl: WebGL2RenderingContext, buffers: ArrayBuffer[] = []) {
-        this.gl = gl;
-        this.arrayObject = gl.createVertexArray();
+    constructor(buffers: ArrayBuffer[] = [], gl?: WGL2) {
+        this.gl = gl || this.gl;
+        this.arrayObject = this.gl.createVertexArray();
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
-        this.buffers = new Map();
         if (buffers && buffers.length) {
             buffers.forEach((buffer: ArrayBuffer) => {
                 this.buffers.set(buffer.uid, buffer);
             });
         }
-        this.type = CONSTANT.VAO;
     }
 
     public addBuffer(buffer: ArrayBuffer): void {
@@ -40,7 +39,7 @@ export class VAO {
         if (!program || !this.buffers) {
             return;
         }
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.bindVertexArray(this.arrayObject);
         this.buffers.forEach((buffer: ArrayBuffer) => {
             buffer.setAttributePoint(program);
@@ -49,7 +48,7 @@ export class VAO {
     }
 
     public bind(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
+        const _gl: WGL2 = this.gl;
         _gl.bindVertexArray(this.arrayObject);
     }
 
@@ -69,9 +68,9 @@ export class VAO {
         ArrayBuffer.unBind(this.gl);
     }
 
-    public unBind(): void {
-        const _gl: WebGL2RenderingContext = this.gl;
-        _gl.bindVertexArray(null);
+    static unBind(gl?: WGL2): void {
+        const _gl = gl || <WGL2>GL.gl;
+        _gl && _gl.bindVertexArray(null);
     }
 
     public disposeBuffes(): void {
