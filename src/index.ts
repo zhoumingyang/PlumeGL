@@ -11,6 +11,7 @@ import { DrawTexture3D } from './example/texture_3d';
 import { DrawTexture2DArray } from './example/texture_2d_array';
 import { QueryOcclusion } from './example/query_occlusion';
 import { TransformFeedbackInterleaved } from './example/transform_feedback_interleaved';
+import { TransformFeedbackSeparated } from './example/transform_feedback_separated';
 
 const appRun = () => {
     // SampleObject();
@@ -25,6 +26,7 @@ const appRun = () => {
     // DrawTexture3D();
     // DrawTexture2DArray();
     // QueryOcclusion();
-    TransformFeedbackInterleaved();
+    // TransformFeedbackInterleaved();
+    TransformFeedbackSeparated();
 };
 appRun();
