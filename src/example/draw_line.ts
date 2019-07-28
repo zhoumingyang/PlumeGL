@@ -10,14 +10,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true, transparent: false });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true, transparent: false });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -36,14 +29,14 @@ export const DrawLine = (): void => {
     if (!gl) {
         return;
     }
-    const ShaderObj = new PlumeGL.Shader(gl, drawLineVert, drawLineFrag);
+    const ShaderObj = new PlumeGL.Shader(drawLineVert, drawLineFrag);
     ShaderObj.initParameters();
     const COUNT = 6;
-    const line = new PlumeGL.Line(gl);
+    const line = new PlumeGL.Line();
     line.setDrawType(gl.LINE_LOOP);
     line.setGeometryAttribute(createPolygon(COUNT, 0.15), 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     line.initBufferAttributePoint(ShaderObj);
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setViewPort(0, 0, 480, 480);
     sceneState.setClearColor(0.0, 0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);

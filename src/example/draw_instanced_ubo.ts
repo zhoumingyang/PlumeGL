@@ -33,14 +33,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -50,13 +43,13 @@ export const DrawInstancedUbo = () => {
         return;
     }
     // init shader object
-    const shaderObj = new PlumeGL.Shader(gl, drawInstancedUboVert, drawInstancedUboFrag);
+    const shaderObj = new PlumeGL.Shader(drawInstancedUboVert, drawInstancedUboFrag);
     shaderObj.initParameters();
     shaderObj.use();
 
     // init mesh object
     const vertices = new Float32Array(posData);
-    const mesh = new PlumeGL.Mesh(gl);
+    const mesh = new PlumeGL.Mesh();
     mesh.setGeometryAttribute(vertices, 'pos', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     mesh.initBufferAttributePoint(shaderObj);
 
@@ -66,7 +59,7 @@ export const DrawInstancedUbo = () => {
     shaderObj.setUniformBufferData('Transform', transforms, gl.DYNAMIC_DRAW);
     shaderObj.setUniformBufferData('Material', materials, gl.STATIC_DRAW);
 
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0, 0, 0, 1);
     sceneState.setClear(true, false, false);
     sceneState.stateChange();

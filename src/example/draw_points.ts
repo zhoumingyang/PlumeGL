@@ -16,14 +16,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true, transparent: false });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true, transparent: false });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -32,12 +25,12 @@ export const DrawPoints = (): void => {
     if (!gl) {
         return;
     }
-    const ShaderObj = new PlumeGL.Shader(gl, drawPointsVert, drawPointsFrag);
+    const ShaderObj = new PlumeGL.Shader(drawPointsVert, drawPointsFrag);
     ShaderObj.initParameters();
-    const point = new PlumeGL.Point(gl);
+    const point = new PlumeGL.Point();
     point.setGeometryAttribute(new Float32Array(vertDatas), 'position', gl.STATIC_DRAW, 3, gl.FLOAT, false);
     point.initBufferAttributePoint(ShaderObj);
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.5, 0.5, 0.5, 1.0);
     sceneState.setClear(true, false, false);
     sceneState.setViewPort(0, 0, cav.width, cav.height);

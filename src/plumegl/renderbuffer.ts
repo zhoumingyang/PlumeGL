@@ -1,37 +1,35 @@
 import { Util } from './util';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 let uuid: number = 0;
 export class RenderBuffer {
-    public gl: WebGLRenderingContext | WebGL2RenderingContext;
+    public gl: WGL | WGL2 = GL.gl;
     public uid: string;
-    public width: number;
-    public height: number;
+    public width: number = 0;
+    public height: number = 0;
     public instance: WebGLRenderbuffer;
     public format: number;
-    public type: Symbol;
-    private _valid: boolean;
+    public type: Symbol = CONSTANT.RENDERBUFFER;
+    private _valid: boolean = false;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext, format?: number) {
-        this.gl = gl;
+    constructor(format?: number, gl?: WGL | WGL2) {
+        this.gl = gl || this.gl;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
-        this.width = 0;
-        this.height = 0;
-        this.instance = gl.createRenderbuffer();
-        this.format = format || gl.DEPTH_COMPONENT16;
-        this._valid = false;
-        this.type = CONSTANT.RENDERBUFFER;
+        this.instance = this.gl.createRenderbuffer();
+        this.format = format || this.gl.DEPTH_COMPONENT16;
         this._renderBufferStorage();
     }
 
     public bind(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindRenderbuffer(_gl.RENDERBUFFER, this.instance);
     }
 
-    static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
-        gl && gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+    static unBind(gl?: WGL | WGL2): void {
+        const tmpGl = gl || GL.gl;
+        tmpGl && tmpGl.bindRenderbuffer(tmpGl.RENDERBUFFER, null);
     }
 
     public dispose(): void {
@@ -63,7 +61,7 @@ export class RenderBuffer {
     }
 
     private _renderBufferStorage(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindRenderbuffer(_gl.RENDERBUFFER, this.instance);
         _gl.renderbufferStorage(_gl.RENDERBUFFER, this.format, this.width, this.height);
         _gl.bindRenderbuffer(_gl.RENDERBUFFER, null);

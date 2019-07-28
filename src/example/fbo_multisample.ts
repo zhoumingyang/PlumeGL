@@ -30,14 +30,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -53,9 +46,9 @@ export const FboMultiSample = () => {
         MAX: 2
     };
 
-    const textureShader = new PlumeGL.Shader(gl, fboMultiSampleVsRender, fboMultiSampleFsRender);
+    const textureShader = new PlumeGL.Shader(fboMultiSampleVsRender, fboMultiSampleFsRender);
     textureShader.initParameters();
-    const splashShader = new PlumeGL.Shader(gl, fboMultiSampleVsSplash, fboMultiSampleFsSplash);
+    const splashShader = new PlumeGL.Shader(fboMultiSampleVsSplash, fboMultiSampleFsSplash);
     splashShader.initParameters();
 
     const programs: any[] = [
@@ -74,7 +67,7 @@ export const FboMultiSample = () => {
         data[2 * i + 1] = radius * Math.cos(angle);
     }
 
-    const lineLoop = new PlumeGL.Line(gl);
+    const lineLoop = new PlumeGL.Line();
     lineLoop.setDrawType(gl.LINE_LOOP);
     lineLoop.setGeometryAttribute(data, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     lineLoop.initBufferAttributePoint(textureShader);
@@ -82,7 +75,7 @@ export const FboMultiSample = () => {
     var positions = new Float32Array(posData);
     var texCoords = new Float32Array(texData);
 
-    const quadMesh = new PlumeGL.Mesh(gl);
+    const quadMesh = new PlumeGL.Mesh();
     quadMesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.setGeometryAttribute(texCoords, 'texcoord', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.initBufferAttributePoint(splashShader);
@@ -93,10 +86,10 @@ export const FboMultiSample = () => {
         x: cav.width,
         y: cav.height
     };
-    const tmpTexture = new PlumeGL.Texture2D(gl);
+    const tmpTexture = new PlumeGL.Texture2D();
     tmpTexture.setTextureFromData(null, [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]);
     tmpTexture.filterMode(false, false, false);
-    PlumeGL.Texture2D.unBind(gl);
+    PlumeGL.Texture2D.unBind();
 
     // -- Init Frame Buffers
     const FRAMEBUFFER = {
@@ -104,17 +97,18 @@ export const FboMultiSample = () => {
         COLORBUFFER: 1
     };
     const tmpFrameBuffers = [
-        new PlumeGL.FrameBuffer(gl),
-        new PlumeGL.FrameBuffer(gl)
+        new PlumeGL.FrameBuffer(),
+        new PlumeGL.FrameBuffer()
     ];
-    const tmpColorRenderBuffer = new PlumeGL.RenderBuffer(gl, gl.RGBA8);
+
+    const tmpColorRenderBuffer = new PlumeGL.RenderBuffer(gl.RGBA8);
     tmpColorRenderBuffer.setSize(FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
     tmpColorRenderBuffer.allocateMultisample(4);
     tmpFrameBuffers[FRAMEBUFFER.RENDERBUFFER].attachRenderBuffer(tmpColorRenderBuffer, gl.COLOR_ATTACHMENT0);
     tmpFrameBuffers[FRAMEBUFFER.COLORBUFFER].attachTexture(tmpTexture, gl.COLOR_ATTACHMENT0);
 
     // Pass 1
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     tmpFrameBuffers[FRAMEBUFFER.RENDERBUFFER].bind();
     programs[PROGRAM.TEXTURE].use();
     lineLoop.prepare();
@@ -130,7 +124,7 @@ export const FboMultiSample = () => {
     tmpFrameBuffers[FRAMEBUFFER.RENDERBUFFER].setReadBuffer();
     tmpFrameBuffers[FRAMEBUFFER.COLORBUFFER].setDrawBuffer();
     sceneState.setClearBuffer(PlumeGL.STATE.COLOR_BUFFER, 0, [0.0, 0.0, 0.0, 1.0]).change();
-    PlumeGL.FrameBuffer.blitFrameBuffer(gl,
+    PlumeGL.FrameBuffer.blitFrameBuffer(
         0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
         0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
         gl.COLOR_BUFFER_BIT, gl.NEAREST
@@ -144,7 +138,7 @@ export const FboMultiSample = () => {
             0, 0, 8, 0,
             0, 0, 0, 1
         ]);
-    PlumeGL.FrameBuffer.unBind(gl);
+    PlumeGL.FrameBuffer.unBind();
     programs[PROGRAM.SPLASH].use();
     programs[PROGRAM.SPLASH].setUniformData('diffuseLocation', 0);
     programs[PROGRAM.SPLASH].setUniformData('MVP', [mvp, false]);

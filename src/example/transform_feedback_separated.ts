@@ -21,14 +21,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -37,7 +30,7 @@ export const TransformFeedbackSeparated = () => {
     if (!gl) {
         return;
     }
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
     sceneState.setRasterDiscard(true); // Disable rasterization, vertices processing only
@@ -46,19 +39,19 @@ export const TransformFeedbackSeparated = () => {
         vars: ['gl_Position', 'v_color'],
         bufferMode: gl.SEPARATE_ATTRIBS
     };
-    const transformShaderObj = new PlumeGL.Shader(gl, separatedTransformVert, separatedTransformFrag, fb);
+    const transformShaderObj = new PlumeGL.Shader(separatedTransformVert, separatedTransformFrag, fb);
     transformShaderObj.initParameters();
-    const feedbackShaderObj = new PlumeGL.Shader(gl, separatedFeedbackVert, separatedFeedbackFrag);
+    const feedbackShaderObj = new PlumeGL.Shader(separatedFeedbackVert, separatedFeedbackFrag);
     feedbackShaderObj.initParameters();
 
     // -- Init Buffer
     const VERTEX_COUNT = 6;
     const positions = new Float32Array(verData);
-    const tfMesh = new PlumeGL.Mesh(gl);
+    const tfMesh = new PlumeGL.Mesh();
     tfMesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 4, gl.FLOAT, false);
     tfMesh.initBufferAttributePoint(transformShaderObj);
 
-    const fbMesh = new PlumeGL.Mesh(gl);
+    const fbMesh = new PlumeGL.Mesh();
     const posSize = positions.length * Float32Array.BYTES_PER_ELEMENT;
     const colorSize = positions.length * Float32Array.BYTES_PER_ELEMENT;
     fbMesh.setGeometryAttribute(posSize, 'position', gl.STATIC_COPY, 4, gl.FLOAT, false);
@@ -66,7 +59,7 @@ export const TransformFeedbackSeparated = () => {
     fbMesh.initBufferAttributePoint(feedbackShaderObj);
 
     // -- Init TransformFeedback
-    const feedback = new PlumeGL.FeedBack(gl);
+    const feedback = new PlumeGL.FeedBack(undefined);
     feedback.bindBuffer(fbMesh);
 
     // -- Render

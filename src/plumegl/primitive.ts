@@ -3,6 +3,7 @@ import { ArrayBuffer } from './arraybuffer';
 import { Shader } from './shader';
 import { IndexBuffer } from './indexbuffer';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 interface Attribute {
     name: string;
@@ -12,30 +13,23 @@ interface Attribute {
 };
 
 export class Primitive {
-    public gl: WebGLRenderingContext | WebGL2RenderingContext;
-    public type: Symbol;
-    public DrawTypes: number[];
+    public gl: WGL | WGL2 = GL.gl;
+    public type: Symbol = CONSTANT.PRIMITIVE;
+    public DrawTypes: number[] = [];
     public uid: string;
-    public children: Primitive[];  // TODO, now do not consider the children
-    public attributes: any;
-    public buffers: any;
-    public modelMatrix: number[];  // TODO, now do not consider the matrix
+    public children: Primitive[] = [];  // TODO, now do not consider the children
+    public attributes: any = {};
+    public buffers: any = {};
+    public modelMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];  // TODO, now do not consider the matrix
     public vao: VAO;
     public indexBuffer: IndexBuffer;
-    public uniqueBuffer: ArrayBuffer;
+    public uniqueBuffer: ArrayBuffer = undefined;
     protected drawType: number;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
-        this.gl = gl;
-        this.type = CONSTANT.PRIMITIVE;
-        this.DrawTypes = [];
-        this.children = [];
-        this.attributes = {};
-        this.buffers = {};
-        this.modelMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-        this.uniqueBuffer = undefined;
-        if (gl instanceof WebGL2RenderingContext) {
-            this.vao = new VAO(gl);
+    constructor(gl?: WGL | WGL2) {
+        this.gl = gl || this.gl;
+        if (this.gl instanceof WebGL2RenderingContext) {
+            this.vao = new VAO(undefined, this.gl);
         }
     }
 
@@ -62,9 +56,9 @@ export class Primitive {
             console.warn(`no attribute infos`);
             return;
         }
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         drawType = drawType || _gl.STATIC_DRAW;
-        const arrayBuffer = new ArrayBuffer(_gl, drawType);
+        const arrayBuffer = new ArrayBuffer(drawType, _gl);
         arrayBuffer.setBufferData(datas);
         attribs.forEach((ab: Attribute) => {
             this.attributes[ab.name] = datas;
@@ -89,10 +83,10 @@ export class Primitive {
             return;
         }
 
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.attributes[name] = datas;
         drawType = drawType || _gl.STATIC_DRAW;
-        const arrayBuffer = new ArrayBuffer(_gl, drawType);
+        const arrayBuffer = new ArrayBuffer(drawType, _gl);
         arrayBuffer.setBufferData(datas);
         arrayBuffer.attrib(name, size || 3, type || _gl.FLOAT, normalize || false);
         if (this.vao) {
@@ -114,7 +108,7 @@ export class Primitive {
             ArrayBuffer.unBind(this.gl);
             this.indexBuffer.bind();
         }
-        this.vao.unBind();
+        VAO.unBind();
     }
 
     public prepare(slot?: number[]): void {
@@ -133,7 +127,7 @@ export class Primitive {
 
     public unPrepare(): void {
         if (this.vao) {
-            this.vao.unBind();
+            VAO.unBind();
         } else {
             const buffers: any = this.buffers;
             for (let key in buffers) {
@@ -141,7 +135,7 @@ export class Primitive {
             }
         }
         if (this.indexBuffer) {
-            this.indexBuffer.unBind();
+            IndexBuffer.unBind();
         }
     }
 
@@ -161,7 +155,7 @@ export class Primitive {
     }
 
     public draw(arrayArg?: any, elementArg?: any, option?: any): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         if (this.indexBuffer) {
             const cnt = (elementArg && elementArg.cnt != null) ? elementArg.cnt : 0;
             const type = (elementArg && elementArg.type != null) ? elementArg.type : _gl.UNSIGNED_INT;

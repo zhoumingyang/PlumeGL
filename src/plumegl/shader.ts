@@ -4,6 +4,7 @@ import { UniformBuffer } from './uniformbuffer';
 import { P3D } from './p3d';
 import { Primitive } from './primitive';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 interface UniformInfo {
     uniformName: string;
@@ -22,45 +23,37 @@ interface FeedBack {
 
 let uuid: number = 0;
 export class Shader {
-    private gl: WebGLRenderingContext | WebGL2RenderingContext;
+    private gl: WGL | WGL2 = GL.gl;
     private vertexShader: WebGLShader;
     private fragmentShader: WebGLShader;
-    private readyState: boolean;
+    private readyState: boolean = false;
     public instance: WebGLProgram;
     public vertexSource: string;
     public fragmentSource: string;
     public uid: string;
-    public attribsInfo: Map<string, GLint>;
-    public uniformSetterMap: Map<string, Function>;
-    public uniformLocationMap: Map<string, WebGLUniformLocation>;
-    public uniformBufferMap: Map<string, UniformBuffer>;
-    private p3ds: Map<string, P3D | Primitive>;
-    public type: Symbol;
+    public attribsInfo: Map<string, GLint> = new Map();
+    public uniformSetterMap: Map<string, Function> = new Map();
+    public uniformLocationMap: Map<string, WebGLUniformLocation> = new Map();
+    public uniformBufferMap: Map<string, UniformBuffer> = new Map();
+    private p3ds: Map<string, P3D | Primitive> = new Map();
+    public type: Symbol = CONSTANT.SHADER;
     public fb: FeedBack;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext,
-        vertexSource: string, fragmentSource: string, fb?: FeedBack) {
-        this.gl = gl;
+    constructor(vertexSource: string, fragmentSource: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
+        this.gl = gl || this.gl;
         this.vertexSource = vertexSource;
         this.fragmentSource = fragmentSource;
-        this.instance = gl.createProgram();
-        this.readyState = false;
+        this.instance = this.gl.createProgram();
         this.fb = fb;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
-        this.attribsInfo = new Map();
-        this.uniformLocationMap = new Map();
-        this.uniformSetterMap = new Map();
-        this.uniformBufferMap = new Map();
         if (vertexSource !== undefined && fragmentSource !== undefined) {
             this.compileShader();
         }
-        this.p3ds = new Map();
-        this.type = CONSTANT.SHADER;
     }
 
     private compileSource(shaderSource: string, type: number): WebGLShader {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const shader: WebGLShader = _gl.createShader(type);
         _gl.shaderSource(shader, shaderSource);
         _gl.compileShader(shader);
@@ -74,7 +67,7 @@ export class Shader {
     private compileShader(): boolean {
         const vertexSource: string = this.vertexSource;
         const fragmentSource: string = this.fragmentSource;
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const _program: WebGLProgram = this.instance;
         this.vertexShader = this.compileSource(vertexSource, _gl.VERTEX_SHADER);
         this.fragmentShader = this.compileSource(fragmentSource, _gl.FRAGMENT_SHADER);
@@ -220,7 +213,7 @@ export class Shader {
     }
 
     public initParameters(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const _program: WebGLProgram = this.instance;
         let option: any = {
             texCnt: 0,
@@ -312,7 +305,7 @@ export class Shader {
             return;
         }
         drawType = drawType || _gl.DYNAMIC_DRAW;
-        const uniformBuffer = new UniformBuffer(_gl, drawType);
+        const uniformBuffer = new UniformBuffer(drawType, _gl);
         uniformBuffer.setBufferData(dataArray, option);
         this.uniformBufferMap.set(name, uniformBuffer);
     }
@@ -348,7 +341,7 @@ export class Shader {
     }
 
     public use(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const _program: WebGLProgram = this.instance;
         if (!this.readyState) {
             this.initParameters();
@@ -357,7 +350,7 @@ export class Shader {
     }
 
     public unUse(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl && _gl.useProgram(null);
     }
 
@@ -377,7 +370,7 @@ export class Shader {
     }
 
     public dispose(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.unUse();
         if (_gl) {
             _gl.deleteProgram(this.instance);

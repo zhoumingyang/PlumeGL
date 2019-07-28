@@ -1,23 +1,23 @@
 import { Util } from './util';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 let uuid: number = 0;
 export class IndexBuffer {
-    public gl: WebGLRenderingContext | WebGL2RenderingContext;
+    public gl: WGL | WGL2 = GL.gl;
     public instance: WebGLBuffer;
     public drawType: number;
     public dataType: any;
     public dataTypeSize: any;
     public dataByteSize: any;
-    public type: Symbol;
+    public type: Symbol = CONSTANT.INDEXBUFFER;
     public uid: string;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext, drawType?: number, dataType?: number) {
-        this.gl = gl;
-        this.instance = gl.createBuffer();
-        this.drawType = drawType || gl.STATIC_DRAW;
-        this.setDataType(dataType || gl.UNSIGNED_SHORT);
-        this.type = CONSTANT.INDEXBUFFER;
+    constructor(drawType: number = GL.gl.STATIC_DRAW, dataType: number = GL.gl.UNSIGNED_SHORT, gl?: WGL | WGL2) {
+        this.gl = gl || GL.gl;
+        this.instance = this.gl.createBuffer();
+        this.drawType = drawType;
+        this.setDataType(dataType);
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
     }
@@ -28,23 +28,24 @@ export class IndexBuffer {
     }
 
     public bind(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, this.instance);
     }
 
-    public unBind(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
-        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, null);
+    static unBind(gl?: WGL | WGL2): void {
+        const _gl = gl || GL.gl;
+        _gl && _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
     public dispose(): void {
-        this.unBind();
+        const _gl: WGL | WGL2 = this.gl;
+        _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, null);
         this.gl && this.gl.deleteBuffer(this.instance);
         this.instance = null;
     }
 
     public setElementData(_array: any): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, this.instance);
         _gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, _array, this.drawType);
         _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, null);
@@ -52,7 +53,7 @@ export class IndexBuffer {
     }
 
     public setSubElementData(_array: any, offset: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
         _gl.bufferSubData(_gl.ARRAY_BUFFER, offset, _array);
         _gl.bindBuffer(_gl.ARRAY_BUFFER, null);

@@ -1,42 +1,34 @@
 import { Util } from './util';
 import { Sampler } from './sampler';
 import { CONSTANT } from './constant';
+import { GL, WGL, WGL2 } from './gl';
 
 let uuid: number = 0;
 export class Texture {
-    public gl: WebGLRenderingContext | WebGL2RenderingContext;
+    public gl: WGL | WGL2 = GL.gl;
     public instance: WebGLTexture;
     public format: number;
     public internal: number;
     public colorType: number;
-    public width: number;
-    public height: number;
-    public depth: number;
+    public width: number = 0;
+    public height: number = 0;
+    public depth: number = 0;
     public uid: string;
-    public samplers: any;
-    public attachBuffer: number;
-    public textureType: number;
-    public levels: number;
-    public level: number;
-    public type: Symbol;
+    public samplers: any = {};
+    public attachBuffer: number = undefined;
+    public textureType: number = undefined;
+    public levels: number = 1;
+    public level: number = 0;
+    public type: Symbol = CONSTANT.TEXTURE;
 
-    constructor(gl: WebGLRenderingContext | WebGL2RenderingContext) {
-        this.gl = gl;
-        this.instance = gl.createTexture();
+    constructor(gl?: WGL | WGL2) {
+        this.gl = gl || this.gl;
+        this.instance = this.gl.createTexture();
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
-        this.width = 0;
-        this.height = 0;
-        this.depth = 0;
-        this.format = gl.RGBA;
-        this.internal = gl.RGBA;
-        this.colorType = gl.UNSIGNED_BYTE;
-        this.samplers = {};
-        this.attachBuffer = undefined;
-        this.type = CONSTANT.TEXTURE;
-        this.textureType = null;
-        this.levels = 1;
-        this.level = 0;
+        this.format = this.gl.RGBA;
+        this.internal = this.gl.RGBA;
+        this.colorType = this.gl.UNSIGNED_BYTE;
     }
 
     public setLevelInfo(level?: number, levels?: number): void {
@@ -56,7 +48,7 @@ export class Texture {
         if (!(this.gl instanceof WebGL2RenderingContext)) {
             return;
         }
-        const sampler = new Sampler(this.gl);
+        const sampler = new Sampler();
         this.samplers[sampler.uid] = sampler;
         return sampler;
     }
@@ -93,21 +85,21 @@ export class Texture {
     }
 
     public setFormat(format: number, internal: number, type: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.format = format || _gl.RGBA;
         this.internal = internal || _gl.RGBA;
         this.colorType = type || _gl.UNSIGNED_BYTE;
     }
 
     public active(slot?: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         if (slot !== undefined) {
             _gl.activeTexture(_gl.TEXTURE0 + slot);
         }
     }
 
     public bind(slot?: number, sampler?: Sampler | string): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.active(slot);
         _gl.bindTexture(this.textureType, this.instance);
         if (!this.samplers) {
@@ -124,12 +116,13 @@ export class Texture {
         curSampler && curSampler.bind(slot);
     }
 
-    static unBind(gl: WebGLRenderingContext | WebGL2RenderingContext): void {
+    static unBind(gl?: WGL | WGL2): void {
 
     }
 
-    static setPixelStorei(gl: WebGLRenderingContext | WebGL2RenderingContext, name: GLenum, param: any): void {
-        gl.pixelStorei(name, param);
+    static setPixelStorei(name: GLenum, param: any, gl?: WGL | WGL2): void {
+        const tmpGl = gl || GL.gl;
+        tmpGl && tmpGl.pixelStorei(name, param);
     }
 
     public dispose(): void {
@@ -157,29 +150,29 @@ export class Texture {
     }
 
     public repeat(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.setWrapMode(_gl.REPEAT);
     }
 
     public clamp(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.setWrapMode(_gl.CLAMP_TO_EDGE);
     }
 
     public mirror(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         this.setWrapMode(_gl.MIRRORED_REPEAT);
     }
 
     public wrapMode(clampEdge: boolean = true) {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const mode: number = clampEdge === true ? _gl.CLAMP_TO_EDGE : _gl.REPEAT;
         _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_S, mode);
         _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_T, mode);
     }
 
     public filterMode(linear: boolean = true, mipmap: boolean = false, mipmapLinear: boolean = false) {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         const filter = this.textureFilter(!!linear, !!mipmap, !!mipmapLinear);
         _gl.texParameteri(this.textureType, _gl.TEXTURE_MAG_FILTER, this.textureFilter(!!linear, false, false));
         _gl.texParameteri(this.textureType, _gl.TEXTURE_MIN_FILTER, filter);
@@ -189,13 +182,13 @@ export class Texture {
         if (mode === undefined) {
             return;
         }
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_S, mode);
         _gl.texParameteri(this.textureType, _gl.TEXTURE_WRAP_T, mode);
     }
 
     public setFilterMode(minFiler: number, magFiler?: number): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         if (!minFiler && !magFiler) {
             this.filterMode();
             return;
@@ -206,23 +199,23 @@ export class Texture {
     }
 
     public setLevelSection(base: number = 0, max: number = 0): void {
-        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WGL2 = <WGL2>this.gl;
         _gl.texParameteri(this.textureType, _gl.TEXTURE_BASE_LEVEL, base);
         _gl.texParameteri(this.textureType, _gl.TEXTURE_MAX_LEVEL, max);
     }
 
     public setLod(minLod: number = 0, maxLod: number = 0): void {
-        const _gl: WebGL2RenderingContext = <WebGL2RenderingContext>this.gl;
+        const _gl: WGL2 = <WGL2>this.gl;
         _gl.texParameteri(this.textureType, _gl.TEXTURE_MIN_LOD, minLod);
         _gl.texParameteri(this.textureType, _gl.TEXTURE_MAX_LOD, maxLod);
     }
 
     public mipmap(): void {
-        const _gl: WebGLRenderingContext | WebGL2RenderingContext = this.gl;
+        const _gl: WGL | WGL2 = this.gl;
         _gl.generateMipmap(this.textureType);
     }
 
-    static pixelStorei(gl: WebGLRenderingContext | WebGL2RenderingContext, pname: number, param: number) {
+    static pixelStorei(gl: WGL | WGL2, pname: number, param: number) {
         gl.pixelStorei(pname, param);
     }
 }

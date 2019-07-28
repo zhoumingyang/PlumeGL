@@ -293,14 +293,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -363,7 +356,7 @@ export const DrawTexture3D = () => {
             }
         }
     }
-    const tmpTexture = new PlumeGL.Texture3D(gl);
+    const tmpTexture = new PlumeGL.Texture3D();
     tmpTexture.setFormat(gl.RED, gl.R8, gl.UNSIGNED_BYTE);
     tmpTexture.active(0);
     tmpTexture.setTextureFromData(data, [SIZE, SIZE, SIZE]);
@@ -372,13 +365,13 @@ export const DrawTexture3D = () => {
     tmpTexture.mipmap();
 
     // -- Initialize program
-    const shaderObj = new PlumeGL.Shader(gl, texture3DVert, texture3DFrag);
+    const shaderObj = new PlumeGL.Shader(texture3DVert, texture3DFrag);
     shaderObj.initParameters();
 
     // -- Initialize buffer
     const positions = new Float32Array(posData);
     const texCoords = new Float32Array(texData);
-    const quadMesh = new PlumeGL.Mesh(gl);
+    const quadMesh = new PlumeGL.Mesh();
     quadMesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.setGeometryAttribute(texCoords, 'in_texcoord', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.initBufferAttributePoint(shaderObj);
@@ -410,7 +403,7 @@ export const DrawTexture3D = () => {
         ];
     }
 
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
     function render() {

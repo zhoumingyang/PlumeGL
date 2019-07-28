@@ -29,14 +29,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = <WebGL2RenderingContext>PlumeGL.initGL(cav);
     return gl;
 };
 
@@ -46,20 +39,20 @@ export const DrawTexture2DArray = () => {
         return;
     }
 
-    const shaderObj = new PlumeGL.Shader(gl, texture2DArrayVert, texture2DArrayFrag);
+    const shaderObj = new PlumeGL.Shader(texture2DArrayVert, texture2DArrayFrag);
     shaderObj.initParameters();
 
     // -- Init buffers
     const positions = new Float32Array(posData);
     const texCoords = new Float32Array(texData);
-    const quadMesh = new PlumeGL.Mesh(gl);
+    const quadMesh = new PlumeGL.Mesh();
     quadMesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.setGeometryAttribute(texCoords, 'texcoord', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     quadMesh.initBufferAttributePoint(shaderObj);
 
-    const tmpTexture = new PlumeGL.Texture2DArray(gl);
+    const tmpTexture = new PlumeGL.Texture2DArray();
     tmpTexture.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
-    const sceneState = new PlumeGL.State(gl);
+    const sceneState = new PlumeGL.State();
     sceneState.setClearColor(1.0, 1.0, 1.0, 1.0);
     sceneState.setClear(true, false, false);
     ImageLoader.load('../res/di-animation-array.jpg', (image: any) => {

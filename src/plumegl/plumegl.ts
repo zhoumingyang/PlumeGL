@@ -22,6 +22,21 @@ import { Scene } from './scene';
 import { Query } from './query';
 import { CONSTANT, STATE } from './constant';
 import { FeedBack } from './feedback';
+import { GL, WGL, WGL2 } from './gl';
+
+const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
+    if (ele instanceof HTMLCanvasElement) {
+        let gl: any = ele.getContext('webgl2', { antialias: true });
+        if (!gl) {
+            console.warn('not support webgl2');
+            gl = ele.getContext('webgl', { antialias: true });
+        }
+        GL.gl = gl;
+    } else {
+        GL.gl = ele;
+    }
+    return GL.gl;
+};
 
 export const PlumeGL = {
     ArrayBuffer,
@@ -48,5 +63,6 @@ export const PlumeGL = {
     Query,
     CONSTANT,
     STATE,
-    FeedBack
+    FeedBack,
+    initGL
 };

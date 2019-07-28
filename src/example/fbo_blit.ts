@@ -43,14 +43,7 @@ const createGLContext = () => {
     if (!cav) {
         return;
     }
-    let gl = cav.getContext('webgl2', { antialias: true });
-    if (!gl) {
-        console.warn('webgl2 is not avaliable');
-        gl = cav.getContext('webgl', { antialias: true });
-        if (!gl) {
-            return;
-        }
-    }
+    let gl = PlumeGL.initGL(cav);
     return gl;
 }
 
@@ -60,22 +53,22 @@ export const FboBlit = () => {
         return;
     }
     const scene = new PlumeGL.Scene();
-    const program = new PlumeGL.Shader(gl, fboBlitVert, fboBlitFrag);
+    const program = new PlumeGL.Shader(fboBlitVert, fboBlitFrag);
     program.initParameters();
 
     const positions: Float32Array = new Float32Array(posData);
     const texcoords: Float32Array = new Float32Array(uvData);
-    const mesh = new PlumeGL.Mesh(gl);
+    const mesh = new PlumeGL.Mesh();
     mesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     mesh.setGeometryAttribute(texcoords, 'texcoord', gl.STATIC_DRAW, 2, gl.FLOAT, false);
     mesh.initBufferAttributePoint(program);
 
-    const textureDiffuse = new PlumeGL.Texture2D(gl);
-    const textureColorBuffer = new PlumeGL.Texture2D(gl);
+    const textureDiffuse = new PlumeGL.Texture2D();
+    const textureColorBuffer = new PlumeGL.Texture2D();
     const tmpP3d = new PlumeGL.P3D(mesh, textureDiffuse);
     program.addDrawObject(tmpP3d);
     scene.add(program);
-    scene.setSceneState(new PlumeGL.State(gl));
+    scene.setSceneState(new PlumeGL.State());
     ImageLoader.load('../res/Di-3d.png', (image: any) => {
 
         const FRAMEBUFFER_SIZE = {
@@ -83,7 +76,7 @@ export const FboBlit = () => {
             y: image.height
         };
 
-        PlumeGL.Texture2D.setPixelStorei(gl, gl.UNPACK_FLIP_Y_WEBGL, true);
+        PlumeGL.Texture2D.setPixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         textureDiffuse.active(0);
         textureDiffuse.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
         textureDiffuse.setTextureFromImage(image);
@@ -92,12 +85,12 @@ export const FboBlit = () => {
         textureColorBuffer.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
         textureColorBuffer.setTextureFromData(null, [FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y]);
         textureColorBuffer.filterMode(true, false, false);
-        PlumeGL.Texture2D.unBind(gl);
+        PlumeGL.Texture2D.unBind();
 
         // -- Init Frame Buffer
-        const framebufferRender = new PlumeGL.FrameBuffer(gl);
-        const framebufferResolve = new PlumeGL.FrameBuffer(gl);
-        const colorRenderbuffer = new PlumeGL.RenderBuffer(gl, gl.RGBA4);
+        const framebufferRender = new PlumeGL.FrameBuffer();
+        const framebufferResolve = new PlumeGL.FrameBuffer();
+        const colorRenderbuffer = new PlumeGL.RenderBuffer(gl.RGBA4);
         colorRenderbuffer.setSize(FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y);
         colorRenderbuffer.allocate();
         framebufferRender.attachRenderBuffer(colorRenderbuffer, gl.COLOR_ATTACHMENT0);
@@ -132,7 +125,7 @@ export const FboBlit = () => {
                 if ((i + j) % 2) {
                     continue;
                 }
-                PlumeGL.FrameBuffer.blitFrameBuffer(gl,
+                PlumeGL.FrameBuffer.blitFrameBuffer(
                     0, 0, FRAMEBUFFER_SIZE.x, FRAMEBUFFER_SIZE.y,
                     FRAMEBUFFER_SIZE.x / TILE * (i + 0) + BORDER,
                     FRAMEBUFFER_SIZE.x / TILE * (j + 0) + BORDER,
@@ -144,7 +137,7 @@ export const FboBlit = () => {
         }
 
         // Pass 2
-        PlumeGL.FrameBuffer.unBind(gl);
+        PlumeGL.FrameBuffer.unBind();
         scene.state.setViewPort(0, 0, cav.width, cav.height).change();
         scene.state.setClearBuffer(PlumeGL.STATE.COLOR_BUFFER, 0, [0.7, 0.0, 0.0, 1.0]).change();
         const IDENTITY = new Float32Array(idenData);
