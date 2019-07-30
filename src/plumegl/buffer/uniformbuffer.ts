@@ -14,11 +14,6 @@ export class UniformBuffer extends BaseBuffer {
         this.drawType = drawType;
     }
 
-    // public bind(): void {
-    //     const _gl: WGL2 = this.gl;
-    //     _gl.bindBuffer(_gl.UNIFORM_BUFFER, this.instance);
-    // }
-
     static unBind(gl?: WGL | WGL2): void {
         const _gl = <WGL2>gl || <WGL2>GL.gl;
         _gl && _gl.bindBuffer(_gl.UNIFORM_BUFFER, null);
@@ -38,17 +33,7 @@ export class UniformBuffer extends BaseBuffer {
         _gl.bindBuffer(_gl.UNIFORM_BUFFER, null);
     }
 
-    // public setSubBufferData(_array: any, offset: number = 0): void {
-    //     const _gl: WGL2 = this.gl;
-    //     _gl.bindBuffer(_gl.UNIFORM_BUFFER, this.instance);
-    //     _gl.bufferSubData(_gl.UNIFORM_BUFFER, offset, _array);
-    //     _gl.bindBuffer(_gl.UNIFORM_BUFFER, null);
-    // }
-
     public dispose(): void {
-        // const _gl: WGL2 = this.gl;
-        // UniformBuffer.unBind(_gl);
-        // _gl && _gl.deleteBuffer(this.instance);
         super.dispose();
         this.instance = undefined;
         this.drawType = undefined;

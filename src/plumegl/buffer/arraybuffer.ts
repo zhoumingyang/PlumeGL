@@ -38,11 +38,6 @@ export class ArrayBuffer extends BaseBuffer {
         this._drawLengthChange();
     }
 
-    // public bind(): void {
-    //     const _gl: WGL | WGL2 = this.gl;
-    //     _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
-    // }
-
     static unBind(gl?: WGL | WGL2): void {
         const tmpGL = gl || GL.gl;
         tmpGL && tmpGL.bindBuffer(tmpGL.ARRAY_BUFFER, null);
@@ -52,21 +47,10 @@ export class ArrayBuffer extends BaseBuffer {
         if (!_array) {
             return;
         }
-        // const _gl: WGL | WGL2 = this.gl;
-        // _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
-        // _gl.bufferData(_gl.ARRAY_BUFFER, _array, this.drawType);
-        // _gl.bindBuffer(_gl.ARRAY_BUFFER, null);
         super.setBufferData(_array);
         this.byteLength = (_array.byteLength === undefined) ? _array : _array.byteLength;
         this._drawLengthChange();
     }
-
-    // public setSubBufferData(_array: any, offset: number): void {
-    //     const _gl: WGL | WGL2 = this.gl;
-    //     _gl.bindBuffer(_gl.ARRAY_BUFFER, this.instance);
-    //     _gl.bufferSubData(_gl.ARRAY_BUFFER, offset, _array);
-    //     _gl.bindBuffer(_gl.ARRAY_BUFFER, null);
-    // }
 
     public setAttributePoint(program: Shader): void {
         const _gl: WGL | WGL2 = this.gl;
@@ -94,8 +78,6 @@ export class ArrayBuffer extends BaseBuffer {
     }
 
     public dispose(): void {
-        // ArrayBuffer.unBind();
-        // this.gl && this.gl.deleteBuffer(this.instance);
         super.dispose();
         this.instance = null;
         this.attribs = [];
