@@ -1,4 +1,4 @@
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 import { separatedTransformVert } from './shader/separated_transform_vert';
 import { separatedTransformFrag } from './shader/separated_transform_frag';
 import { separatedFeedbackVert } from './shader/separated_feedback_vert';

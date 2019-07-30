@@ -1,4 +1,4 @@
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 import { fboMultiSampleVsRender } from './shader/fbo_multisample_vs_render';
 import { fboMultiSampleFsRender } from './shader/fbo_multisample_fs_render';
 import { fboMultiSampleVsSplash } from './shader/fbo_multisample_vs_splash';

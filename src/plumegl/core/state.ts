@@ -1,5 +1,5 @@
-import { CONSTANT, STATE } from './constant';
-import { GL, WGL, WGL2 } from './gl';
+import { CONSTANT, STATE } from '../engine/constant';
+import { GL, WGL, WGL2 } from '../engine/gl';
 
 interface state {
     value: any,

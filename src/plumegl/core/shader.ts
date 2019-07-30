@@ -1,10 +1,10 @@
-import { Util } from './util';
-import { UniformFactory } from './uniform';
-import { UniformBuffer } from './uniformbuffer';
+import { Util } from '../util/util';
+import { UniformFactory } from '../aid/uniform';
+import { UniformBuffer } from '../buffer/uniformbuffer';
 import { P3D } from './p3d';
-import { Primitive } from './primitive';
-import { CONSTANT } from './constant';
-import { GL, WGL, WGL2 } from './gl';
+import { Primitive } from '../primitive/primitive';
+import { CONSTANT } from '../engine/constant';
+import { GL, WGL, WGL2 } from '../engine/gl';
 
 interface UniformInfo {
     uniformName: string;

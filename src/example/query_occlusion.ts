@@ -1,4 +1,4 @@
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 import { queryOcclusionVert } from './shader/query_occlusion_vert';
 import { queryOcclusionFrag } from './shader/query_occlusion_frag';
 

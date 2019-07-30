@@ -1,7 +1,7 @@
 import { fboBlendVert } from './shader/fbo_blend_vert';
 import { fboBlendFrag } from './shader/fbo_blend_frag';
-import { PlumeGL } from '../plumegl/plumegl';
-import { ImageLoader } from '../loader/imageloader';
+import { PlumeGL } from '../plumegl/engine/plumegl';
+import { ImageLoader } from '../PlumeGL/loader/imageloader';
 
 const posData: number[] = [
     -1.0, -1.0,

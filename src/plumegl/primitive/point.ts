@@ -1,7 +1,7 @@
-import { Util } from './util';
+import { Util } from '../util/util';
 import { Primitive } from './primitive';
-import { CONSTANT } from './constant';
-import { WGL, WGL2 } from './gl';
+import { CONSTANT } from '../engine/constant';
+import { WGL, WGL2 } from '../engine/gl';
 
 let uuid = 0;
 export class Point extends Primitive {

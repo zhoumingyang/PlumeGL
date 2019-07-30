@@ -15,7 +15,7 @@ import { TransformFeedbackSeparated } from './example/transform_feedback_separat
 import { DrawTfbSeparated2 } from './example/transform_feedback_separated_2';
 
 const appRun = () => {
-    // SampleObject();
+    SampleObject();
     // FboBlit();
     // BufferUniform();
     // DrawInstancedUbo();
@@ -29,6 +29,6 @@ const appRun = () => {
     // QueryOcclusion();
     // TransformFeedbackInterleaved();
     // TransformFeedbackSeparated();
-    DrawTfbSeparated2();
+    // DrawTfbSeparated2();
 };
 appRun();

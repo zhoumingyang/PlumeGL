@@ -1,8 +1,8 @@
-import { Util } from './util';
-import { ArrayBuffer } from './arraybuffer';
-import { Shader } from './shader';
-import { CONSTANT } from './constant';
-import { GL, WGL2 } from './gl';
+import { Util } from '../util/util';
+import { ArrayBuffer } from '../buffer/arraybuffer';
+import { Shader } from '../core/shader';
+import { CONSTANT } from '../engine/constant';
+import { GL, WGL2 } from '../engine/gl';
 
 let uuid = 0;
 export class VAO {
