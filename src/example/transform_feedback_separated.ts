@@ -56,11 +56,13 @@ export const TransformFeedbackSeparated = () => {
     const colorSize = positions.length * Float32Array.BYTES_PER_ELEMENT;
     fbMesh.setGeometryAttribute(posSize, 'position', gl.STATIC_COPY, 4, gl.FLOAT, false);
     fbMesh.setGeometryAttribute(colorSize, 'color', gl.STATIC_COPY, 4, gl.FLOAT, false);
+    fbMesh.feedBackAttribute(['position', 'color']);
     fbMesh.initBufferAttributePoint(feedbackShaderObj);
 
     // -- Init TransformFeedback
     const feedback = new PlumeGL.FeedBack(undefined);
     feedback.bindBuffer(fbMesh);
+    feedback.unBind();
 
     // -- Render
     sceneState.stateChange();  // First draw, capture the attributes

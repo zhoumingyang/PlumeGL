@@ -12,6 +12,7 @@ import { DrawTexture2DArray } from './example/texture_2d_array';
 import { QueryOcclusion } from './example/query_occlusion';
 import { TransformFeedbackInterleaved } from './example/transform_feedback_interleaved';
 import { TransformFeedbackSeparated } from './example/transform_feedback_separated';
+import { DrawTfbSeparated2 } from './example/transform_feedback_separated_2';
 
 const appRun = () => {
     // SampleObject();
@@ -27,6 +28,7 @@ const appRun = () => {
     // DrawTexture2DArray();
     // QueryOcclusion();
     // TransformFeedbackInterleaved();
-    TransformFeedbackSeparated();
+    // TransformFeedbackSeparated();
+    DrawTfbSeparated2();
 };
 appRun();

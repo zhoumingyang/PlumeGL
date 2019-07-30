@@ -11,6 +11,7 @@ export class FeedBack {
     public instance: WebGLTransformFeedback;
     public type: Symbol = CONSTANT.FEEDBACK;
     public uid: string;
+    public mbuffers: Map<number, WebGLBuffer> = new Map();
 
     constructor(gl?: WGL2) {
         this.gl = gl || this.gl;
@@ -39,9 +40,32 @@ export class FeedBack {
                 tmpBuffer = uniqueBuffer.instance;
             } else if (buffers) {
                 tmpBuffer = <WebGLBuffer>[];
+                let fbIndex: number[] = [];
                 for (let key in buffers) {
-                    tmpBuffer.push(buffers[key].instance);
+                    if (buffers[key].feedBack) {
+                        tmpBuffer.push(buffers[key].instance);
+                        fbIndex.push(buffers[key].feedBackIndex);
+                    }
                 }
+
+                //sort buffer buy feedback index
+                const cnt = fbIndex.length;
+                for (let i = 0; i < cnt; i++) {
+                    for (let j = i + 1; j < cnt; j++) {
+                        if (fbIndex[i] > fbIndex[j]) {
+
+                            let tmpIdx = fbIndex[i];
+                            fbIndex[i] = fbIndex[j];
+                            fbIndex[j] = tmpIdx;
+
+                            let tmpBf = tmpBuffer[i];
+                            tmpBuffer[i] = tmpBuffer[j];
+                            tmpBuffer[j] = tmpBf;
+
+                        }
+                    }
+                }
+
             }
             return tmpBuffer;
         };
@@ -70,8 +94,7 @@ export class FeedBack {
         } else {
             _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, this.instance);
             _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, index, tmpBuffer);
-            _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, null);
-            _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, index, null);
+            this.mbuffers.set(index, tmpBuffer);
         }
     }
 
@@ -83,28 +106,31 @@ export class FeedBack {
             if (tmpBuffer instanceof Array) {
                 tmpBuffer.forEach((b, j) => {
                     _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, i + j, b);
+                    this.mbuffers.set(i + j, b);
                 });
             } else {
                 _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, i, tmpBuffer);
-            }
-        });
-        _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, null);
-        buffers.forEach((buffer, i) => {
-            const tmpBuffer = this.getWebGLBuffers(buffer);
-            if (tmpBuffer instanceof Array) {
-                tmpBuffer.forEach((b, j) => {
-                    _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, i + j, b);
-                });
-            } else {
-                _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, i, null);
+                this.mbuffers.set(i, tmpBuffer);
             }
         });
     }
 
-    public begin(drawMode: number): void {
+    public unBind(idx?: number): void {
+        const _gl: WGL2 = this.gl;
+        _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, null);
+        if (idx != undefined) {
+            this.mbuffers.has(idx) && _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, idx, null);
+        } else {
+            this.mbuffers.forEach((buffer: WebGLBuffer, key: number) => {
+                _gl.bindBufferBase(_gl.TRANSFORM_FEEDBACK_BUFFER, key, null);
+            });
+        }
+    }
+
+    public begin(drawMode?: number): void {
         const _gl: WGL2 = this.gl;
         _gl.bindTransformFeedback(_gl.TRANSFORM_FEEDBACK, this.instance);
-        drawMode = drawMode || _gl.TRIANGLES;
+        drawMode = drawMode != undefined ? drawMode : _gl.TRIANGLES;
         _gl.beginTransformFeedback(drawMode);
     }
 
@@ -117,5 +143,6 @@ export class FeedBack {
     public dispose(): void {
         const _gl: WGL2 = this.gl;
         _gl.deleteTransformFeedback(this.instance);
+        this.mbuffers = new Map();
     }
 }
