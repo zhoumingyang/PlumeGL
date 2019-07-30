@@ -14,6 +14,8 @@ export class ArrayBuffer {
     public length: number = 0;
     public uid: string;
     public type: Symbol = CONSTANT.ARRAYBUFFER;
+    public feedBack: boolean = false;
+    public feedBackIndex: number = 0;
 
     constructor(drawType: number = GL.gl.STATIC_DRAW, gl?: WGL | WGL2) {
         this.gl = gl || this.gl;

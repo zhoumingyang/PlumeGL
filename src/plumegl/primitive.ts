@@ -97,6 +97,24 @@ export class Primitive {
         this.buffers[name] = arrayBuffer;
     }
 
+    public feedBackAttribute(name: string | string[], index: number = 0): void {
+        if (name instanceof Array) {
+            name.forEach((n: string, i: number) => {
+                const arrayBuffer = this.buffers[n];
+                if (arrayBuffer) {
+                    arrayBuffer.feedBack = true;
+                    arrayBuffer.feedBackIndex = i;
+                }
+            });
+        } else {
+            const arrayBuffer = this.buffers[name];
+            if (arrayBuffer) {
+                arrayBuffer.feedBack = true;
+                arrayBuffer.feedBackIndex = index;
+            }
+        }
+    }
+
     public initBufferAttributePoint(program: Shader): void {
         if (this.vao) {
             this.vao.initBufferAttributePoint(program);

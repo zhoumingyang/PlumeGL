@@ -68,6 +68,7 @@ export const TransformFeedbackInterleaved = () => {
     // -- Init TransformFeedback: Track output buffer
     const feedBack = new PlumeGL.FeedBack();
     feedBack.bindBuffer(fbMesh, 0);
+    feedBack.unBind();
 
     // -- Render
     sceneState.stateChange();
