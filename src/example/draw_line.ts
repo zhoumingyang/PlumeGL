@@ -1,6 +1,6 @@
 import { drawLineVert } from './shader/draw_line_vert';
 import { drawLineFrag } from './shader/draw_line_frag';
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 
 let cav: any;
 const createGLContext = () => {

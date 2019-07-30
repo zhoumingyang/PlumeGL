@@ -1,9 +1,9 @@
-import { ArrayBuffer } from './arraybuffer';
-import { Primitive } from './primitive';
-import { P3D } from './p3d';
-import { CONSTANT } from './constant';
-import { Util } from './util';
-import { GL, WGL2 } from './gl';
+import { ArrayBuffer } from '../buffer/arraybuffer';
+import { Primitive } from '../primitive/primitive';
+import { P3D } from '../core/p3d';
+import { CONSTANT } from '../engine/constant';
+import { Util } from '../util/util';
+import { GL, WGL2 } from '../engine/gl';
 
 let uuid = 0;
 export class FeedBack {

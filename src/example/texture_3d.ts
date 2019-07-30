@@ -1,4 +1,4 @@
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 import { texture3DVert } from './shader/texture_3d_vert';
 import { texture3DFrag } from './shader/texture_3d_frag';
 

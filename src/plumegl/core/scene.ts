@@ -1,7 +1,7 @@
-import { Util } from './util';
+import { Util } from '../util/util';
 import { Shader } from './shader';
 import { State } from './state';
-import { CONSTANT } from './constant';
+import { CONSTANT } from '../engine/constant';
 
 let uuid: number = 0;
 export class Scene {

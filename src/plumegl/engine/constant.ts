@@ -1,4 +1,5 @@
 export const CONSTANT = {
+    BASEBUFFER: Symbol('BaseBuffer'),
     ARRAYBUFFER: Symbol('ArrayBuffer'),
     FRAMEBUFFER: Symbol('FrameBuffer'),
     INDEXBUFFER: Symbol('IndexBuffer'),

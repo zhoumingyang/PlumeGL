@@ -2,7 +2,7 @@ import { FboRttFsDrawBuffer } from './shader/fbo_rtt_fs_draw_buffer';
 import { FboRttVsDrawBuffer } from './shader/fbo_rtt_vs_draw_buffer';
 import { FboRttFsDraw } from './shader/fbo_rtt_fs_draw';
 import { FboRttVsDraw } from './shader/fbo_rtt_vs_draw';
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 
 const triData: number[] = [
     -0.5, -0.5, -1.0,

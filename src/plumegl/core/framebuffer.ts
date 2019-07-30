@@ -1,8 +1,8 @@
-import { Texture } from './texture';
-import { RenderBuffer } from './renderbuffer';
-import { Util } from './util';
-import { CONSTANT } from './constant';
-import { GL, WGL, WGL2 } from './gl';
+import { Texture } from '../texture/texture';
+import { RenderBuffer } from '../buffer/renderbuffer';
+import { Util } from '../util/util';
+import { CONSTANT } from '../engine/constant';
+import { GL, WGL, WGL2 } from '../engine/gl';
 
 let uuid: number = 0;
 export class FrameBuffer {

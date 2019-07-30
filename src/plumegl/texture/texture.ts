@@ -1,7 +1,7 @@
-import { Util } from './util';
+import { Util } from '../util/util';
 import { Sampler } from './sampler';
-import { CONSTANT } from './constant';
-import { GL, WGL, WGL2 } from './gl';
+import { CONSTANT } from '../engine/constant';
+import { GL, WGL, WGL2 } from '../engine/gl';
 
 let uuid: number = 0;
 export class Texture {

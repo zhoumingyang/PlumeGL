@@ -1,6 +1,6 @@
 import { drawPointsVert } from './shader/draw_points_vert';
 import { drawPointsFrag } from './shader/draw_points_frag';
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 
 const vertDatas: number[] = [
     -0.5, 0.5, 0.0,

@@ -1,7 +1,7 @@
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 import { texture2DArrayVert } from './shader/texture_2d_array_vert';
 import { texture2DArrayFrag } from './shader/texture_2d_array_frag';
-import { ImageLoader } from '../loader/imageloader';
+import { ImageLoader } from '../PlumeGL/loader/imageloader';
 
 const posData: number[] = [
     -1.0, -1.0,

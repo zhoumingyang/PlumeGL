@@ -1,4 +1,4 @@
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 import { interleavedTransformVert } from './shader/interleaved_transform_vert';
 import { interleavedTransformFrag } from './shader/interleaved_transform_frag';
 import { interleavedFeedbackVert } from './shader/interleaved_feedback_vert';

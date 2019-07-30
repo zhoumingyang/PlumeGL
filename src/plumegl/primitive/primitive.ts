@@ -1,9 +1,9 @@
 import { VAO } from './vao';
-import { ArrayBuffer } from './arraybuffer';
-import { Shader } from './shader';
-import { IndexBuffer } from './indexbuffer';
-import { CONSTANT } from './constant';
-import { GL, WGL, WGL2 } from './gl';
+import { ArrayBuffer } from '../buffer/arraybuffer';
+import { Shader } from '../core/shader';
+import { IndexBuffer } from '../buffer/indexbuffer';
+import { CONSTANT } from '../engine/constant';
+import { GL, WGL, WGL2 } from '../engine/gl';
 
 interface Attribute {
     name: string;

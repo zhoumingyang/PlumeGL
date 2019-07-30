@@ -1,6 +1,6 @@
 import { Texture } from './texture';
-import { CONSTANT } from './constant';
-import { GL, WGL2 } from './gl';
+import { CONSTANT } from '../engine/constant';
+import { GL, WGL2 } from '../engine/gl';
 
 export class Texture3D extends Texture {
 

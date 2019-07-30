@@ -1,8 +1,8 @@
-import { Util } from './util';
-import { IndexBuffer } from './indexbuffer';
+import { Util } from '../util/util';
+import { IndexBuffer } from '../buffer/indexbuffer';
 import { Primitive } from './primitive';
-import { CONSTANT } from './constant';
-import { WGL, WGL2 } from './gl';
+import { CONSTANT } from '../engine/constant';
+import { WGL, WGL2 } from '../engine/gl';
 
 let uuid = 0;
 export class Mesh extends Primitive {
@@ -27,6 +27,6 @@ export class Mesh extends Primitive {
         if (!this.indexBuffer) {
             this.indexBuffer = new IndexBuffer(drawType, dataType, this.gl);
         }
-        this.indexBuffer.setElementData(datas);
+        this.indexBuffer.setBufferData(datas);
     }
 }

@@ -1,6 +1,6 @@
 import { drawInstancedUboVert } from './shader/draw_instanced_ubo_vert';
 import { drawInstancedUboFrag } from './shader/draw_instanced_ubo_frag';
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 
 const posData = [
     -0.3, -0.5,

@@ -1,7 +1,6 @@
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 import { TfbSeparated2Vert } from './shader/tfb_separated2_vert';
 import { TfbSeparated2Frag } from './shader/tfb_separated2_frag';
-import { Util } from '../plumegl/util';
 
 let cav: any;
 const createGLContext = () => {

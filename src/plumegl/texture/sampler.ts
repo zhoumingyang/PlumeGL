@@ -1,6 +1,6 @@
-import { Util } from './util';
-import { CONSTANT, TEXTURE } from './constant';
-import { GL, WGL2 } from './gl';
+import { Util } from '../util/util';
+import { CONSTANT, TEXTURE } from '../engine/constant';
+import { GL, WGL2 } from '../engine/gl';
 
 interface WrapType {
     WRAP_S?: number;

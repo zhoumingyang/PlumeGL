@@ -1,8 +1,8 @@
-import { Primitive } from './primitive';
-import { Texture } from './texture';
+import { Primitive } from '../primitive/primitive';
+import { Texture } from '../texture/texture';
 import { State } from './state';
-import { Util } from './util';
-import { CONSTANT } from './constant';
+import { Util } from '../util/util';
+import { CONSTANT } from '../engine/constant';
 
 let uuid = 0;
 export class P3D {

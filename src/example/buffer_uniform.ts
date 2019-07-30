@@ -1,6 +1,6 @@
 import { bufferUniformVert } from './shader/buffer_uniform_vert';
 import { bufferUniformFrag } from './shader/buffer_uniform_frag';
-import { PlumeGL } from '../plumegl/plumegl';
+import { PlumeGL } from '../plumegl/engine/plumegl';
 
 const element = [0, 1, 2, 2, 3, 0];
 

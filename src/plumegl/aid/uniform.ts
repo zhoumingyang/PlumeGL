@@ -1,4 +1,4 @@
-import { WGL, WGL2 } from './gl';
+import { WGL, WGL2 } from '../engine/gl';
 
 const uniformMap: any = {
     5126: '1f',     //FLOAT
