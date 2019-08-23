@@ -22,6 +22,12 @@ export const CONSTANT = {
     VAO: Symbol('Vao'),
     QUERY: Symbol('Query'),
     FEEDBACK: Symbol('FeedBack'),
+    BASELIGHT: Symbol('BaseLight'),
+    AMBIENTLIGHT: Symbol('AmbientLight'),
+    PARALLELLIGHT: Symbol('ParallelLight'),
+    POINTLIGHT: Symbol('PointLight'),
+    SPOTLIGHT: Symbol('SpotLight'),
+    DEFAULTLIGHTSHADER: Symbol('DefaultLightShader')
 };
 Object.freeze(CONSTANT);
 

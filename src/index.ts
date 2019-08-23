@@ -13,9 +13,10 @@ import { QueryOcclusion } from './example/query_occlusion';
 import { TransformFeedbackInterleaved } from './example/transform_feedback_interleaved';
 import { TransformFeedbackSeparated } from './example/transform_feedback_separated';
 import { DrawTfbSeparated2 } from './example/transform_feedback_separated_2';
+import { DrawLightCube } from './example/light_cube';
 
 const appRun = () => {
-    SampleObject();
+    // SampleObject();
     // FboBlit();
     // BufferUniform();
     // DrawInstancedUbo();
@@ -30,5 +31,6 @@ const appRun = () => {
     // TransformFeedbackInterleaved();
     // TransformFeedbackSeparated();
     // DrawTfbSeparated2();
+    DrawLightCube();
 };
 appRun();

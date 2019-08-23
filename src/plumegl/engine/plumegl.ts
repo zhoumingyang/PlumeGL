@@ -23,6 +23,13 @@ import { Query } from '../aid/query';
 import { CONSTANT, STATE } from './constant';
 import { FeedBack } from '../aid/feedback';
 import { GL, WGL, WGL2 } from './gl';
+import { Util } from '../util/util';
+import { BaseLight } from '../light/baselight';
+import { AmbientLight } from '../light/ambientlight';
+import { ParallelLight } from '../light/parallellight';
+import { PointLight } from '../light/pointlight';
+import { SpotLight } from '../light/spotlight';
+import { DefaultLightShader } from '../shader/defaultlight';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     if (ele instanceof HTMLCanvasElement) {
@@ -64,5 +71,12 @@ export const PlumeGL = {
     CONSTANT,
     STATE,
     FeedBack,
-    initGL
+    initGL,
+    Util,
+    BaseLight,
+    AmbientLight,
+    ParallelLight,
+    PointLight,
+    SpotLight,
+    DefaultLightShader
 };

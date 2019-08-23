@@ -23,7 +23,7 @@ interface FeedBack {
 
 let uuid: number = 0;
 export class Shader {
-    private gl: WGL | WGL2 = GL.gl;
+    public gl: WGL | WGL2 = GL.gl;
     private vertexShader: WebGLShader;
     private fragmentShader: WebGLShader;
     private readyState: boolean = false;
@@ -236,49 +236,55 @@ export class Shader {
             const arraySymbol: number = uniformVarName.indexOf('[');
             const attribSymbol: number = uniformVarName.indexOf('.');
             if (arraySymbol >= 0) {
-                let uniformDefineName: string;
-                let defineArray: boolean = false;
-                let attribVarInfos: any[] = [];
-                if (attribSymbol > -1) {
-                    let tmpIndex = attribSymbol < arraySymbol ? attribSymbol : arraySymbol;
-                    if (arraySymbol < attribSymbol) { defineArray = true; }
-                    uniformDefineName = uniformVarName.substring(0, tmpIndex);
-                    let remainAttribName = uniformVarName.substring(attribSymbol + 1);
-                    attribVarInfos = this.parseStructUniformVar(remainAttribName);
-                } else {
-                    uniformDefineName = uniformVarName.substring(0, arraySymbol);
-                    defineArray = true;
-                }
-                let allUniformNames: string[] = [];
-                let allVerUniformNames: string[] = this.parseUniformArrayVar({
-                    uniformDefineName,
-                    uniformName: uniformVarName,
-                    attribInfos: attribVarInfos,
-                    defineArray
-                }, this.vertexSource);
-                let allFragUniformNames: string[] = this.parseUniformArrayVar({
-                    uniformDefineName,
-                    uniformName: uniformVarName,
-                    attribInfos: attribVarInfos,
-                    defineArray
-                }, this.fragmentSource);
-                allUniformNames = allVerUniformNames.concat(allFragUniformNames);
-                allUniformNames.forEach((uniformVarName: string) => {
-                    if (!this.uniformLocationMap.has(uniformVarName)) {
-                        const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniformVarName);
-                        this.uniformLocationMap.set(uniformVarName, uniformLocation);
-                        const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
-                        this.uniformSetterMap.set(uniformVarName, setterFunction);
-                    }
-                });
+                // let uniformDefineName: string;
+                // let defineArray: boolean = false;
+                // let attribVarInfos: any[] = [];
+                // if (attribSymbol > -1) {
+                //     let tmpIndex = attribSymbol < arraySymbol ? attribSymbol : arraySymbol;
+                //     if (arraySymbol < attribSymbol) { defineArray = true; }
+                //     uniformDefineName = uniformVarName.substring(0, tmpIndex);
+                //     let remainAttribName = uniformVarName.substring(attribSymbol + 1);
+                //     attribVarInfos = this.parseStructUniformVar(remainAttribName);
+                // } else {
+                //     uniformDefineName = uniformVarName.substring(0, arraySymbol);
+                //     defineArray = true;
+                // }
+                // let allUniformNames: string[] = [];
+                // let allVerUniformNames: string[] = this.parseUniformArrayVar({
+                //     uniformDefineName,
+                //     uniformName: uniformVarName,
+                //     attribInfos: attribVarInfos,
+                //     defineArray
+                // }, this.vertexSource);
+                // let allFragUniformNames: string[] = this.parseUniformArrayVar({
+                //     uniformDefineName,
+                //     uniformName: uniformVarName,
+                //     attribInfos: attribVarInfos,
+                //     defineArray
+                // }, this.fragmentSource);
+                // allUniformNames = allVerUniformNames.concat(allFragUniformNames);
+                // allUniformNames.forEach((uniformVarName: string) => {
+                //     if (!this.uniformLocationMap.has(uniformVarName)) {
+                //         const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniformVarName);
+                //         this.uniformLocationMap.set(uniformVarName, uniformLocation);
+                //         const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
+                //         this.uniformSetterMap.set(uniformVarName, setterFunction);
+                //     }
+                // });
                 //TODO: some performence problem here
             } else {
-                const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniform.name);
-                if (uniformLocation !== undefined) {
-                    this.uniformLocationMap.set(uniformVarName, uniformLocation);
-                    const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
-                    this.uniformSetterMap.set(uniformVarName, setterFunction);
-                }
+                // const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniform.name);
+                // if (uniformLocation !== undefined) {
+                //     this.uniformLocationMap.set(uniformVarName, uniformLocation);
+                //     const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
+                //     this.uniformSetterMap.set(uniformVarName, setterFunction);
+                // }
+            }
+            const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniform.name);
+            if (uniformLocation !== undefined) {
+                this.uniformLocationMap.set(uniformVarName, uniformLocation);
+                const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
+                this.uniformSetterMap.set(uniformVarName, setterFunction);
             }
         }
 

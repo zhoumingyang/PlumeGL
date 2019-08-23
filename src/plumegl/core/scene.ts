@@ -2,20 +2,128 @@ import { Util } from '../util/util';
 import { Shader } from './shader';
 import { State } from './state';
 import { CONSTANT } from '../engine/constant';
+import { BaseLight } from '../light/baselight';
+import { AmbientLight } from '../light/ambientlight';
+import { PointLight } from '../light/pointlight';
+import { ParallelLight } from '../light/parallellight';
+import { SpotLight } from '../light/spotlight';
 
 let uuid: number = 0;
 export class Scene {
-    private shaders: Map<string, Shader>;
+    private shaders: Map<string, Shader> = new Map();
     public state: State;
-    public type: Symbol;
+    public type: Symbol = CONSTANT.SCENE;
     public uid: string;
+    public ambientLights:any;
+    public pointLights:any;
+    public parallelLights:any;
+    public spotLights:any
+    static MAX_AMBIENT_LIGHTS = 10;
+    static MAX_PARALLEL_LIGHTS = 10;
+    static MAX_POINT_LIGHTS = 10;
+    static MAX_SPOT_LIGHTS = 10;
 
     constructor() {
-        this.shaders = new Map();
         this.state = undefined;
-        this.type = CONSTANT.SCENE;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 10) uuid = 0;
+        this.ambientLights = {};
+        this.pointLights = {};
+        this.parallelLights = {};
+        this.spotLights = {};
+    }
+
+    public addLight(light: any): void {
+        switch (true) {
+            case light instanceof AmbientLight:
+                this.ambientLights[light.uid] = light;
+                break;
+            case light instanceof ParallelLight:
+                this.parallelLights[light.uid] = light;
+                break;
+            case light instanceof PointLight:
+                this.pointLights[light.uid] = light;
+                break;
+            case light instanceof SpotLight:
+                this.spotLights[light.uid] = light;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public removeLight(arg: string | BaseLight): void {
+        const key: string = (arg instanceof BaseLight) ? arg.uid : arg;
+        delete this.ambientLights[key];
+        delete this.parallelLights[key];
+        delete this.pointLights[key];
+        delete this.pointLights[key];
+    }
+
+    public initLights(shader: Shader): void {
+        //init light uniform, for default shader color
+        const ambientKeys: string[] = Object.keys(this.ambientLights);
+        const ambientNum = ambientKeys.length > Scene.MAX_AMBIENT_LIGHTS ?
+            Scene.MAX_AMBIENT_LIGHTS : ambientKeys.length;
+
+        const parallelKeys: string[] = Object.keys(this.parallelLights);
+        const parallelNum = parallelKeys.length > Scene.MAX_PARALLEL_LIGHTS ?
+            Scene.MAX_AMBIENT_LIGHTS : parallelKeys.length;
+            
+        const pointKeys: string[] = Object.keys(this.pointLights);
+        const pointNum = pointKeys.length > Scene.MAX_POINT_LIGHTS ?
+            Scene.MAX_POINT_LIGHTS : pointKeys.length;
+        
+        const spotKeys: string[] = Object.keys(this.spotLights);
+        const spotNum = spotKeys.length > Scene.MAX_SPOT_LIGHTS ?
+            Scene.MAX_SPOT_LIGHTS : spotKeys.length;
+
+        let key:string;
+
+        shader.setUniformData(`uNumAmbientLight`, [ambientNum]);
+        for (let i = 0; i < ambientNum; i++) {
+            key = ambientKeys[i];
+            const ambientLight = this.ambientLights[key];
+            shader.setUniformData(`uAmbientLights[${i}].color`, ambientLight.color);
+            shader.setUniformData(`uAmbientLights[${i}].ambient`, [ambientLight.ambient]);
+            shader.setUniformData(`uAmbientLights[${i}].diffuse`, [ambientLight.diffuse]);
+        }
+
+        shader.setUniformData(`uNumParallelLight`, [parallelNum]);
+        for (let i = 0; i < parallelNum; i++) {
+            key = parallelKeys[i];
+            const parallelLight = this.parallelLights[key];
+            shader.setUniformData(`uAmbientLights[${i}].color`, parallelLight.color);
+            shader.setUniformData(`uAmbientLights[${i}].ambient`, [parallelLight.ambient]);
+            shader.setUniformData(`uAmbientLights[${i}].diffuse`, [parallelLight.diffuse]);
+        }
+
+        shader.setUniformData(`uNumPointLight`, [pointNum]);
+        for (let i = 0; i < pointNum; i++) {
+            key = pointKeys[i];
+            const pointLight = this.pointLights[key];
+            shader.setUniformData(`uPointLights[${i}].color`, pointLight.color);
+            shader.setUniformData(`uPointLights[${i}].ambient`, [pointLight.ambient]);
+            shader.setUniformData(`uPointLights[${i}].diffuse`, [pointLight.diffuse]);
+            shader.setUniformData(`uPointLights[${i}].position`, [pointLight.position]);
+            shader.setUniformData(`uPointLights[${i}].attenuation.constant`, [pointLight.attenuation.constant]);
+            shader.setUniformData(`uPointLights[${i}].attenuation.linear`, [pointLight.attenuation.linear]);
+            shader.setUniformData(`uPointLights[${i}].attenuation.exponent`, [pointLight.attenuation.exponent]);
+        }
+
+        shader.setUniformData(`uNumSpotLight`, [spotNum]);
+        for (let i = 0; i < spotNum; i++) {
+            key = spotKeys[i];
+            const spotLight = this.spotLights[key];
+            shader.setUniformData(`uSpotLights[${i}].color`, spotLight.color);
+            shader.setUniformData(`uSpotLights[${i}].ambient`, [spotLight.ambient]);
+            shader.setUniformData(`uSpotLights[${i}].diffuse`, [spotLight.diffuse]);
+            shader.setUniformData(`uSpotLights[${i}].position`, [spotLight.position]);
+            shader.setUniformData(`uSpotLights[${i}].direction`, [spotLight.direction]);
+            shader.setUniformData(`uSpotLights[${i}].attenuation.constant`, [spotLight.attenuation.constant]);
+            shader.setUniformData(`uSpotLights[${i}].attenuation.linear`, [spotLight.attenuation.linear]);
+            shader.setUniformData(`uSpotLights[${i}].attenuation.exponent`, [spotLight.attenuation.exponent]);
+        }
     }
 
     public setSceneState(state: State): void {
@@ -33,7 +141,11 @@ export class Scene {
 
     public forEachRender(callback: Function): void {
         this.shaders.forEach((shader: Shader, key: string) => {
+            //TODO init lights uniform
+            shader.use();
+            this.initLights(shader);
             callback.call(this, shader, key);
+            shader.unUse();
         });
     }
 
@@ -49,5 +161,13 @@ export class Scene {
         this.shaders.clear();
         this.shaders = new Map();
         this.state = undefined;
+        this.ambientLights.clear();
+        this.ambientLights = new Map();
+        this.parallelLights.clear();
+        this.parallelLights = new Map();
+        this.pointLights.clear();
+        this.pointLights = new Map();
+        this.spotLights.clear();
+        this.spotLights = new Map();
     }
 }

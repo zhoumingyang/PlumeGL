@@ -1,10 +1,12 @@
 export const Util = {
 
-    errorCheck: (gl: WebGLRenderingContext, option?: any): void => {
+    errorCheck: (gl: WebGLRenderingContext | WebGL2RenderingContext, option?: any): boolean => {
         const err = gl.getError();
         if (err !== gl.NO_ERROR && (!option || (option && !option.onlyFlush))) {
-            console.warn(err);
+            console.error(err);
+            return false;
         }
+        return true;
     },
 
     random13: (len: number = 13, index?: number | string): string => {
