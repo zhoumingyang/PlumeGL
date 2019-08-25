@@ -27,7 +27,8 @@ export const CONSTANT = {
     PARALLELLIGHT: Symbol('ParallelLight'),
     POINTLIGHT: Symbol('PointLight'),
     SPOTLIGHT: Symbol('SpotLight'),
-    DEFAULTLIGHTSHADER: Symbol('DefaultLightShader')
+    DEFAULTLIGHTSHADER: Symbol('DefaultLightShader'),
+    BASICLINESHADER: Symbol('BasicLineShader')
 };
 Object.freeze(CONSTANT);
 

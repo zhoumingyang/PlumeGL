@@ -5,8 +5,8 @@ import { LightAttenuation } from './attenuation';
 export class SpotLight extends BaseLight {
     public type: Symbol = CONSTANT.SPOTLIGHT;
     public cutoff: number = 0.0;
-    public direction: number[] = [0.0, 0.0, 0.0];
-    public position: number[] = [0.0, 0.0, 0.0];
+    public direction: Float32Array = Float32Array.from([0.0, 0.0, 0.0]);
+    public position: Float32Array = Float32Array.from([0.0, 0.0, 0.0]);
     public attenuation: LightAttenuation = {
         constant: 1.0,
         linear: 0.0,
@@ -26,7 +26,7 @@ export class SpotLight extends BaseLight {
         this.attenuation.exponent = att.exponent || this.attenuation.exponent;
     }
 
-    public setDirection(dir: number[]): void {
+    public setDirection(dir: Float32Array): void {
         if (!dir || dir.length < 3) {
             console.warn('direction should be vector3');
             return;
@@ -34,7 +34,7 @@ export class SpotLight extends BaseLight {
         this.direction = dir;
     }
 
-    public setPosition(pos: number[]): void {
+    public setPosition(pos: Float32Array): void {
         if (!pos || pos.length < 3) {
             console.warn('position should be vector3');
             return;

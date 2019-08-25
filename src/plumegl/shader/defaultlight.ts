@@ -1,5 +1,5 @@
 import { DefaultLightVert } from './resource/defaultLight_vert';
-import { DefaultLightFrag } from './resource/defaultLight_farg';
+import { DefaultLightFrag } from './resource/defaultLight_frag';
 import { Shader } from '../core/shader';
 import { CONSTANT } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';

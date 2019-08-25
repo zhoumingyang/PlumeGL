@@ -6,7 +6,7 @@ let uuid: number = 0;
 export class BaseLight {
     public type: Symbol = CONSTANT.BASELIGHT;
     public uid: string;
-    public color: number[] = [1.0, 1.0, 1.0];
+    public color: Float32Array = Float32Array.from([1.0, 1.0, 1.0]);
     public ambient: number = 1.0;
     public diffuse: number = 1.0;
 
@@ -15,11 +15,11 @@ export class BaseLight {
         if (uuid >= 10) uuid = 0;
     }
 
-    public setDirection(dir: number[]): void {
+    public setDirection(dir: Float32Array): void {
 
     }
 
-    public setPosition(pos: number[]): void {
+    public setPosition(pos: Float32Array): void {
 
     }
 

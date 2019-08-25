@@ -4,7 +4,7 @@ import { LightAttenuation } from './attenuation';
 
 export class PointLight extends BaseLight {
     public type: Symbol = CONSTANT.POINTLIGHT;
-    public position: number[] = [0.0, 0.0, 0.0];
+    public position: Float32Array = Float32Array.from([0.0, 0.0, 0.0]);
     public attenuation: LightAttenuation = {
         constant: 1.0,
         linear: 0.0,
@@ -15,7 +15,7 @@ export class PointLight extends BaseLight {
         super();
     }
 
-    public setPosition(pos: number[]): void {
+    public setPosition(pos: Float32Array): void {
         if (!pos || pos.length < 3) {
             console.warn('position should be vector3');
             return;

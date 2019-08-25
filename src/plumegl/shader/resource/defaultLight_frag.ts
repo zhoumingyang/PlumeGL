@@ -86,25 +86,28 @@ void main() {
 		numSpot = MAX_SPOT_LIGHT;
     }
     
-    vec4 ambientIrradiance = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    vec4 ambientIrradiance = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     for(int i = 0; i < numAmbient; i++) {
         ambientIrradiance += calcAmbientColor(uAmbientLights[i]);
     }
     ambientIrradiance = ambientIrradiance / ambientIrradiance.w;
     
-    vec4 parallelIrradiance = vec4(0.0f, 0.0f, 0.0f, 0.0f); 
+    vec4 parallelIrradiance = vec4(0.0f, 0.0f, 0.0f, 1.0f); 
+    numParallel = 1;
     for(int i = 0; i < numParallel; i++) {
         parallelIrradiance += calcParallelColor(uParallelLights[i], normal, vPosition, uEyePosition);
     }
     parallelIrradiance = parallelIrradiance / parallelIrradiance.w;
 
-    vec4 pointIrradiance = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    vec4 pointIrradiance = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    numPoint = 0;
     for(int i = 0; i < numPoint; i++) {
         pointIrradiance += calcPointColor(uPointLights[i], normal, vPosition, uEyePosition);
     }
     pointIrradiance = pointIrradiance / pointIrradiance.w;
 
-    vec4 spotIrradiance = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    vec4 spotIrradiance = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    numSpot = 0;
     for(int i = 0; i < numSpot; i++) {
         spotIrradiance += calcSpotColor(uSpotLights[i], normal, vPosition, uEyePosition);
     }
@@ -117,7 +120,7 @@ void main() {
         // fragColor = texture(uTexture, vUv.xy) * finalColor;
         fragColor = vec4(1.0, 0.0, 0.0, 1.0);
 	} else {
-		fragColor = finalColor;
+        fragColor = finalColor;
     }
     
 }`;

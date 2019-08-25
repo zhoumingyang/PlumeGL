@@ -30,6 +30,7 @@ import { ParallelLight } from '../light/parallellight';
 import { PointLight } from '../light/pointlight';
 import { SpotLight } from '../light/spotlight';
 import { DefaultLightShader } from '../shader/defaultlight';
+import { BasicLineShader } from '../shader/basicline';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     if (ele instanceof HTMLCanvasElement) {
@@ -78,5 +79,6 @@ export const PlumeGL = {
     ParallelLight,
     PointLight,
     SpotLight,
-    DefaultLightShader
+    DefaultLightShader,
+    BasicLineShader
 };
