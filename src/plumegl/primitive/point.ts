@@ -12,7 +12,7 @@ export class Point extends Primitive {
         this.DrawTypes = [this.gl.POINTS];
         this.setDrawType(this.gl.POINTS);
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
     }
 
 }

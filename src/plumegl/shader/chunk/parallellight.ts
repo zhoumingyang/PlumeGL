@@ -58,7 +58,7 @@ export const parallelLightCalculate =
 
         //specular
         vec3 specularColor = vec3(0.0f, 0.0f, 0.0f);
-        calcParallelSpecularColor(light, normal, fragPos, eyePos, specularColor);
+        // calcParallelSpecularColor(light, normal, fragPos, eyePos, specularColor);
 
         return  vec4(diffuseColor + specularColor, 1.0f);
     }`;

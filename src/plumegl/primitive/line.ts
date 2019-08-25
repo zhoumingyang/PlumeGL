@@ -12,7 +12,7 @@ export class Line extends Primitive {
         this.DrawTypes = [this.gl.LINES, this.gl.LINE_LOOP, this.gl.LINE_STRIP];
         this.setDrawType(this.gl.LINES);
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
     }
 
     setLineWidth(lw: number) {

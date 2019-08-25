@@ -83,7 +83,7 @@ const createGLContext = () => {
 };
 
 const create = (): Float32Array => {
-    let out = new Float32Array(32);
+    let out = new Float32Array(16);
     out[0] = 1;
     out[1] = 0;
     out[2] = 0;
@@ -421,14 +421,13 @@ export const DrawLightCube = () => {
 
     const ambientLight = new PlumeGL.AmbientLight();
     ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
-    ambientLight.ambient = 0.70;
-    ambientLight.diffuse = 1.0;
+    ambientLight.ambient = 0.75;
 
     const parallelLight = new PlumeGL.ParallelLight();
-    parallelLight.color = Float32Array.from([1.0, 0.0, 0.0]);
-    parallelLight.setDirection(Float32Array.from([1.0, 1.0, 1.0]));
+    parallelLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    parallelLight.setDirection(Float32Array.from([2.0, 2.0, 2.0]));
 
-    scene.addLight(ambientLight);
+    // scene.addLight(ambientLight);
     scene.addLight(parallelLight);
 
     const vertices = new Float32Array(cubeVert);
@@ -479,11 +478,11 @@ export const DrawLightCube = () => {
         let yAxis: Float32Array = new Float32Array(3);
         zAxis[0] = 0; zAxis[1] = 0; zAxis[2] = 1;
         yAxis[0] = 0; yAxis[1] = 1; yAxis[2] = 0;
-        cubeRotation = 247.697;
-        modelViewMat = rotate(modelViewMat, cubeRotation, zAxis);
-        modelViewMat = rotate(modelViewMat, cubeRotation * 0.7, yAxis);
-        normalMat = rotate(normalMat, cubeRotation, zAxis);
-        normalMat = rotate(normalMat, cubeRotation * 0.7, yAxis);
+        // cubeRotation = 0;
+        // modelViewMat = rotate(modelViewMat, cubeRotation, zAxis);
+        // modelViewMat = rotate(modelViewMat, cubeRotation * 0.7, yAxis);
+        // normalMat = rotate(normalMat, cubeRotation, zAxis);
+        // normalMat = rotate(normalMat, cubeRotation * 0.7, yAxis);
         mvp = multiply(projectionMat, modelViewMat);
 
         scene.state.stateChange();

@@ -50,7 +50,7 @@ export class Shader {
         this.instance = this.gl.createProgram();
         this.fb = fb;
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
         if (vertexSource !== undefined && fragmentSource !== undefined) {
             this.compileShader();
         }
@@ -365,6 +365,9 @@ export class Shader {
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {
+        if (this.p3ds.has(p3d.uid)) {
+            console.log(p3d.uid);
+        }
         this.p3ds.set(p3d.uid, p3d);
     }
 

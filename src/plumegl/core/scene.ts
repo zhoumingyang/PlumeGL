@@ -26,7 +26,7 @@ export class Scene {
     constructor() {
         this.state = undefined;
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
         this.ambientLights = {};
         this.pointLights = {};
         this.parallelLights = {};
@@ -93,9 +93,10 @@ export class Scene {
         for (let i = 0; i < parallelNum; i++) {
             key = parallelKeys[i];
             const parallelLight = this.parallelLights[key];
-            shader.setUniformData(`uAmbientLights[${i}].color`, [parallelLight.color[0], parallelLight.color[1], parallelLight.color[2]]);
-            shader.setUniformData(`uAmbientLights[${i}].ambient`, [parallelLight.ambient]);
-            shader.setUniformData(`uAmbientLights[${i}].diffuse`, [parallelLight.diffuse]);
+            shader.setUniformData(`uParallelLights[${i}].color`, [parallelLight.color[0], parallelLight.color[1], parallelLight.color[2]]);
+            shader.setUniformData(`uSpotLights[${i}].direction`, [parallelLight.direction[0], parallelLight.direction[1], parallelLight.direction[2]]);
+            shader.setUniformData(`uParallelLights[${i}].ambient`, [parallelLight.ambient]);
+            shader.setUniformData(`uParallelLights[${i}].diffuse`, [parallelLight.diffuse]);
         }
 
         shader.setUniformData(`uNumPointLight`, [pointNum]);

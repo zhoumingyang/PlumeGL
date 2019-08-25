@@ -12,7 +12,7 @@ export class BaseLight {
 
     constructor() {
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
     }
 
     public setDirection(dir: Float32Array): void {
