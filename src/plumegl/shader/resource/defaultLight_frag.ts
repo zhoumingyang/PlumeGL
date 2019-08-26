@@ -92,19 +92,16 @@ void main() {
     }
     
     vec4 parallelIrradiance = vec4(0.0f, 0.0f, 0.0f, 1.0f); 
-    numParallel = 1;
     for(int i = 0; i < numParallel; i++) {
         parallelIrradiance += calcParallelColor(uParallelLights[i], normal, vPosition, uEyePosition);
     }
 
     vec4 pointIrradiance = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    numPoint = 0;
     for(int i = 0; i < numPoint; i++) {
         pointIrradiance += calcPointColor(uPointLights[i], normal, vPosition, uEyePosition);
     }
 
     vec4 spotIrradiance = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    numSpot = 0;
     for(int i = 0; i < numSpot; i++) {
         spotIrradiance += calcSpotColor(uSpotLights[i], normal, vPosition, uEyePosition);
     }

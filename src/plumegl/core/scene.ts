@@ -94,7 +94,7 @@ export class Scene {
             key = parallelKeys[i];
             const parallelLight = this.parallelLights[key];
             shader.setUniformData(`uParallelLights[${i}].color`, [parallelLight.color[0], parallelLight.color[1], parallelLight.color[2]]);
-            shader.setUniformData(`uSpotLights[${i}].direction`, [parallelLight.direction[0], parallelLight.direction[1], parallelLight.direction[2]]);
+            shader.setUniformData(`uParallelLights[${i}].direction`, [parallelLight.direction[0], parallelLight.direction[1], parallelLight.direction[2]]);
             shader.setUniformData(`uParallelLights[${i}].ambient`, [parallelLight.ambient]);
             shader.setUniformData(`uParallelLights[${i}].diffuse`, [parallelLight.diffuse]);
         }

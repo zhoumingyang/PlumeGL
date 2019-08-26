@@ -29,7 +29,8 @@ export const parallelDiffuseCalculate: string =
 
         vec3 norm = normalize(normal);
 
-        float diffuseFactor = max(dot(norm, -light.direction), 0.0f);
+        vec3 lightDir = normalize(light.direction);
+        float diffuseFactor = max(dot(norm, -lightDir), 0.0f);
         diffuseColor = diffuseFactor * light.color;
 
         return true;
@@ -58,7 +59,7 @@ export const parallelLightCalculate =
 
         //specular
         vec3 specularColor = vec3(0.0f, 0.0f, 0.0f);
-        // calcParallelSpecularColor(light, normal, fragPos, eyePos, specularColor);
+        calcParallelSpecularColor(light, normal, fragPos, eyePos, specularColor);
 
         return  vec4(diffuseColor + specularColor, 1.0f);
     }`;
