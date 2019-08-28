@@ -13,9 +13,12 @@ import { QueryOcclusion } from './example/query_occlusion';
 import { TransformFeedbackInterleaved } from './example/transform_feedback_interleaved';
 import { TransformFeedbackSeparated } from './example/transform_feedback_separated';
 import { DrawTfbSeparated2 } from './example/transform_feedback_separated_2';
+import { DrawLightCube } from './example/light_cube';
+import { DrawPointLightCube } from './example/point_light_cube';
+import { DrawSpotLightPlane } from './example/spot_light_plane';
 
 const appRun = () => {
-    SampleObject();
+    // SampleObject();
     // FboBlit();
     // BufferUniform();
     // DrawInstancedUbo();
@@ -30,5 +33,8 @@ const appRun = () => {
     // TransformFeedbackInterleaved();
     // TransformFeedbackSeparated();
     // DrawTfbSeparated2();
+    // DrawLightCube();
+    // DrawPointLightCube();
+    DrawSpotLightPlane();
 };
 appRun();

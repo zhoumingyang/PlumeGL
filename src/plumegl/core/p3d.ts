@@ -18,7 +18,7 @@ export class P3D {
         this.texture = texture;
         this.state = state || new State();
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
     }
 
     private _prepareInner(slots: number[] = [0]): void {

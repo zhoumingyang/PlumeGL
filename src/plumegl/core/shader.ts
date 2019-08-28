@@ -23,7 +23,7 @@ interface FeedBack {
 
 let uuid: number = 0;
 export class Shader {
-    private gl: WGL | WGL2 = GL.gl;
+    public gl: WGL | WGL2 = GL.gl;
     private vertexShader: WebGLShader;
     private fragmentShader: WebGLShader;
     private readyState: boolean = false;
@@ -39,7 +39,7 @@ export class Shader {
     public type: Symbol = CONSTANT.SHADER;
     public fb: FeedBack;
 
-    constructor(vertexSource: string, fragmentSource: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
+    constructor(vertexSource?: string, fragmentSource?: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
         this.gl = gl || this.gl;
         if (!this.gl) {
             console.error('no gl context', this.type);
@@ -50,10 +50,15 @@ export class Shader {
         this.instance = this.gl.createProgram();
         this.fb = fb;
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
         if (vertexSource !== undefined && fragmentSource !== undefined) {
             this.compileShader();
         }
+    }
+
+    public setShaderSource(vertexSource?: string, fragmentSource?: string) {
+        this.vertexSource = vertexSource;
+        this.fragmentSource = fragmentSource;
     }
 
     private compileSource(shaderSource: string, type: number): WebGLShader {
@@ -68,7 +73,7 @@ export class Shader {
         return shader;
     }
 
-    private compileShader(): boolean {
+    public compileShader(): boolean {
         const vertexSource: string = this.vertexSource;
         const fragmentSource: string = this.fragmentSource;
         const _gl: WGL | WGL2 = this.gl;
@@ -236,49 +241,55 @@ export class Shader {
             const arraySymbol: number = uniformVarName.indexOf('[');
             const attribSymbol: number = uniformVarName.indexOf('.');
             if (arraySymbol >= 0) {
-                let uniformDefineName: string;
-                let defineArray: boolean = false;
-                let attribVarInfos: any[] = [];
-                if (attribSymbol > -1) {
-                    let tmpIndex = attribSymbol < arraySymbol ? attribSymbol : arraySymbol;
-                    if (arraySymbol < attribSymbol) { defineArray = true; }
-                    uniformDefineName = uniformVarName.substring(0, tmpIndex);
-                    let remainAttribName = uniformVarName.substring(attribSymbol + 1);
-                    attribVarInfos = this.parseStructUniformVar(remainAttribName);
-                } else {
-                    uniformDefineName = uniformVarName.substring(0, arraySymbol);
-                    defineArray = true;
-                }
-                let allUniformNames: string[] = [];
-                let allVerUniformNames: string[] = this.parseUniformArrayVar({
-                    uniformDefineName,
-                    uniformName: uniformVarName,
-                    attribInfos: attribVarInfos,
-                    defineArray
-                }, this.vertexSource);
-                let allFragUniformNames: string[] = this.parseUniformArrayVar({
-                    uniformDefineName,
-                    uniformName: uniformVarName,
-                    attribInfos: attribVarInfos,
-                    defineArray
-                }, this.fragmentSource);
-                allUniformNames = allVerUniformNames.concat(allFragUniformNames);
-                allUniformNames.forEach((uniformVarName: string) => {
-                    if (!this.uniformLocationMap.has(uniformVarName)) {
-                        const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniformVarName);
-                        this.uniformLocationMap.set(uniformVarName, uniformLocation);
-                        const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
-                        this.uniformSetterMap.set(uniformVarName, setterFunction);
-                    }
-                });
+                // let uniformDefineName: string;
+                // let defineArray: boolean = false;
+                // let attribVarInfos: any[] = [];
+                // if (attribSymbol > -1) {
+                //     let tmpIndex = attribSymbol < arraySymbol ? attribSymbol : arraySymbol;
+                //     if (arraySymbol < attribSymbol) { defineArray = true; }
+                //     uniformDefineName = uniformVarName.substring(0, tmpIndex);
+                //     let remainAttribName = uniformVarName.substring(attribSymbol + 1);
+                //     attribVarInfos = this.parseStructUniformVar(remainAttribName);
+                // } else {
+                //     uniformDefineName = uniformVarName.substring(0, arraySymbol);
+                //     defineArray = true;
+                // }
+                // let allUniformNames: string[] = [];
+                // let allVerUniformNames: string[] = this.parseUniformArrayVar({
+                //     uniformDefineName,
+                //     uniformName: uniformVarName,
+                //     attribInfos: attribVarInfos,
+                //     defineArray
+                // }, this.vertexSource);
+                // let allFragUniformNames: string[] = this.parseUniformArrayVar({
+                //     uniformDefineName,
+                //     uniformName: uniformVarName,
+                //     attribInfos: attribVarInfos,
+                //     defineArray
+                // }, this.fragmentSource);
+                // allUniformNames = allVerUniformNames.concat(allFragUniformNames);
+                // allUniformNames.forEach((uniformVarName: string) => {
+                //     if (!this.uniformLocationMap.has(uniformVarName)) {
+                //         const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniformVarName);
+                //         this.uniformLocationMap.set(uniformVarName, uniformLocation);
+                //         const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
+                //         this.uniformSetterMap.set(uniformVarName, setterFunction);
+                //     }
+                // });
                 //TODO: some performence problem here
             } else {
-                const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniform.name);
-                if (uniformLocation !== undefined) {
-                    this.uniformLocationMap.set(uniformVarName, uniformLocation);
-                    const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
-                    this.uniformSetterMap.set(uniformVarName, setterFunction);
-                }
+                // const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniform.name);
+                // if (uniformLocation !== undefined) {
+                //     this.uniformLocationMap.set(uniformVarName, uniformLocation);
+                //     const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
+                //     this.uniformSetterMap.set(uniformVarName, setterFunction);
+                // }
+            }
+            const uniformLocation: WebGLUniformLocation = _gl.getUniformLocation(_program, uniform.name);
+            if (uniformLocation !== undefined) {
+                this.uniformLocationMap.set(uniformVarName, uniformLocation);
+                const setterFunction: Function = UniformFactory.uniformSetter(uniform.type, uniformLocation, _gl, option);
+                this.uniformSetterMap.set(uniformVarName, setterFunction);
             }
         }
 
@@ -359,6 +370,9 @@ export class Shader {
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {
+        if (this.p3ds.has(p3d.uid)) {
+            console.log(p3d.uid);
+        }
         this.p3ds.set(p3d.uid, p3d);
     }
 

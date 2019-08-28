@@ -13,7 +13,7 @@ export class Mesh extends Primitive {
         this.DrawTypes = [this.gl.TRIANGLES, this.gl.TRIANGLE_STRIP, this.gl.TRIANGLE_FAN];
         this.setDrawType(this.gl.TRIANGLES);
         this.uid = Util.random13(13, uuid++);
-        if (uuid >= 10) uuid = 0;
+        if (uuid >= 1000) uuid = 0;
     }
 
     public setIndices(datas: any, drawType?: number, dataType?: number): void {
