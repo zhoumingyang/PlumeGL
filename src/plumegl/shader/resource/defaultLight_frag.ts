@@ -5,8 +5,7 @@ import { pointLightMax, pointLightDefine, pointDiffuseCalculate, pointSpecularCa
 import { spotLightMax, spotLightDefine, spotDiffuseCalculate, spotSpecularCalculate, spotLightCalculate } from '../chunk/spotlight';
 
 export const DefaultLightFrag: string =
-    `#version 300 es
-precision highp float;
+    `precision highp float;
 precision highp int;
 
 // max value define
@@ -24,8 +23,9 @@ in vec2 vUv;
 uniform float uSpecStrength;
 uniform float uSpecPower;
 uniform vec3 uEyePosition;
-// uniform sampler2D uTexture;
-uniform int ubMap;
+#ifdef USE_MAP
+    uniform sampler2D uTexture;
+#endif
 
 // attenuation struct define
 ${lightAttenuation}
@@ -108,11 +108,10 @@ void main() {
 
     vec4 finalColor = ambientIrradiance + parallelIrradiance + pointIrradiance + spotIrradiance;
 
-    if(ubMap == 1) {
-        // fragColor = texture(uTexture, vUv.xy) * finalColor;
-        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
-	} else {
+    #ifdef USE_MAP
+        fragColor = texture(uTexture, vUv.xy) * finalColor;
+    #else
         fragColor = finalColor;
-    }
+    #endif
     
 }`;

@@ -498,7 +498,6 @@ export const DrawPointLightCube = () => {
                 shaderObj.setUniformData(shaderObj.uniformWorlMatirx, [modelViewMat, false]);
                 shaderObj.setUniformData(shaderObj.uniformNormalMatrix, [normalMat, false]);
                 shaderObj.setUniformData(shaderObj.uniformEyePosition, [0.0, 0.0, 0.0]);
-                shaderObj.setUniformData(shaderObj.uniformBoolMap, [0]);
                 shaderObj.setUniformData(shaderObj.uniformSpecStrength, [1.0]);
                 shaderObj.setUniformData(shaderObj.uniformSpecPower, [2]);
                 shaderObj.forEachDraw((obj: any) => {

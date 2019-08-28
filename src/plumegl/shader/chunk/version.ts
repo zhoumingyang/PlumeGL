@@ -1,0 +1,1 @@
+export const Version: string = `#version 300 es \n`;

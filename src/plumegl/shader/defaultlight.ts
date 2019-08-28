@@ -1,5 +1,6 @@
 import { DefaultLightVert } from './resource/defaultLight_vert';
 import { DefaultLightFrag } from './resource/defaultLight_frag';
+import { Version } from './chunk/version';
 import { Shader } from '../core/shader';
 import { CONSTANT } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
@@ -17,9 +18,17 @@ export class DefaultLightShader extends Shader {
     public uniformSpecPower: string = "uSpecPower";
     public uniformEyePosition: string = "uEyePosition";
     public uniformTexture: string = "uTexture";
-    public uniformBoolMap: string = "ubMap";
 
-    constructor(gl?: WGL | WGL2) {
-        super(DefaultLightVert, DefaultLightFrag, undefined, gl);
+    constructor(useMap: boolean = false, gl?: WGL | WGL2) {
+        super(undefined, undefined, undefined, gl);
+        let vs: string = DefaultLightVert;
+        let fs: string = DefaultLightFrag;
+        if (useMap) {
+            fs = `#define USE_MAP 1 \n` + fs;
+        }
+        vs = Version + vs;
+        fs = Version + fs;
+        this.setShaderSource(vs, fs);
+        this.compileShader();
     }
 }

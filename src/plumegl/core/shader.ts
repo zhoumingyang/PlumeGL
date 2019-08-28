@@ -39,7 +39,7 @@ export class Shader {
     public type: Symbol = CONSTANT.SHADER;
     public fb: FeedBack;
 
-    constructor(vertexSource: string, fragmentSource: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
+    constructor(vertexSource?: string, fragmentSource?: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
         this.gl = gl || this.gl;
         if (!this.gl) {
             console.error('no gl context', this.type);
@@ -56,6 +56,11 @@ export class Shader {
         }
     }
 
+    public setShaderSource(vertexSource?: string, fragmentSource?: string) {
+        this.vertexSource = vertexSource;
+        this.fragmentSource = fragmentSource;
+    }
+
     private compileSource(shaderSource: string, type: number): WebGLShader {
         const _gl: WGL | WGL2 = this.gl;
         const shader: WebGLShader = _gl.createShader(type);
@@ -68,7 +73,7 @@ export class Shader {
         return shader;
     }
 
-    private compileShader(): boolean {
+    public compileShader(): boolean {
         const vertexSource: string = this.vertexSource;
         const fragmentSource: string = this.fragmentSource;
         const _gl: WGL | WGL2 = this.gl;

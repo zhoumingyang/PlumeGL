@@ -310,7 +310,6 @@ export const DrawSpotLightPlane = () => {
                 shaderObj.setUniformData(shaderObj.uniformWorlMatirx, [modelMat, false]);
                 shaderObj.setUniformData(shaderObj.uniformNormalMatrix, [modelMat, false]);
                 shaderObj.setUniformData(shaderObj.uniformEyePosition, [eyePos[0], eyePos[1], eyePos[2]]);
-                shaderObj.setUniformData(shaderObj.uniformBoolMap, [0]);
                 shaderObj.setUniformData(shaderObj.uniformSpecStrength, [1.0]);
                 shaderObj.setUniformData(shaderObj.uniformSpecPower, [2]);
                 shaderObj.forEachDraw((obj: any) => {
