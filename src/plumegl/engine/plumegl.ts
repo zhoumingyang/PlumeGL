@@ -8,7 +8,7 @@ import { Texture2DArray } from '../texture/texture2Darray';
 import { Texture3D } from '../texture/texture3D';
 import { TextureCube } from '../texture/texturecube';
 import { Sampler } from '../texture/sampler';
-import { Shader } from '../core/shader';
+import { Shader } from '../shader/shader';
 import { VAO } from '../primitive/vao';
 import { UniformFactory } from '../aid/uniform';
 import { Primitive } from '../primitive/primitive';

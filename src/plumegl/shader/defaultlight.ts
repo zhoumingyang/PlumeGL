@@ -1,7 +1,7 @@
 import { DefaultLightVert } from './resource/defaultLight_vert';
 import { DefaultLightFrag } from './resource/defaultLight_frag';
 import { Version } from './chunk/version';
-import { Shader } from '../core/shader';
+import { Shader } from './shader';
 import { CONSTANT } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 

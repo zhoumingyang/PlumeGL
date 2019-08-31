@@ -1,5 +1,5 @@
 import { Util } from '../util/util';
-import { Shader } from './shader';
+import { Shader } from '../shader/shader';
 import { State } from './state';
 import { CONSTANT } from '../engine/constant';
 import { BaseLight } from '../light/baselight';
@@ -7,6 +7,7 @@ import { AmbientLight } from '../light/ambientlight';
 import { PointLight } from '../light/pointlight';
 import { ParallelLight } from '../light/parallellight';
 import { SpotLight } from '../light/spotlight';
+import { Camera } from '../camera/camera';
 
 let uuid: number = 0;
 export class Scene {
@@ -17,7 +18,9 @@ export class Scene {
     public ambientLights: any;
     public pointLights: any;
     public parallelLights: any;
-    public spotLights: any
+    public spotLights: any;
+    public activeCamera: Camera;
+    public cameras: any;
     static MAX_AMBIENT_LIGHTS = 10;
     static MAX_PARALLEL_LIGHTS = 10;
     static MAX_POINT_LIGHTS = 10;
@@ -31,6 +34,7 @@ export class Scene {
         this.pointLights = {};
         this.parallelLights = {};
         this.spotLights = {};
+        this.cameras = {};
     }
 
     public addLight(light: any): void {
@@ -58,6 +62,28 @@ export class Scene {
         delete this.parallelLights[key];
         delete this.pointLights[key];
         delete this.pointLights[key];
+    }
+
+    public addCamera(camera: any): void {
+        this.cameras[camera.uid] = camera;
+    }
+
+    public removeCamera(arg: string | Camera): void {
+        const key: string = (arg instanceof Camera) ? arg.uid : arg;
+        if (this.activeCamera && this.activeCamera.uid === key) {
+            this.activeCamera = undefined;
+        }
+        delete this.cameras[key];
+    }
+
+    public setActiveCamera(camera: string | Camera): void {
+        if (camera instanceof Camera) {
+            this.activeCamera = camera;
+            this.cameras[camera.uid] = camera;
+        } else {
+            const tmpCamera = this.cameras[camera];
+            this.activeCamera = tmpCamera;
+        }
     }
 
     public initLights(shader: Shader): void {
@@ -162,13 +188,10 @@ export class Scene {
         this.shaders.clear();
         this.shaders = new Map();
         this.state = undefined;
-        this.ambientLights.clear();
-        this.ambientLights = new Map();
-        this.parallelLights.clear();
-        this.parallelLights = new Map();
-        this.pointLights.clear();
-        this.pointLights = new Map();
-        this.spotLights.clear();
-        this.spotLights = new Map();
+        this.ambientLights = {};
+        this.parallelLights = {};
+        this.pointLights = {};
+        this.spotLights = {};
+        this.cameras = {};
     }
 }

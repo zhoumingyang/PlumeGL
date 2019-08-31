@@ -1,6 +1,6 @@
 import { VAO } from './vao';
 import { ArrayBuffer } from '../buffer/arraybuffer';
-import { Shader } from '../core/shader';
+import { Shader } from '../shader/shader';
 import { IndexBuffer } from '../buffer/indexbuffer';
 import { CONSTANT } from '../engine/constant';
 import { GL, WGL, WGL2 } from '../engine/gl';
@@ -48,6 +48,10 @@ export class Primitive {
 
     public getDrawType(): number {
         return this.drawType;
+    }
+
+    public getModelMat(): Mat4 {
+        return this.modelMatrix.clone();
     }
 
     public setGeometryAttributes(datas: number[] | Float32Array | number, attribs: Attribute[], drawType?: number): void {

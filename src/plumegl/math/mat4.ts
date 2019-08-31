@@ -369,8 +369,8 @@ export class Mat4 {
         return this;
     }
 
-    public ortho(out: number, left: number, right: number,
-        bottom: number, top: number, near: number, far: number): Mat4 {
+    public ortho(left: number, right: number, bottom: number,
+        top: number, near: number, far: number): Mat4 {
         let lr: number = 1 / (left - right);
         let bt: number = 1 / (bottom - top);
         let nf: number = 1 / (near - far);

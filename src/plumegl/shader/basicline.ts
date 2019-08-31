@@ -1,6 +1,6 @@
 import { BasicLineVert } from './resource/basicline_vert';
 import { BasicLineFrag } from './resource/basicline_frag';
-import { Shader } from '../core/shader';
+import { Shader } from './shader';
 import { CONSTANT } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 

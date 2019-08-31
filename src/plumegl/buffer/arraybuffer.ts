@@ -1,5 +1,5 @@
 import { Util } from '../util/util';
-import { Shader } from '../core/shader';
+import { Shader } from '../shader/shader';
 import { CONSTANT } from '../engine/constant';
 import { GL, WGL, WGL2 } from '../engine/gl';
 import { BaseBuffer } from './basebuffer';

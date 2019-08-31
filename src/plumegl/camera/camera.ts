@@ -1,6 +1,7 @@
 import { Vec3 } from "../math/vec3";
 import { CONSTANT } from "../engine/constant";
 import { Util } from '../util/util';
+import { Mat4 } from "../math/mat4";
 
 export interface View {
     position?: Vec3;
@@ -54,5 +55,25 @@ export class Camera {
 
     get up() {
         return this._up;
+    }
+
+    public updateMat(): void {
+
+    }
+
+    public getViewMat(): Mat4 {
+        return new Mat4();
+    }
+
+    public getProjectMat(): Mat4 {
+        return new Mat4();
+    }
+
+    public getModelViewMat(modelMatrix: Mat4): Mat4 {
+        return modelMatrix.clone();
+    }
+
+    public getProjectViewModelMat(modelMatrix: Mat4): Mat4 {
+        return modelMatrix.clone();
     }
 }

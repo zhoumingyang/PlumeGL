@@ -1,4 +1,5 @@
 import { PlumeGL } from '../plumegl/engine/plumegl';
+import { Mat4 } from '../plumegl/math/mat4';
 
 let cubeVert: number[] = [
     //front
@@ -420,13 +421,10 @@ export const DrawLightCube = () => {
     scene.state.setDepthTest(true);
 
     const ambientLight = new PlumeGL.AmbientLight();
-    // ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
     ambientLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     ambientLight.ambient = 0.25;
 
     const parallelLight = new PlumeGL.ParallelLight();
-    // parallelLight.color = Float32Array.from([1.0, 1.0, 1.0]);
-    // parallelLight.setDirection(Float32Array.from([-2.0, -2.0, -2.0]));
     parallelLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     parallelLight.setDirection(new PlumeGL.Vec3(-2.0, -2.0, -2.0));
 
@@ -442,7 +440,7 @@ export const DrawLightCube = () => {
     mesh.setGeometryAttribute(uvs, defaultLightShader.uvAttribute, gl.STATIC_DRAW, 2, gl.FLOAT, false);
     mesh.initBufferAttributePoint(defaultLightShader);
 
-    const p3d = new PlumeGL.P3D(mesh);
+    let p3d = new PlumeGL.P3D(mesh);
     defaultLightShader.addDrawObject(p3d);
 
     for (let i = 0; i < normaLines.length; i++) {
@@ -450,7 +448,8 @@ export const DrawLightCube = () => {
         const data: Float32Array = Float32Array.from(normaLines[i][0].concat(normaLines[i][1]));
         line.setGeometryAttribute(data, basicLineShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
         line.initBufferAttributePoint(basicLineShader);
-        basicLineShader.addDrawObject(line);
+        p3d = new PlumeGL.P3D(line);
+        basicLineShader.addDrawObject(p3d);
     }
 
     let projectionMat = create();
@@ -460,7 +459,16 @@ export const DrawLightCube = () => {
     const aspect: number = 512 / 512;
     const zNear: number = 0.1;
     const zFar: number = 100.0;
-    projectionMat = perspective(fieldOfView, aspect, zNear, zFar);
+    const camera = new PlumeGL.PerspectiveCamera();
+    camera.setPersective(fieldOfView, aspect, zNear, zFar);
+    camera.setView(
+        new PlumeGL.Vec3(0.0, 0.0, 0.0),
+        new PlumeGL.Vec3(0.0, 0.0, -100.0),
+        new PlumeGL.Vec3(0.0, 1.0, 0.0));
+    camera.updateMat();
+    scene.setActiveCamera(camera);
+
+    projectionMat = scene.activeCamera.getProjectMat().value;
 
     let trans = new Float32Array(3);
     trans[0] = 0.0;
@@ -487,16 +495,18 @@ export const DrawLightCube = () => {
         normalMat = rotate(normalMat, cubeRotation * 0.7, yAxis);
         mvp = multiply(projectionMat, modelViewMat);
 
+        const eyePos = scene.activeCamera.position;
         scene.state.stateChange();
         scene.forEachRender((shaderObj: any) => {
             if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTLIGHTSHADER) {
                 shaderObj.setUniformData(shaderObj.uniformMvp, [mvp, false]);
                 shaderObj.setUniformData(shaderObj.uniformWorlMatirx, [modelViewMat, false]);
                 shaderObj.setUniformData(shaderObj.uniformNormalMatrix, [normalMat, false]);
-                shaderObj.setUniformData(shaderObj.uniformEyePosition, [0.0, 0.0, 0.0]);
+                shaderObj.setUniformData(shaderObj.uniformEyePosition, [eyePos.x, eyePos.y, eyePos.z]);
                 shaderObj.setUniformData(shaderObj.uniformSpecStrength, [1.0]);
                 shaderObj.setUniformData(shaderObj.uniformSpecPower, [2]);
                 shaderObj.forEachDraw((obj: any) => {
+                    const tmpModelMat = obj.getModelMat();
                     obj.prepare();
                     obj.draw({ start: 0, cnt: 36 });
                     obj.unPrepare();
