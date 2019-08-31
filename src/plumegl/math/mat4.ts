@@ -393,4 +393,113 @@ export class Mat4 {
         return this;
     }
 
+    public translate(v: any): Mat4 {
+        let x = v.x,
+            y = v.y,
+            z = v.z;
+        let out = new Mat4();
+        let a00: number = void 0,
+            a01: number = void 0,
+            a02: number = void 0,
+            a03: number = void 0;
+        let a10: number = void 0,
+            a11: number = void 0,
+            a12: number = void 0,
+            a13: number = void 0;
+        let a20: number = void 0,
+            a21: number = void 0,
+            a22: number = void 0,
+            a23: number = void 0;
+
+        a00 = this._value[0]; a01 = this._value[1]; a02 = this._value[2]; a03 = this._value[3];
+        a10 = this._value[4]; a11 = this._value[5]; a12 = this._value[6]; a13 = this._value[7];
+        a20 = this._value[8]; a21 = this._value[9]; a22 = this._value[10]; a23 = this._value[11];
+
+        out.value[0] = a00; out.value[1] = a01; out.value[2] = a02; out.value[3] = a03;
+        out.value[4] = a10; out.value[5] = a11; out.value[6] = a12; out.value[7] = a13;
+        out.value[8] = a20; out.value[9] = a21; out.value[10] = a22; out.value[11] = a23;
+
+        out.value[12] = a00 * x + a10 * y + a20 * z + out.value[12];
+        out.value[13] = a01 * x + a11 * y + a21 * z + out.value[13];
+        out.value[14] = a02 * x + a12 * y + a22 * z + out.value[14];
+        out.value[15] = a03 * x + a13 * y + a23 * z + out.value[15];
+
+        return out;
+    }
+
+    public rotate(rad: number, axis: any): Mat4 {
+        const out = new Mat4();
+        let x: number = axis.x,
+            y: number = axis.y,
+            z: number = axis.z;
+        let len = Math.sqrt(x * x + y * y + z * z);
+        let s: number = void 0,
+            c: number = void 0,
+            t: number = void 0;
+        let a00: number = void 0,
+            a01: number = void 0,
+            a02: number = void 0,
+            a03: number = void 0;
+        let a10: number = void 0,
+            a11: number = void 0,
+            a12: number = void 0,
+            a13: number = void 0;
+        let a20: number = void 0,
+            a21: number = void 0,
+            a22: number = void 0,
+            a23: number = void 0;
+        let b00: number = void 0,
+            b01: number = void 0,
+            b02: number = void 0;
+        let b10: number = void 0,
+            b11: number = void 0,
+            b12: number = void 0;
+        let b20: number = void 0,
+            b21: number = void 0,
+            b22: number = void 0;
+
+        if (Math.abs(len) < 0.000001) {
+            return null;
+        }
+
+        len = 1 / len;
+        x *= len;
+        y *= len;
+        z *= len;
+
+        s = Math.sin(rad);
+        c = Math.cos(rad);
+        t = 1 - c;
+
+        a00 = this._value[0]; a01 = this._value[1]; a02 = this._value[2]; a03 = this._value[3];
+        a10 = this._value[4]; a11 = this._value[5]; a12 = this._value[6]; a13 = this._value[7];
+        a20 = this._value[8]; a21 = this._value[9]; a22 = this._value[10]; a23 = this._value[11];
+
+        // Construct the elements of the rotation matrix
+        b00 = x * x * t + c; b01 = y * x * t + z * s; b02 = z * x * t - y * s;
+        b10 = x * y * t - z * s; b11 = y * y * t + c; b12 = z * y * t + x * s;
+        b20 = x * z * t + y * s; b21 = y * z * t - x * s; b22 = z * z * t + c;
+
+        // Perform rotation-specific matrix multiplication
+        out.value[0] = a00 * b00 + a10 * b01 + a20 * b02;
+        out.value[1] = a01 * b00 + a11 * b01 + a21 * b02;
+        out.value[2] = a02 * b00 + a12 * b01 + a22 * b02;
+        out.value[3] = a03 * b00 + a13 * b01 + a23 * b02;
+        out.value[4] = a00 * b10 + a10 * b11 + a20 * b12;
+        out.value[5] = a01 * b10 + a11 * b11 + a21 * b12;
+        out.value[6] = a02 * b10 + a12 * b11 + a22 * b12;
+        out.value[7] = a03 * b10 + a13 * b11 + a23 * b12;
+        out.value[8] = a00 * b20 + a10 * b21 + a20 * b22;
+        out.value[9] = a01 * b20 + a11 * b21 + a21 * b22;
+        out.value[10] = a02 * b20 + a12 * b21 + a22 * b22;
+        out.value[11] = a03 * b20 + a13 * b21 + a23 * b22;
+
+        out.value[12] = this._value[12];
+        out.value[13] = this._value[13];
+        out.value[14] = this._value[14];
+        out.value[15] = this._value[15];
+
+        return out;
+    }
+
 }
