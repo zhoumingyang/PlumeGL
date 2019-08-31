@@ -258,9 +258,9 @@ export class Mat4 {
         let m32 = this._value[9];
         let m33 = this._value[10];
 
-        this._value[0] = Math.hypot(m11, m12, m13);
-        this._value[1] = Math.hypot(m21, m22, m23);
-        this._value[2] = Math.hypot(m31, m32, m33);
+        re.x = Math.hypot(m11, m12, m13);
+        re.y = Math.hypot(m21, m22, m23);
+        re.z = Math.hypot(m31, m32, m33);
     }
 
     public perspective(fovy: number, aspect: number, near: number, far: number): Mat4 {
@@ -500,6 +500,66 @@ export class Mat4 {
         out.value[15] = this._value[15];
 
         return out;
+    }
+
+    public scale(v: any): Mat4 {
+        let x = v.x, y = v.y, z = v.z;
+
+        const out = new Mat4();
+        out.value[0] = this._value[0] * x;
+        out.value[1] = this._value[1] * x;
+        out.value[2] = this._value[2] * x;
+        out.value[3] = this._value[3] * x;
+        out.value[4] = this._value[4] * y;
+        out.value[5] = this._value[5] * y;
+        out.value[6] = this._value[6] * y;
+        out.value[7] = this._value[7] * y;
+        out.value[8] = this._value[8] * z;
+        out.value[9] = this._value[9] * z;
+        out.value[10] = this._value[10] * z;
+        out.value[11] = this._value[11] * z;
+        out.value[12] = this._value[12];
+        out.value[13] = this._value[13];
+        out.value[14] = this._value[14];
+        out.value[15] = this._value[15];
+
+        return out;
+    }
+
+    public fromRotationTranslation(q: any, v: any): Mat4 {
+        let x = q.x, y = q.y, z = q.z, w = q.w;
+        let x2 = x + x;
+        let y2 = y + y;
+        let z2 = z + z;
+
+        let xx = x * x2;
+        let xy = x * y2;
+        let xz = x * z2;
+        let yy = y * y2;
+        let yz = y * z2;
+        let zz = z * z2;
+        let wx = w * x2;
+        let wy = w * y2;
+        let wz = w * z2;
+
+        this._value[0] = 1 - (yy + zz);
+        this._value[1] = xy + wz;
+        this._value[2] = xz - wy;
+        this._value[3] = 0;
+        this._value[4] = xy - wz;
+        this._value[5] = 1 - (xx + zz);
+        this._value[6] = yz + wx;
+        this._value[7] = 0;
+        this._value[8] = xz + wy;
+        this._value[9] = yz - wx;
+        this._value[10] = 1 - (xx + yy);
+        this._value[11] = 0;
+        this._value[12] = v[0];
+        this._value[13] = v[1];
+        this._value[14] = v[2];
+        this._value[15] = 1;
+
+        return this;
     }
 
 }
