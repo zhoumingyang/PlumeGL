@@ -28,7 +28,11 @@ export const CONSTANT = {
     POINTLIGHT: Symbol('PointLight'),
     SPOTLIGHT: Symbol('SpotLight'),
     DEFAULTLIGHTSHADER: Symbol('DefaultLightShader'),
-    BASICLINESHADER: Symbol('BasicLineShader')
+    BASICLINESHADER: Symbol('BasicLineShader'),
+    MAT4: Symbol('Mat4'),
+    VEC3: Symbol('Vec3'),
+    CAMERA: Symbol('Camera'),
+    PERSPECTIVECAMERA: Symbol('PerspectiveCamera'),
 };
 Object.freeze(CONSTANT);
 

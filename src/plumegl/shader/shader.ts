@@ -1,7 +1,7 @@
 import { Util } from '../util/util';
 import { UniformFactory } from '../aid/uniform';
 import { UniformBuffer } from '../buffer/uniformbuffer';
-import { P3D } from './p3d';
+import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 import { CONSTANT } from '../engine/constant';
 import { GL, WGL, WGL2 } from '../engine/gl';

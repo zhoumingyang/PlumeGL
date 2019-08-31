@@ -1,9 +1,10 @@
 import { VAO } from './vao';
 import { ArrayBuffer } from '../buffer/arraybuffer';
-import { Shader } from '../core/shader';
+import { Shader } from '../shader/shader';
 import { IndexBuffer } from '../buffer/indexbuffer';
 import { CONSTANT } from '../engine/constant';
 import { GL, WGL, WGL2 } from '../engine/gl';
+import { Mat4 } from '../math/mat4';
 
 interface Attribute {
     name: string;
@@ -20,7 +21,8 @@ export class Primitive {
     public children: Primitive[] = [];  // TODO, now do not consider the children
     public attributes: any = {};
     public buffers: any = {};
-    public modelMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];  // TODO, now do not consider the matrix
+    public modelMatrix: Mat4 = new Mat4(); 
+    public normalMatrix: Mat4 = new Mat4();
     public vao: VAO;
     public indexBuffer: IndexBuffer;
     public uniqueBuffer: ArrayBuffer = undefined;
@@ -47,6 +49,14 @@ export class Primitive {
 
     public getDrawType(): number {
         return this.drawType;
+    }
+
+    public getModelMat(): Mat4 {
+        return this.modelMatrix.clone();
+    }
+
+    public getNormalMat(): Mat4 {
+        return this.normalMatrix.clone();
     }
 
     public setGeometryAttributes(datas: number[] | Float32Array | number, attribs: Attribute[], drawType?: number): void {

@@ -3,6 +3,7 @@ import { Texture } from '../texture/texture';
 import { State } from './state';
 import { Util } from '../util/util';
 import { CONSTANT } from '../engine/constant';
+import { Mat4 } from '../math/mat4';
 
 let uuid = 0;
 export class P3D {
@@ -12,6 +13,8 @@ export class P3D {
     public ready: boolean = false;
     public uid: string;
     public type: Symbol = CONSTANT.P3D;
+    public modelMatrix: Mat4 = new Mat4();
+    public normalMatrix: Mat4 = new Mat4();
 
     constructor(primitive: Primitive, texture?: Texture, state?: State) {
         this.primitive = primitive;
@@ -72,6 +75,18 @@ export class P3D {
         if (this.ready) {
             this.primitive && this.primitive.draw(arrayArg, elementArg, option);
         }
+    }
+
+    public getModelMat(): Mat4 {
+        const cloneModelMat: Mat4 = this.modelMatrix.clone();
+        const primitiveModelMat: Mat4 = this.primitive.modelMatrix.clone();
+        return cloneModelMat.multiply(primitiveModelMat);
+    }
+
+    public getNormalMat(): Mat4 {
+        const cloneNormalMat: Mat4 = this.normalMatrix.clone();
+        const primitiveNormalMat: Mat4 = this.primitive.normalMatrix.clone();
+        return cloneNormalMat.multiply(primitiveNormalMat);
     }
 
     public restitute(): void {

@@ -8,7 +8,7 @@ import { Texture2DArray } from '../texture/texture2Darray';
 import { Texture3D } from '../texture/texture3D';
 import { TextureCube } from '../texture/texturecube';
 import { Sampler } from '../texture/sampler';
-import { Shader } from '../core/shader';
+import { Shader } from '../shader/shader';
 import { VAO } from '../primitive/vao';
 import { UniformFactory } from '../aid/uniform';
 import { Primitive } from '../primitive/primitive';
@@ -31,6 +31,8 @@ import { PointLight } from '../light/pointlight';
 import { SpotLight } from '../light/spotlight';
 import { DefaultLightShader } from '../shader/defaultlight';
 import { BasicLineShader } from '../shader/basicline';
+import { PerspectiveCamera } from '../camera/perspectivecamera';
+import { MathApi } from '../math/api';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     if (ele instanceof HTMLCanvasElement) {
@@ -80,5 +82,8 @@ export const PlumeGL = {
     PointLight,
     SpotLight,
     DefaultLightShader,
-    BasicLineShader
+    BasicLineShader,
+    PerspectiveCamera,
+    Mat4: MathApi.Mat4,
+    Vec3: MathApi.Vec3
 };

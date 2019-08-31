@@ -250,13 +250,17 @@ export const DrawSpotLightPlane = () => {
     scene.state.setDepthTest(true);
 
     const ambientLight = new PlumeGL.AmbientLight();
-    ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    // ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    ambientLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     ambientLight.ambient = 0.25;
 
     const spotLight = new PlumeGL.SpotLight();
-    spotLight.color = Float32Array.from([1.0, 1.0, 1.0]);
-    spotLight.position = Float32Array.from([0.0, 2.0, 0.0]);
-    spotLight.direction = Float32Array.from([0.0, -1.0, 0.0]);
+    // spotLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    // spotLight.position = Float32Array.from([0.0, 2.0, 0.0]);
+    // spotLight.direction = Float32Array.from([0.0, -1.0, 0.0]);
+    spotLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
+    spotLight.position = new PlumeGL.Vec3(0.0, 2.0, 0.0);
+    spotLight.direction = new PlumeGL.Vec3(0.0, -1.0, 0.0);
     spotLight.diffuse = 1.0;
     spotLight.cutoff = 0.75;
     spotLight.setAttenuation({
