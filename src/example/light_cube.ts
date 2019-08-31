@@ -420,12 +420,15 @@ export const DrawLightCube = () => {
     scene.state.setDepthTest(true);
 
     const ambientLight = new PlumeGL.AmbientLight();
-    ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    // ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    ambientLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     ambientLight.ambient = 0.25;
 
     const parallelLight = new PlumeGL.ParallelLight();
-    parallelLight.color = Float32Array.from([1.0, 1.0, 1.0]);
-    parallelLight.setDirection(Float32Array.from([-2.0, -2.0, -2.0]));
+    // parallelLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    // parallelLight.setDirection(Float32Array.from([-2.0, -2.0, -2.0]));
+    parallelLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
+    parallelLight.setDirection(new PlumeGL.Vec3(-2.0, -2.0, -2.0));
 
     scene.addLight(ambientLight);
     scene.addLight(parallelLight);

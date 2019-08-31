@@ -33,8 +33,8 @@ const appRun = () => {
     // TransformFeedbackInterleaved();
     // TransformFeedbackSeparated();
     // DrawTfbSeparated2();
-    // DrawLightCube();
+    DrawLightCube();
     // DrawPointLightCube();
-    DrawSpotLightPlane();
+    // DrawSpotLightPlane();
 };
 appRun();

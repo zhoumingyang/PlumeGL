@@ -4,6 +4,7 @@ import { Shader } from '../core/shader';
 import { IndexBuffer } from '../buffer/indexbuffer';
 import { CONSTANT } from '../engine/constant';
 import { GL, WGL, WGL2 } from '../engine/gl';
+import { Mat4 } from '../math/mat4';
 
 interface Attribute {
     name: string;
@@ -20,7 +21,7 @@ export class Primitive {
     public children: Primitive[] = [];  // TODO, now do not consider the children
     public attributes: any = {};
     public buffers: any = {};
-    public modelMatrix: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];  // TODO, now do not consider the matrix
+    public modelMatrix: Mat4 = new Mat4();  // TODO, now do not consider the matrix
     public vao: VAO;
     public indexBuffer: IndexBuffer;
     public uniqueBuffer: ArrayBuffer = undefined;

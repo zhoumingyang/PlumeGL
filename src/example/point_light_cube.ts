@@ -420,12 +420,15 @@ export const DrawPointLightCube = () => {
     scene.state.setDepthTest(true);
 
     const ambientLight = new PlumeGL.AmbientLight();
-    ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    // ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    ambientLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     ambientLight.ambient = 0.25;
 
     const pointLight = new PlumeGL.PointLight();
-    pointLight.color = Float32Array.from([1.0, 1.0, 1.0]);
-    pointLight.position = Float32Array.from([1.5, 1.5, -5.0]);
+    // pointLight.color = Float32Array.from([1.0, 1.0, 1.0]);
+    // pointLight.position = Float32Array.from([1.5, 1.5, -5.0]);
+    pointLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
+    pointLight.position = new PlumeGL.Vec3(1.5, 1.5, 1.5);
     pointLight.ambient = 0.75;
     pointLight.diffuse = 1.0;
     pointLight.setAttenuation({

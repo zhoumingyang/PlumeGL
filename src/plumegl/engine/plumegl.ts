@@ -31,6 +31,8 @@ import { PointLight } from '../light/pointlight';
 import { SpotLight } from '../light/spotlight';
 import { DefaultLightShader } from '../shader/defaultlight';
 import { BasicLineShader } from '../shader/basicline';
+import { PerspectiveCamera } from '../camera/perspectivecamera';
+import { MathApi } from '../math/api';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     if (ele instanceof HTMLCanvasElement) {
@@ -80,5 +82,8 @@ export const PlumeGL = {
     PointLight,
     SpotLight,
     DefaultLightShader,
-    BasicLineShader
+    BasicLineShader,
+    PerspectiveCamera,
+    Mat4: MathApi.Mat4,
+    Vec3: MathApi.Vec3
 };
