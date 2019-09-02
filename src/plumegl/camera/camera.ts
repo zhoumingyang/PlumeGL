@@ -16,6 +16,8 @@ export class Camera {
     private _position: Vec3 = new Vec3();
     private _target: Vec3 = new Vec3();
     private _up: Vec3 = new Vec3();
+    protected viewMatrix: Mat4 = new Mat4();
+    protected projectMatrix: Mat4 = new Mat4();
 
     constructor(v?: View) {
         if (v) {
@@ -61,19 +63,34 @@ export class Camera {
 
     }
 
+    public updateView(view: View): void {
+        this.position = view.position || this.position;
+        this.target = view.target || this.target;
+        this.up = view.up || this.up;
+    }
+
+    public setView(position: Vec3, target: Vec3, up: Vec3) {
+        this.position = position || this.position;
+        this.target = target || this.target;
+        this.up = up || this.up;
+    }
+
     public getViewMat(): Mat4 {
-        return new Mat4();
+        return this.viewMatrix;
     }
 
     public getProjectMat(): Mat4 {
-        return new Mat4();
+        return this.projectMatrix
     }
 
     public getModelViewMat(modelMatrix: Mat4): Mat4 {
-        return modelMatrix.clone();
+        const viewMatrix: Mat4 = this.viewMatrix.clone();
+        return viewMatrix.multiply(modelMatrix);
     }
 
     public getProjectViewModelMat(modelMatrix: Mat4): Mat4 {
-        return modelMatrix.clone();
+        const projectMatrix: Mat4 = this.projectMatrix.clone();
+        const modelViewMatrix: Mat4 = this.getModelViewMat(modelMatrix);
+        return projectMatrix.multiply(modelViewMatrix);
     }
 }
