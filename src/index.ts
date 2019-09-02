@@ -16,6 +16,7 @@ import { DrawTfbSeparated2 } from './example/transform_feedback_separated_2';
 import { DrawLightCube } from './example/light_cube';
 import { DrawPointLightCube } from './example/point_light_cube';
 import { DrawSpotLightPlane } from './example/spot_light_plane';
+import { DrawOrthoCube } from './example/orthocamera_cube';
 
 const appRun = () => {
     // SampleObject();
@@ -33,8 +34,9 @@ const appRun = () => {
     // TransformFeedbackInterleaved();
     // TransformFeedbackSeparated();
     // DrawTfbSeparated2();
-    DrawLightCube();
+    // DrawLightCube();
     // DrawPointLightCube();
     // DrawSpotLightPlane();
+    DrawOrthoCube();
 };
 appRun();
