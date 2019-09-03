@@ -38,6 +38,8 @@ export class Shader {
     private p3ds: Map<string, P3D | Primitive> = new Map();
     public type: Symbol = CONSTANT.SHADER;
     public fb: FeedBack;
+    public selfUniform: any = undefined;
+    public uniform: any = {};
 
     constructor(vertexSource?: string, fragmentSource?: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
         this.gl = gl || this.gl;
@@ -370,14 +372,12 @@ export class Shader {
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {
-        if (this.p3ds.has(p3d.uid)) {
-            console.log(p3d.uid);
-        }
         this.p3ds.set(p3d.uid, p3d);
     }
 
     public forEachDraw(callback: Function): void {
         this.p3ds.forEach((p3d: P3D | Primitive, key: string) => {
+            p3d.initSelfUniform(this);
             callback.call(this, p3d, key);
         });
     }

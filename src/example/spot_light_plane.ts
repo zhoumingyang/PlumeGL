@@ -250,14 +250,10 @@ export const DrawSpotLightPlane = () => {
     scene.state.setDepthTest(true);
 
     const ambientLight = new PlumeGL.AmbientLight();
-    // ambientLight.color = Float32Array.from([1.0, 1.0, 1.0]);
     ambientLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     ambientLight.ambient = 0.25;
 
     const spotLight = new PlumeGL.SpotLight();
-    // spotLight.color = Float32Array.from([1.0, 1.0, 1.0]);
-    // spotLight.position = Float32Array.from([0.0, 2.0, 0.0]);
-    // spotLight.direction = Float32Array.from([0.0, -1.0, 0.0]);
     spotLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     spotLight.position = new PlumeGL.Vec3(0.0, 2.0, 0.0);
     spotLight.direction = new PlumeGL.Vec3(0.0, -1.0, 0.0);
@@ -283,6 +279,8 @@ export const DrawSpotLightPlane = () => {
 
     const p3d = new PlumeGL.P3D(mesh);
     defaultLightShader.addDrawObject(p3d);
+    p3d.setSelfUniform(defaultLightShader.uniform.specStrength, [1.0]);
+    p3d.setSelfUniform(defaultLightShader.uniform.specPower, [2]);
 
     let modelMat = create();
     let viewMat = create();
@@ -310,12 +308,10 @@ export const DrawSpotLightPlane = () => {
     function render() {
         scene.forEachRender((shaderObj: any) => {
             if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTLIGHTSHADER) {
-                shaderObj.setUniformData(shaderObj.uniformMvp, [mvp, false]);
-                shaderObj.setUniformData(shaderObj.uniformWorlMatirx, [modelMat, false]);
-                shaderObj.setUniformData(shaderObj.uniformNormalMatrix, [modelMat, false]);
-                shaderObj.setUniformData(shaderObj.uniformEyePosition, [eyePos[0], eyePos[1], eyePos[2]]);
-                shaderObj.setUniformData(shaderObj.uniformSpecStrength, [1.0]);
-                shaderObj.setUniformData(shaderObj.uniformSpecPower, [2]);
+                shaderObj.setUniformData(shaderObj.uniform.mvp, [mvp, false]);
+                shaderObj.setUniformData(shaderObj.uniform.worlMatirx, [modelMat, false]);
+                shaderObj.setUniformData(shaderObj.uniform.normalMatrix, [modelMat, false]);
+                shaderObj.setUniformData(shaderObj.uniform.eyePosition, [eyePos[0], eyePos[1], eyePos[2]]);
                 shaderObj.forEachDraw((obj: any) => {
                     obj.prepare();
                     obj.draw({ start: 0, cnt: 6 });

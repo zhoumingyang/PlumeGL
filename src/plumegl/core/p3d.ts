@@ -4,6 +4,7 @@ import { State } from './state';
 import { Util } from '../util/util';
 import { CONSTANT } from '../engine/constant';
 import { Mat4 } from '../math/mat4';
+import { Shader } from '../shader/shader';
 
 let uuid = 0;
 export class P3D {
@@ -15,6 +16,7 @@ export class P3D {
     public type: Symbol = CONSTANT.P3D;
     public modelMatrix: Mat4 = new Mat4();
     public normalMatrix: Mat4 = new Mat4();
+    private selfUniform: any = undefined;
 
     constructor(primitive: Primitive, texture?: Texture, state?: State) {
         this.primitive = primitive;
@@ -114,6 +116,27 @@ export class P3D {
         if (this.primitive) {
             this.primitive.dispose();
             this.primitive = null;
+        }
+    }
+
+    public mountSelfUniform(shaderUniform: any): void {
+        if (!shaderUniform) {
+            return;
+        }
+        this.selfUniform = JSON.parse(JSON.stringify(shaderUniform));
+    }
+
+    public initSelfUniform(shader: Shader): void {
+        if (this.selfUniform) {
+            for (let key in this.selfUniform) {
+                shader.setUniformData(key, this.selfUniform[key].value);
+            }
+        }
+    }
+
+    public setSelfUniform(uniformName: string, value: any[]): void {
+        if (this.selfUniform[uniformName]) {
+            this.selfUniform[uniformName].value = value;
         }
     }
 }

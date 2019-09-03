@@ -133,6 +133,9 @@ export const DrawLightCube = () => {
 
     let p3d = new PlumeGL.P3D(mesh);
     defaultLightShader.addDrawObject(p3d);
+    p3d.setSelfUniform(defaultLightShader.uniform.secStrength, [1.0]);
+    p3d.setSelfUniform(defaultLightShader.uniform.specPower, [2.0]);
+    p3d.setSelfUniform(defaultLightShader.uniform.color, [1.0, 0.2, 0.2]);
 
     for (let i = 0; i < normaLines.length; i++) {
         const line = new PlumeGL.Line();
@@ -141,6 +144,7 @@ export const DrawLightCube = () => {
         line.initBufferAttributePoint(basicLineShader);
         p3d = new PlumeGL.P3D(line);
         basicLineShader.addDrawObject(p3d);
+        p3d.setSelfUniform(basicLineShader.uniform.color, [0.4, 0.4, 1.0]);
     }
 
     const fieldOfView: number = 45.0 * Math.PI / 180;
@@ -180,27 +184,24 @@ export const DrawLightCube = () => {
         scene.state.stateChange();
         scene.forEachRender((shaderObj: any) => {
             if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTLIGHTSHADER) {
-                shaderObj.setUniformData(shaderObj.uniformEyePosition, [eyePos.x, eyePos.y, eyePos.z]);
-                shaderObj.setUniformData(shaderObj.uniformSpecStrength, [1.0]);
-                shaderObj.setUniformData(shaderObj.uniformSpecPower, [2]);
+                shaderObj.setUniformData(shaderObj.uniform.eyePosition, [eyePos.x, eyePos.y, eyePos.z]);
                 shaderObj.forEachDraw((obj: any) => {
                     const modelMat = tmpModelMat.clone().multiply(obj.getModelMat());
                     const normalMat = tmpNormalMat.clone().multiply(obj.getNormalMat());
                     const MVP = activeCamera.getProjectViewModelMat(modelMat);
-                    shaderObj.setUniformData(shaderObj.uniformWorlMatirx, [modelMat.value, false]);
-                    shaderObj.setUniformData(shaderObj.uniformNormalMatrix, [normalMat.value, false]);
-                    shaderObj.setUniformData(shaderObj.uniformMvp, [MVP.value, false]);
+                    shaderObj.setUniformData(shaderObj.uniform.worlMatirx, [modelMat.value, false]);
+                    shaderObj.setUniformData(shaderObj.uniform.normalMatrix, [normalMat.value, false]);
+                    shaderObj.setUniformData(shaderObj.uniform.mvp, [MVP.value, false]);
                     obj.prepare();
                     obj.draw({ start: 0, cnt: 36 });
                     obj.unPrepare();
                 });
             }
             if (shaderObj.type === PlumeGL.CONSTANT.BASICLINESHADER) {
-                shaderObj.setUniformData(shaderObj.uniformColor, [1.0, 1.0, 1.0]);
                 shaderObj.forEachDraw((obj: any) => {
                     const modelMat = tmpModelMat.clone().multiply(obj.getModelMat());
                     const MVP = activeCamera.getProjectViewModelMat(modelMat);
-                    shaderObj.setUniformData(shaderObj.uniformMvp, [MVP.value, false]);
+                    shaderObj.setUniformData(shaderObj.uniform.mvp, [MVP.value, false]);
                     obj.prepare();
                     obj.draw({ start: 0, cnt: 2 });
                     obj.unPrepare();

@@ -23,6 +23,7 @@ in vec2 vUv;
 uniform float uSpecStrength;
 uniform float uSpecPower;
 uniform vec3 uEyePosition;
+uniform vec3 uColor;
 #ifdef USE_MAP
     uniform sampler2D uTexture;
 #endif
@@ -111,7 +112,7 @@ void main() {
     #ifdef USE_MAP
         fragColor = texture(uTexture, vUv.xy) * finalColor;
     #else
-        fragColor = finalColor;
+        fragColor = finalColor * vec4(uColor, 1.0);
     #endif
     
 }`;

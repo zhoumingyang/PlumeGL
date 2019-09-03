@@ -21,7 +21,7 @@ export class Primitive {
     public children: Primitive[] = [];  // TODO, now do not consider the children
     public attributes: any = {};
     public buffers: any = {};
-    public modelMatrix: Mat4 = new Mat4(); 
+    public modelMatrix: Mat4 = new Mat4();
     public normalMatrix: Mat4 = new Mat4();
     public vao: VAO;
     public indexBuffer: IndexBuffer;
@@ -224,5 +224,9 @@ export class Primitive {
             this.indexBuffer = null;
         }
         this.uniqueBuffer = null;
+    }
+
+    public initSelfUniform(): void {
+
     }
 }
