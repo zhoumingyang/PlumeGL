@@ -39,6 +39,7 @@ export class Shader {
     public type: Symbol = CONSTANT.SHADER;
     public fb: FeedBack;
     public selfUniform: any = undefined;
+    public uniform: any = {};
 
     constructor(vertexSource?: string, fragmentSource?: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
         this.gl = gl || this.gl;

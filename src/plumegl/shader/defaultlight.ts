@@ -13,14 +13,14 @@ export class DefaultLightShader extends Shader {
     public positionAttribute: string = "aPosition";
     public normalAttribute: string = "aNormal";
     public uvAttribute: string = "aUv";
-    public uniformMvp: string = "uMvp";
-    public uniformWorlMatirx: string = "uWorldMatrix";
-    public uniformNormalMatrix: string = "uNormalMatrix";
-    public uniformSpecStrength: string = "uSpecStrength";
-    public uniformSpecPower: string = "uSpecPower";
-    public uniformEyePosition: string = "uEyePosition";
-    public uniformTexture: string = "uTexture";
-    public uniformColor: string = "uColor";
+    // public uniformMvp: string = "uMvp";
+    // public uniformWorlMatirx: string = "uWorldMatrix";
+    // public uniformNormalMatrix: string = "uNormalMatrix";
+    // public uniformEyePosition: string = "uEyePosition";
+    // public uniformSpecStrength: string = "uSpecStrength";
+    // public uniformSpecPower: string = "uSpecPower";
+    // public uniformTexture: string = "uTexture";
+    // public uniformColor: string = "uColor";
 
     constructor(useMap: boolean = false, gl?: WGL | WGL2) {
         super(undefined, undefined, undefined, gl);
@@ -33,6 +33,7 @@ export class DefaultLightShader extends Shader {
         fs = Version + fs;
         this.setShaderSource(vs, fs);
         this.compileShader();
+
         this.selfUniform = {
             "uSpecStrength": {
                 type: 'float',
@@ -50,7 +51,19 @@ export class DefaultLightShader extends Shader {
                 type: 'vec3',
                 value: [1.0, 1.0, 1.0]
             }
-        }
+        };
+
+        this.uniform = {
+            mvp: "uMvp",
+            worldMatrix: "uWorldMatrix",
+            normalMatrix: "uNormalMatrix",
+            eyePosition: "uEyePosition",
+            specStrength: "uSpecStrength",
+            specPower: "uSpecPower",
+            texture: "uTexture",
+            color: "uColor",
+        };
+        
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {

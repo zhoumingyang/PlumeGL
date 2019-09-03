@@ -9,8 +9,6 @@ import { Primitive } from '../primitive/primitive';
 export class BasicLineShader extends Shader {
     public type: Symbol = CONSTANT.BASICLINESHADER;
     public positionAttribute: string = "aPosition";
-    public uniformMvp: string = "uMvp";
-    public uniformColor: string = "uColor";
 
     constructor(gl?: WGL | WGL2) {
         super(BasicLineVert, BasicLineFrag, undefined, gl);
@@ -19,6 +17,10 @@ export class BasicLineShader extends Shader {
                 type: 'vec3',
                 value: [1.0, 1.0, 1.0]
             }
+        };
+        this.uniform = {
+            mvp: "uMvp",
+            color: "uColor",
         };
     }
 
