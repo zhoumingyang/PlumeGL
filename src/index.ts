@@ -34,9 +34,9 @@ const appRun = () => {
     // TransformFeedbackInterleaved();
     // TransformFeedbackSeparated();
     // DrawTfbSeparated2();
-    // DrawLightCube();
+    DrawLightCube();
     // DrawPointLightCube();
     // DrawSpotLightPlane();
-    DrawOrthoCube();
+    // DrawOrthoCube();
 };
 appRun();

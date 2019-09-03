@@ -183,6 +183,7 @@ export const DrawLightCube = () => {
                 shaderObj.setUniformData(shaderObj.uniformEyePosition, [eyePos.x, eyePos.y, eyePos.z]);
                 shaderObj.setUniformData(shaderObj.uniformSpecStrength, [1.0]);
                 shaderObj.setUniformData(shaderObj.uniformSpecPower, [2]);
+                shaderObj.setUniformData(shaderObj.uniformColor, [1.0, 0.2, 0.2]);
                 shaderObj.forEachDraw((obj: any) => {
                     const modelMat = tmpModelMat.clone().multiply(obj.getModelMat());
                     const normalMat = tmpNormalMat.clone().multiply(obj.getNormalMat());

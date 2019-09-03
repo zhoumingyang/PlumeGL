@@ -370,14 +370,12 @@ export class Shader {
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {
-        if (this.p3ds.has(p3d.uid)) {
-            console.log(p3d.uid);
-        }
         this.p3ds.set(p3d.uid, p3d);
     }
 
     public forEachDraw(callback: Function): void {
         this.p3ds.forEach((p3d: P3D | Primitive, key: string) => {
+            // p3d.initSelfUniform()
             callback.call(this, p3d, key);
         });
     }
