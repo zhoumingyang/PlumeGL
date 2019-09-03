@@ -21,7 +21,6 @@ export class DefaultLightShader extends Shader {
     public uniformEyePosition: string = "uEyePosition";
     public uniformTexture: string = "uTexture";
     public uniformColor: string = "uColor";
-    public selfUniform: any = undefined;
 
     constructor(useMap: boolean = false, gl?: WGL | WGL2) {
         super(undefined, undefined, undefined, gl);

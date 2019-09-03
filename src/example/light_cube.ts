@@ -133,6 +133,9 @@ export const DrawLightCube = () => {
 
     let p3d = new PlumeGL.P3D(mesh);
     defaultLightShader.addDrawObject(p3d);
+    p3d.setSelfUniform(defaultLightShader.uniformSpecStrength, [1.0]);
+    p3d.setSelfUniform(defaultLightShader.uniformSpecPower, [2.0]);
+    p3d.setSelfUniform(defaultLightShader.uniformColor, [1.0, 0.2, 0.2]);
 
     for (let i = 0; i < normaLines.length; i++) {
         const line = new PlumeGL.Line();
@@ -141,6 +144,7 @@ export const DrawLightCube = () => {
         line.initBufferAttributePoint(basicLineShader);
         p3d = new PlumeGL.P3D(line);
         basicLineShader.addDrawObject(p3d);
+        p3d.setSelfUniform(basicLineShader.uniformColor,[0.4, 0.4, 1.0]);
     }
 
     const fieldOfView: number = 45.0 * Math.PI / 180;
@@ -181,9 +185,6 @@ export const DrawLightCube = () => {
         scene.forEachRender((shaderObj: any) => {
             if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTLIGHTSHADER) {
                 shaderObj.setUniformData(shaderObj.uniformEyePosition, [eyePos.x, eyePos.y, eyePos.z]);
-                shaderObj.setUniformData(shaderObj.uniformSpecStrength, [1.0]);
-                shaderObj.setUniformData(shaderObj.uniformSpecPower, [2]);
-                shaderObj.setUniformData(shaderObj.uniformColor, [1.0, 0.2, 0.2]);
                 shaderObj.forEachDraw((obj: any) => {
                     const modelMat = tmpModelMat.clone().multiply(obj.getModelMat());
                     const normalMat = tmpNormalMat.clone().multiply(obj.getNormalMat());
@@ -197,7 +198,7 @@ export const DrawLightCube = () => {
                 });
             }
             if (shaderObj.type === PlumeGL.CONSTANT.BASICLINESHADER) {
-                shaderObj.setUniformData(shaderObj.uniformColor, [1.0, 1.0, 1.0]);
+                // shaderObj.setUniformData(shaderObj.uniformColor, [1.0, 1.0, 1.0]);
                 shaderObj.forEachDraw((obj: any) => {
                     const modelMat = tmpModelMat.clone().multiply(obj.getModelMat());
                     const MVP = activeCamera.getProjectViewModelMat(modelMat);

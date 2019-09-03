@@ -38,6 +38,7 @@ export class Shader {
     private p3ds: Map<string, P3D | Primitive> = new Map();
     public type: Symbol = CONSTANT.SHADER;
     public fb: FeedBack;
+    public selfUniform: any = undefined;
 
     constructor(vertexSource?: string, fragmentSource?: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
         this.gl = gl || this.gl;
@@ -375,7 +376,7 @@ export class Shader {
 
     public forEachDraw(callback: Function): void {
         this.p3ds.forEach((p3d: P3D | Primitive, key: string) => {
-            // p3d.initSelfUniform()
+            p3d.initSelfUniform(this);
             callback.call(this, p3d, key);
         });
     }
