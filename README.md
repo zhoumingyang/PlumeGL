@@ -10,66 +10,66 @@
 ### 使用方式
 * 初始化shader<br>
 ```
-const defaultLightShader = new PlumeGL.DefaultLightShader();<br>
-defaultLightShader.initParameters();<br>
-const basicLineShader = new PlumeGL.BasicLineShader();<br>
-basicLineShader.initParameters();<br>
+const defaultLightShader = new PlumeGL.DefaultLightShader();
+defaultLightShader.initParameters();
+const basicLineShader = new PlumeGL.BasicLineShader();
+basicLineShader.initParameters();
 ```
 * 初始化场景以及状态<br>
 ```
-const scene = new PlumeGL.Scene();<br>
-scene.add(defaultLightShader);<br>
-scene.add(basicLineShader);<br>
-scene.setSceneState(new PlumeGL.State());<br>
-scene.state.setClearColor(0.0, 0.0, 0.0, 1.0);<br>
-scene.state.setClear(true, false, false);<br>
-scene.state.setDepthTest(true);<br>
+const scene = new PlumeGL.Scene();
+scene.add(defaultLightShader);
+scene.add(basicLineShader);
+scene.setSceneState(new PlumeGL.State());
+scene.state.setClearColor(0.0, 0.0, 0.0, 1.0);
+scene.state.setClear(true, false, false);
+scene.state.setDepthTest(true);
 ```
 * 设置场景光源<br>
 ```
-const ambientLight = new PlumeGL.AmbientLight();<br>
-ambientLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);<br>
-ambientLight.ambient = 0.25;<br>
-const parallelLight = new PlumeGL.ParallelLight();<br>
-parallelLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);<br>
-parallelLight.setDirection(new PlumeGL.Vec3(-2.0, -2.0, -2.0));<br>
-scene.addLight(ambientLight);<br>
-scene.addLight(parallelLight);<br>
+const ambientLight = new PlumeGL.AmbientLight();
+ambientLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
+ambientLight.ambient = 0.25;
+const parallelLight = new PlumeGL.ParallelLight();
+parallelLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
+parallelLight.setDirection(new PlumeGL.Vec3(-2.0, -2.0, -2.0));
+scene.addLight(ambientLight);
+scene.addLight(parallelLight);
 ```
 * 设置P3D对象，用于管理绘制物图元数据、纹理对象以及材质对象(self uniform)<br>
 ```
-const mesh = new PlumeGL.Mesh();<br>
-mesh.setGeometryAttribute(vertices, defaultLightShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);<br>
-mesh.setGeometryAttribute(normals, defaultLightShader.normalAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);<br>
-mesh.setGeometryAttribute(uvs, defaultLightShader.uvAttribute, gl.STATIC_DRAW, 2, gl.FLOAT, false);<br>
-mesh.initBufferAttributePoint(defaultLightShader);<br>
-let p3d = new PlumeGL.P3D(mesh);<br>
-defaultLightShader.addDrawObject(p3d);<br>
-p3d.setSelfUniform(defaultLightShader.uniform.secStrength, [1.0]);<br>
-p3d.setSelfUniform(defaultLightShader.uniform.specPower, [2.0]);<br>
-p3d.setSelfUniform(defaultLightShader.uniform.color, [1.0, 0.2, 0.2]);<br>
+const mesh = new PlumeGL.Mesh();
+mesh.setGeometryAttribute(vertices, defaultLightShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
+mesh.setGeometryAttribute(normals, defaultLightShader.normalAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
+mesh.setGeometryAttribute(uvs, defaultLightShader.uvAttribute, gl.STATIC_DRAW, 2, gl.FLOAT, false);
+mesh.initBufferAttributePoint(defaultLightShader);
+let p3d = new PlumeGL.P3D(mesh);
+defaultLightShader.addDrawObject(p3d);
+p3d.setSelfUniform(defaultLightShader.uniform.secStrength, [1.0]);
+p3d.setSelfUniform(defaultLightShader.uniform.specPower, [2.0]);
+p3d.setSelfUniform(defaultLightShader.uniform.color, [1.0, 0.2, 0.2]);
 ```
 * 设置相机<br>
 ```
-const camera = new PlumeGL.PerspectiveCamera();<br>
-camera.setPersective(fieldOfView, aspect, zNear, zFar);<br>
-camera.setView(<br>
-    new PlumeGL.Vec3(0.0, 0.0, 0.0),<br>
-    new PlumeGL.Vec3(0.0, 0.0, -100.0),<br>
-    new PlumeGL.Vec3(0.0, 1.0, 0.0));<br>
+const camera = new PlumeGL.PerspectiveCamera();
+camera.setPersective(fieldOfView, aspect, zNear, zFar);
+camera.setView(
+    new PlumeGL.Vec3(0.0, 0.0, 0.0),
+    new PlumeGL.Vec3(0.0, 0.0, -100.0),
+    new PlumeGL.Vec3(0.0, 1.0, 0.0));
 camera.updateMat();<br>
-scene.setActiveCamera(camera);<br>
+scene.setActiveCamera(camera);
 ```
 * 渲染<br>
 ```
-scene.state.stateChange();<br>
-scene.forEachRender((shaderObj: any) => {<br>
-    shaderObj.forEachDraw((obj: any) => {<br>
-        obj.prepare();<br>
-        obj.draw();<br>
-        obj.unPrepare();<br>
-    });<br>
-});<br>
+scene.state.stateChange();
+scene.forEachRender((shaderObj: any) => {
+    shaderObj.forEachDraw((obj: any) => {
+        obj.prepare();
+        obj.draw();
+        obj.unPrepare();
+    });
+});
 ```
 ### 示例：parallel light cube
 ![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/parallellightcube.png)<br>
@@ -82,5 +82,5 @@ scene.forEachRender((shaderObj: any) => {<br>
 ### 示例：buffer uniform
 ![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/bufferuniform.png)<br>
 ### 示例：fbo multisample
-![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/fbosplit.png)<br>
+![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/multifbo.png)<br>
 运行事例：npm run develop <br>
