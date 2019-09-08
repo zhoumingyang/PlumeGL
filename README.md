@@ -71,6 +71,7 @@ scene.forEachRender((shaderObj: any) => {
     });
 });
 ```
+运行示例：npm run develop <br>
 ### 示例：parallel light cube
 ![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/parallellightcube.png)<br>
 ### 示例：ortho camera cube
@@ -83,4 +84,3 @@ scene.forEachRender((shaderObj: any) => {
 ![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/bufferuniform.png)<br>
 ### 示例：fbo multisample
 ![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/multifbo.png)<br>
-运行事例：npm run develop <br>
