@@ -20,7 +20,19 @@ export class Texture2D extends Texture {
         this.width = image.width;
         this.height = image.height;
         _gl.bindTexture(this.textureType, this.instance);
-        _gl.texImage2D(this.textureType, this.level, this.internal, this.format, this.colorType, image);
+        // _gl.texImage2D(this.textureType, this.level, this.internal, this.format, this.colorType, image);
+        if (image instanceof HTMLCanvasElement ||
+            image instanceof HTMLImageElement ||
+            image instanceof HTMLVideoElement ||
+            image instanceof ImageBitmap ||
+            image instanceof ImageData) {
+            _gl.texImage2D(this.textureType,
+                this.level,
+                this.internal,
+                this.format,
+                this.colorType,
+                image);
+        }
     }
 
     public setTextureFromData(data: any, sizes: number[], index?: number): void {
