@@ -14,7 +14,7 @@ export const DefaultLambertVert: string =
 
     out vec3 diffuseResult;
     out vec3 indirectResult;
-    in vec3 vUv;
+    out vec3 vUv;
 
     // parallel light
     ${parallelLightMax}
@@ -39,6 +39,7 @@ export const DefaultLambertVert: string =
         vec4 mvPosition = uModelViewMatrix * vec4(aPosition, 1.0);
         gl_Position = uProjectionMatrix * mvPosition;
         mvPosition = mvPosition.xyz;
+        vUv = aUv;
 
         vec3 transNormal = (uNormalMatrix * vec4(aNormal, 1.0)).xyz;
 
