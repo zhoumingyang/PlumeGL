@@ -15,7 +15,6 @@ export const pointLightMax: string =
 export const pointLightDefine: string =
     `struct PointLight {
         vec3 color;
-        float ambient;
         float diffuse;
         vec3 position;
         LightAttenuation attenuation;
@@ -73,3 +72,46 @@ export const pointLightCalculate: string =
         return pointColor / attenuation;
     }`;
 
+
+/**
+ * 
+ * light: PointLight
+ * 
+ *  geometry: GeometryAttribute {  (local)
+ *      vec3 position;   //model view space
+ *      vec3 normal;
+ *      vec3 viewDir;
+ *  }
+ * 
+ *  resultLight: ResultLight {     (local)
+ *      vec3 color;
+ *      vec3 direction;
+ *      bool visible
+ *  }
+ * 
+ *  numberPointLights: int (uniform or local)
+ *  
+ *  diffuseResult: vec3 (local)
+ * 
+ * */
+
+//calculate light in model view space,reference Threejs
+export const calculatePointLightIrradiance: string =
+    `void calcPointLightIrradiance(const in PointLight light, const in GeometryAttribute geo, out ResultLight resultLight) {
+        vec3 l = light.position - geo.position;
+        resultLight.direction = normalize(l);
+        float distance = length(l);
+        float attenuation = light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.exponent * distance * distance;
+        resultLight.color = light.color * light.diffuse;
+        resultLight.color /= attenuation;
+        resultLight.visible = ( resultLight.color != vec3( 0.0 ) );
+    }`;
+
+export const calculatePointLightTotalDiffuseIrradiance: string =
+    `#pragma unroll_loop
+    for(int i = 0; i < numPointLights; i++) {
+        calcPointLightIrradiance(uPointLights[i], geometry, resultLight);
+        float diffuseFactor = dot(geometry.normal, resultLight.direction);
+        vec3 diffuseColor = PI * resultLight.color;
+        diffuseResult += saturate(diffuseFactor) * diffuseColor;
+    }`;
