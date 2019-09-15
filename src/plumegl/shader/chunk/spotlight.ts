@@ -101,7 +101,7 @@ export const spotLightCalculate: string =
  * 
  *  numberSpotLights: int (uniform or local)
  *  
- *  diffuseResult: vec3 (local)
+ *  vDirectResult: varying vec3
  * 
  * */
 
@@ -114,7 +114,7 @@ export const calculateSpotLightIrradiance: string =
         float angleCos = dot(resultLight.direction, light.direction);
         if(angleCos > light.coneCos)  {
             float spotEffect = smoothstep( light.coneCos, light.penumbraCos, angleCos );
-            resultLight.color = light.color;
+            resultLight.color = light.color * light.diffuse;
             float attenuation = light.attenuation.constant + light.attenuation.linear * distance + light.attenuation.exponent * distance * distance;
             resultLight.color *= spotEffect * (1.0 / attenuation);
             resultLight.visible = true;
@@ -130,6 +130,6 @@ export const calculateSpotLightTotalDiffuseIrradiance: string =
         calcSpotLightIrradiance(uSpotLights[i], geometry, resultLight);
         float diffuseFactor = dot(geometry.normal, resultLight.direction);
         vec3 diffuseColor = PI * resultLight.color;
-        diffuseResult += saturate(diffuseFactor) * diffuseColor;
+        vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }
 `;

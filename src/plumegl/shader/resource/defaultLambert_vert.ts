@@ -12,8 +12,8 @@ export const DefaultLambertVert: string =
     ${Attribute}
     ${Common}
 
-    out vec3 diffuseResult;
-    out vec3 indirectResult;
+    out vec3 vDirectResult;
+    out vec3 vIndirectResult;
     out vec3 vUv;
 
     // parallel light
@@ -43,8 +43,8 @@ export const DefaultLambertVert: string =
 
         vec3 transNormal = (uNormalMatrix * vec4(aNormal, 1.0)).xyz;
 
-        diffuseResult = vec3(0.0);
-        indirectResult = vec3(0.0);
+        vDirectResult = vec3(0.0);
+        vIndirectResult = vec3(0.0);
 
         int numParallelLights = uNumParallelLight;
         int numPointLights = uNumPointLight;

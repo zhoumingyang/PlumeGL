@@ -91,7 +91,7 @@ export const pointLightCalculate: string =
  * 
  *  numberPointLights: int (uniform or local)
  *  
- *  diffuseResult: vec3 (local)
+ *  vDirectResult: varying vec3
  * 
  * */
 
@@ -113,5 +113,5 @@ export const calculatePointLightTotalDiffuseIrradiance: string =
         calcPointLightIrradiance(uPointLights[i], geometry, resultLight);
         float diffuseFactor = dot(geometry.normal, resultLight.direction);
         vec3 diffuseColor = PI * resultLight.color;
-        diffuseResult += saturate(diffuseFactor) * diffuseColor;
+        vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }`;

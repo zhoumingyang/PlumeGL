@@ -80,7 +80,7 @@ export const parallelLightCalculate =
  * 
  *  numParallelLights: int (uniform or local)
  *  
- *  diffuseResult: vec3 (local)
+ *  vDirectResult: varying vec3
  * 
  * */
 
@@ -98,5 +98,5 @@ export const calculateParallelLightTotalDiffuseIrradiance: string =
         calcParallelLightIrradiance(uParallelLights[i], geometry, resultLight);
         float diffuseFactor = dot(geometry.normal, resultLight.direction);
         vec3 diffuseColor = PI * resultLight.color;
-        diffuseResult += saturate(diffuseFactor) * diffuseColor;
+        vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }`;
