@@ -135,7 +135,7 @@ export class P3D {
     }
 
     public setSelfUniform(uniformName: string, value: any[]): void {
-        if (this.selfUniform[uniformName]) {
+        if (this.selfUniform && this.selfUniform[uniformName]) {
             this.selfUniform[uniformName].value = value;
         }
     }
