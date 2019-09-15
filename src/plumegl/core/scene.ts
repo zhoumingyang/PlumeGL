@@ -106,31 +106,51 @@ export class Scene {
 
         let key: string;
 
+        /**
+         * struct AmbientLight {
+         *      vec3 color;
+         *      float ambient;
+         * }
+        */
         shader.setUniformData(`uNumAmbientLight`, [ambientNum]);
         for (let i = 0; i < ambientNum; i++) {
             key = ambientKeys[i];
             const ambientLight = this.ambientLights[key];
             shader.setUniformData(`uAmbientLights[${i}].color`, [ambientLight.color.value[0], ambientLight.color.value[1], ambientLight.color.value[2]]);
             shader.setUniformData(`uAmbientLights[${i}].ambient`, [ambientLight.ambient]);
-            shader.setUniformData(`uAmbientLights[${i}].diffuse`, [ambientLight.diffuse]);
+            // shader.setUniformData(`uAmbientLights[${i}].diffuse`, [ambientLight.diffuse]);
         }
 
+        /**
+         * struct ParallelLight {
+         *      vec3 color;
+         *      vec3 direction;
+         * }
+        */
         shader.setUniformData(`uNumParallelLight`, [parallelNum]);
         for (let i = 0; i < parallelNum; i++) {
             key = parallelKeys[i];
             const parallelLight = this.parallelLights[key];
             shader.setUniformData(`uParallelLights[${i}].color`, [parallelLight.color.value[0], parallelLight.color.value[1], parallelLight.color.value[2]]);
             shader.setUniformData(`uParallelLights[${i}].direction`, [parallelLight.direction.value[0], parallelLight.direction.value[1], parallelLight.direction.value[2]]);
-            shader.setUniformData(`uParallelLights[${i}].ambient`, [parallelLight.ambient]);
-            shader.setUniformData(`uParallelLights[${i}].diffuse`, [parallelLight.diffuse]);
+            // shader.setUniformData(`uParallelLights[${i}].ambient`, [parallelLight.ambient]);
+            // shader.setUniformData(`uParallelLights[${i}].diffuse`, [parallelLight.diffuse]);
         }
 
+        /**
+         * struct PointLight {
+         *      vec3 color;
+         *      float diffuse;
+         *      vec3 position;
+         *      LightAttenuation attenuation;
+         * }
+        */
         shader.setUniformData(`uNumPointLight`, [pointNum]);
         for (let i = 0; i < pointNum; i++) {
             key = pointKeys[i];
             const pointLight = this.pointLights[key];
             shader.setUniformData(`uPointLights[${i}].color`, [pointLight.color.value[0], pointLight.color.value[1], pointLight.color.value[2]]);
-            shader.setUniformData(`uPointLights[${i}].ambient`, [pointLight.ambient]);
+            // shader.setUniformData(`uPointLights[${i}].ambient`, [pointLight.ambient]);
             shader.setUniformData(`uPointLights[${i}].diffuse`, [pointLight.diffuse]);
             shader.setUniformData(`uPointLights[${i}].position`, [pointLight.position.value[0], pointLight.position.value[1], pointLight.position.value[2]]);
             shader.setUniformData(`uPointLights[${i}].attenuation.constant`, [pointLight.attenuation.constant]);
@@ -138,12 +158,27 @@ export class Scene {
             shader.setUniformData(`uPointLights[${i}].attenuation.exponent`, [pointLight.attenuation.exponent]);
         }
 
+        /**
+         * struct SpotLight {
+         *      vec3 color;
+         *      float diffuse;
+         *      float cutoff;
+         *      float coneCos;
+         *      float penumbraCos;
+         *      vec3 position;
+         *      vec3 direction;
+         *      LightAttenuation attenuation;
+         * }
+        */
         shader.setUniformData(`uNumSpotLight`, [spotNum]);
         for (let i = 0; i < spotNum; i++) {
             key = spotKeys[i];
             const spotLight = this.spotLights[key];
             shader.setUniformData(`uSpotLights[${i}].color`, [spotLight.color.value[0], spotLight.color.value[1], spotLight.color.value[2]]);
-            shader.setUniformData(`uSpotLights[${i}].ambient`, [spotLight.ambient]);
+            // shader.setUniformData(`uSpotLights[${i}].ambient`, [spotLight.ambient]);
+            shader.setUniformData(`uSpotLights[${i}].coneCos`,[spotLight.coneCos]);
+            shader.setUniformData(`uSpotLights[${i}].penumbraCos`,[spotLight.penumbraCos]);
+            shader.setUniformData(`uSpotLights[${i}].cutoff`,[spotLight.cutoff]);
             shader.setUniformData(`uSpotLights[${i}].diffuse`, [spotLight.diffuse]);
             shader.setUniformData(`uSpotLights[${i}].position`, [spotLight.position.value[0], spotLight.position.value[1], spotLight.position.value[2]]);
             shader.setUniformData(`uSpotLights[${i}].direction`, [spotLight.direction.value[0], spotLight.direction.value[1], spotLight.direction.value[2]]);

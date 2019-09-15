@@ -12,10 +12,15 @@ export class SpotLight extends BaseLight {
         constant: 1.0,
         linear: 0.0,
         exponent: 0.0
-    }
+    };
+    public angle: number = Math.PI / 3;
+    public penumbra: number = 0;
+    private _coneCos: number;
+    private _penumbraCos: number;
 
     constructor() {
         super();
+        this.updateCone();
     }
 
     public setAttenuation(att: LightAttenuation): void {
@@ -40,5 +45,28 @@ export class SpotLight extends BaseLight {
             return;
         }
         this.cutoff = ctf;
+    }
+
+    private updateCone(): void {
+        this._coneCos = Math.cos(this.angle);
+        this._penumbraCos = Math.cos(this.angle * (1 - this.penumbra));
+    }
+
+    public setAngle(angle: number): void {
+        this.angle = angle;
+        this.updateCone();
+    }
+
+    public setPenumbra(penumbra: number): void {
+        this.penumbra = penumbra;
+        this.updateCone();
+    }
+
+    get coneCos() {
+        return this._coneCos;
+    }
+
+    get penumbraCos() {
+        return this._penumbraCos;
     }
 }
