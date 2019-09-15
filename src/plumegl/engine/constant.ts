@@ -36,6 +36,7 @@ export const CONSTANT = {
     MAT4: Symbol('Mat4'),
     VEC3: Symbol('Vec3'),
     QUAT: Symbol('Quat'),
+    MAT3: Symbol('Mat3'),
 };
 Object.freeze(CONSTANT);
 

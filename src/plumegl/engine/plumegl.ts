@@ -90,5 +90,6 @@ export const PlumeGL = {
     OrthoCamera,
     Mat4: MathApi.Mat4,
     Vec3: MathApi.Vec3,
-    Quat: MathApi.Quat
+    Quat: MathApi.Quat,
+    Mat3: MathApi.Mat3
 };
