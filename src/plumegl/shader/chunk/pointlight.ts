@@ -108,7 +108,7 @@ export const calculatePointLightIrradiance: string =
     }`;
 
 export const calculatePointLightTotalDiffuseIrradiance: string =
-    `#pragma unroll_loop
+    `// #pragma unroll_loop
     for(int i = 0; i < numPointLights; i++) {
         calcPointLightIrradiance(uPointLights[i], geometry, resultLight);
         float diffuseFactor = dot(geometry.normal, resultLight.direction);

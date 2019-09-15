@@ -93,7 +93,7 @@ export const calculateParallelLightIrradiance: string =
     }`;
 
 export const calculateParallelLightTotalDiffuseIrradiance: string =
-    `#pragma unroll_loop
+    `// #pragma unroll_loop
     for(int i = 0; i < numParallelLights; i++) {
         calcParallelLightIrradiance(uParallelLights[i], geometry, resultLight);
         float diffuseFactor = dot(geometry.normal, resultLight.direction);

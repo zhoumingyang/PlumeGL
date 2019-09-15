@@ -1,4 +1,4 @@
-import { Version } from "../chunk/version";
+import { lightAttenuation } from '../chunk/attenuation';
 import { Attribute } from "../chunk/attribute";
 import { Common } from "../chunk/common";
 import { parallelLightMax, parallelLightDefine, calculateParallelLightIrradiance, calculateParallelLightTotalDiffuseIrradiance } from "../chunk/parallellight";
@@ -13,34 +13,34 @@ export const DefaultLambertVert: string =
 
     out vec3 vDirectResult;
     out vec3 vIndirectResult;
-    out vec3 vUv;
+    out vec2 vUv;
 
+    ${lightAttenuation}
+    
     // parallel light
     ${parallelLightMax}
     ${parallelLightDefine}
     ${calculateParallelLightIrradiance}
-    ${calculateParallelLightTotalDiffuseIrradiance}
 
     //point light
     ${pointLightMax}
     ${pointLightDefine}
     ${calculatePointLightIrradiance}
-    ${calculatePointLightTotalDiffuseIrradiance}
 
     //spot light
     ${spotLightMax}
     ${spotLightDefine}
     ${calculateSpotLightIrradiance}
-    ${calculateSpotLightTotalDiffuseIrradiance}
 
     void main() {
 
         vec4 mvPosition = uModelViewMatrix * vec4(aPosition, 1.0);
         gl_Position = uProjectionMatrix * mvPosition;
-        mvPosition = mvPosition.xyz;
-        vUv = aUv;
-
         vec3 transNormal = (uNormalMatrix * vec4(aNormal, 1.0)).xyz;
+        geometry.position = mvPosition.xyz;
+        geometry.normal = transNormal;
+        geometry.viewDir = -mvPosition.xyz;
+        vUv = aUv;
 
         vDirectResult = vec3(0.0);
         vIndirectResult = vec3(0.0);

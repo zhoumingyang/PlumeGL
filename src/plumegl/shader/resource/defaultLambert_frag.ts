@@ -1,7 +1,9 @@
 import { ambientLightMax, ambientLightDefine, ambientLightCalculate } from "../chunk/ambientlight";
 
 export const DefaultLambertFrag: string =
-    `uniform vec3 uDiffuse;
+    `precision highp float;
+    precision highp int;
+    uniform vec3 uDiffuse;
     uniform vec3 uEmissive;
     uniform float uOpacity;
 
@@ -23,7 +25,7 @@ export const DefaultLambertFrag: string =
         return RECIPROCAL_PI * diffuseColor;
     }
     
-    out vec3 fragColor; 
+    out vec4 fragColor; 
 
     void main() {
 
@@ -31,7 +33,7 @@ export const DefaultLambertFrag: string =
         vec3 indirectDiffuse = vec3(0.0f);  // from ambient light, diffuse
 
         //计算自身的diffuse color以及纹理采样，作为间接光照的一部分
-        vec3 diffuseColor = vec4(uDiffuse, uOpacity);
+        vec4 diffuseColor = vec4(uDiffuse, uOpacity);
         #ifdef USE_TEXTURE
             vec4 textureColor = texture2D(uTexture, vUv);
             diffuseColor *= textureColor;
@@ -43,14 +45,14 @@ export const DefaultLambertFrag: string =
             numAmbientLight = MAX_AMBIENT_LIGHT;
         }
         vec4 ambientDiffuse = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-        #pragma unroll_loop
+        // #pragma unroll_loop
         for(int i = 0; i < numAmbientLight; i++) {
             ambientDiffuse += calcAmbientColor(uAmbientLights[i]);
         }
 
         //设置间接光照
         indirectDiffuse = ambientDiffuse.rgb;
-        indirectDiffuse += indirectResult;
+        indirectDiffuse += vIndirectResult;
         indirectDiffuse *= BRDF_Diffuse_Lambert(diffuseColor.rgb);
 
         //设置直接光照
