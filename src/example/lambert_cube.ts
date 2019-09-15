@@ -117,10 +117,21 @@ export const DrawLambertCube = () => {
 
     const parallelLight = new PlumeGL.ParallelLight();
     parallelLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
-    parallelLight.setDirection(new PlumeGL.Vec3(-2.0, -2.0, -2.0));
+    parallelLight.setDirection(new PlumeGL.Vec3(-1.0, -1.0, -1.0));
+
+    const pointLight = new PlumeGL.PointLight();
+    pointLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
+    pointLight.position = new PlumeGL.Vec3(-1.5, -1.5, -1.5);
+    pointLight.diffuse = 1.0;
+    pointLight.setAttenuation({
+        constant: 1.0,
+        linear: 0.5,
+        exponent: 0.0
+    });
 
     scene.addLight(ambientLight);
     scene.addLight(parallelLight);
+    scene.addLight(pointLight);
 
     const vertices = new Float32Array(cubeVert);
     const normals = new Float32Array(cubeNormal);
@@ -183,9 +194,9 @@ export const DrawLambertCube = () => {
             if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTLAMBERTSHADER) {
                 shaderObj.forEachDraw((obj: any) => {
                     const modelMat = tmpModelMat.clone().multiply(obj.getModelMat());
-                    const normalMat = tmpNormalMat.clone().multiply(obj.getNormalMat());
                     const projectMat = activeCamera.getProjectMat();
                     const mvMat = activeCamera.getModelViewMat(modelMat);
+                    const normalMat = new PlumeGL.Mat3().getNormalMat(mvMat);
                     shaderObj.setUniformData(shaderObj.uniform.modelMatrix, [modelMat.value, false]);
                     shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mvMat.value, false]);
                     shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [projectMat.value, false]);

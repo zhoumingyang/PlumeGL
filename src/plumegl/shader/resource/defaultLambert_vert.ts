@@ -36,10 +36,10 @@ export const DefaultLambertVert: string =
 
         vec4 mvPosition = uModelViewMatrix * vec4(aPosition, 1.0);
         gl_Position = uProjectionMatrix * mvPosition;
-        vec3 transNormal = (uNormalMatrix * vec4(aNormal, 1.0)).xyz;
+        vec3 transNormal = uNormalMatrix * aNormal;
         geometry.position = mvPosition.xyz;
-        geometry.normal = transNormal;
-        geometry.viewDir = -mvPosition.xyz;
+        geometry.normal = normalize(transNormal);
+        geometry.viewDir = normalize(-mvPosition.xyz);
         vUv = aUv;
 
         vDirectResult = vec3(0.0);

@@ -88,7 +88,7 @@ export const parallelLightCalculate =
 export const calculateParallelLightIrradiance: string =
     `void calcParallelLightIrradiance(const in ParallelLight light, const in GeometryAttribute geo, out ResultLight resultLight) {
         resultLight.color = light.color;
-		resultLight.direction = light.direction;
+		resultLight.direction = -light.direction;
 		resultLight.visible = true;
     }`;
 

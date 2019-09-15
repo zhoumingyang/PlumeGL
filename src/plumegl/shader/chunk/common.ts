@@ -2,7 +2,7 @@ export const Common: string =
     `uniform mat4 uModelMatrix;
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
-    uniform mat4 uNormalMatrix;
+    uniform mat3 uNormalMatrix;
 
     #define PI 3.14159265359
     #define saturate(a) clamp( a, 0.0, 1.0 )
