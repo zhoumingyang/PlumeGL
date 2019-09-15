@@ -16,8 +16,6 @@ export const parallelLightMax =
 export const parallelLightDefine =
     `struct ParallelLight {
         vec3 color;
-        float ambient;
-        float diffuse;
         vec3 direction;
     };
     uniform int uNumParallelLight;
@@ -61,5 +59,44 @@ export const parallelLightCalculate =
         vec3 specularColor = vec3(0.0f, 0.0f, 0.0f);
         calcParallelSpecularColor(light, normal, fragPos, eyePos, specularColor);
 
-        return  vec4(diffuseColor + specularColor, 1.0f);
+        return vec4(diffuseColor + specularColor, 1.0f);
+    }`;
+
+/**
+ * 
+ * light: ParallelLight
+ * 
+ *  geometry: GeometryAttribute {  (local)
+ *      vec3 position;   //model view space
+ *      vec3 normal;
+ *      vec3 viewDir;
+ *  }
+ * 
+ *  resultLight: ResultLight {     (local)
+ *      vec3 color;
+ *      vec3 direction;
+ *      bool visible
+ *  }
+ * 
+ *  numParallelLights: int (uniform or local)
+ *  
+ *  vDirectResult: varying vec3
+ * 
+ * */
+
+//calculate light in model view space,reference Threejs
+export const calculateParallelLightIrradiance: string =
+    `void calcParallelLightIrradiance(const in ParallelLight light, const in GeometryAttribute geo, out ResultLight resultLight) {
+        resultLight.color = light.color;
+		resultLight.direction = -light.direction;
+		resultLight.visible = true;
+    }`;
+
+export const calculateParallelLightTotalDiffuseIrradiance: string =
+    `// #pragma unroll_loop
+    for(int i = 0; i < numParallelLights; i++) {
+        calcParallelLightIrradiance(uParallelLights[i], geometry, resultLight);
+        float diffuseFactor = dot(geometry.normal, resultLight.direction);
+        vec3 diffuseColor = PI * resultLight.color;
+        vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }`;

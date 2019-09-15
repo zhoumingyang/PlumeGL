@@ -65,43 +65,44 @@ export class Mat4 {
     }
 
     public clone(): Mat4 {
-        const reslut = new Mat4();
-        reslut.value[0] = this._value[0];
-        reslut.value[1] = this._value[1];
-        reslut.value[2] = this._value[2];
-        reslut.value[3] = this._value[3];
-        reslut.value[4] = this._value[4];
-        reslut.value[5] = this._value[5];
-        reslut.value[6] = this._value[6];
-        reslut.value[7] = this._value[7];
-        reslut.value[8] = this._value[8];
-        reslut.value[9] = this._value[9];
-        reslut.value[10] = this._value[10];
-        reslut.value[11] = this._value[11];
-        reslut.value[12] = this._value[12];
-        reslut.value[13] = this._value[13];
-        reslut.value[14] = this._value[14];
-        reslut.value[15] = this._value[15];
-        return reslut;
+        const result = new Mat4();
+        result.value[0] = this._value[0];
+        result.value[1] = this._value[1];
+        result.value[2] = this._value[2];
+        result.value[3] = this._value[3];
+        result.value[4] = this._value[4];
+        result.value[5] = this._value[5];
+        result.value[6] = this._value[6];
+        result.value[7] = this._value[7];
+        result.value[8] = this._value[8];
+        result.value[9] = this._value[9];
+        result.value[10] = this._value[10];
+        result.value[11] = this._value[11];
+        result.value[12] = this._value[12];
+        result.value[13] = this._value[13];
+        result.value[14] = this._value[14];
+        result.value[15] = this._value[15];
+        return result;
     }
 
     public transpose(): Mat4 {
-        this._value[0] = this._value[0];
-        this._value[1] = this._value[4];
-        this._value[2] = this._value[8];
-        this._value[3] = this._value[12];
-        this._value[4] = this._value[1];
-        this._value[5] = this._value[5];
-        this._value[6] = this._value[9];
-        this._value[7] = this._value[13];
-        this._value[8] = this._value[2];
-        this._value[9] = this._value[6];
-        this._value[10] = this._value[10];
-        this._value[11] = this._value[14];
-        this._value[12] = this._value[3];
-        this._value[13] = this._value[7];
-        this._value[14] = this._value[11];
-        this._value[15] = this._value[15];
+        const out = new Mat4();
+        out.value[0] = this._value[0];
+        out.value[1] = this._value[4];
+        out.value[2] = this._value[8];
+        out.value[3] = this._value[12];
+        out.value[4] = this._value[1];
+        out.value[5] = this._value[5];
+        out.value[6] = this._value[9];
+        out.value[7] = this._value[13];
+        out.value[8] = this._value[2];
+        out.value[9] = this._value[6];
+        out.value[10] = this._value[10];
+        out.value[11] = this._value[14];
+        out.value[12] = this._value[3];
+        out.value[13] = this._value[7];
+        out.value[14] = this._value[11];
+        out.value[15] = this._value[15];
         return this;
     }
 

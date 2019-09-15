@@ -31,6 +31,7 @@ import { PointLight } from '../light/pointlight';
 import { SpotLight } from '../light/spotlight';
 import { DefaultLightShader } from '../shader/defaultlight';
 import { BasicLineShader } from '../shader/basicline';
+import { DefaultLambertShader } from '../shader/lambert';
 import { PerspectiveCamera } from '../camera/perspectivecamera';
 import { OrthoCamera } from "../camera/orthocamera";
 import { MathApi } from '../math/api';
@@ -84,9 +85,11 @@ export const PlumeGL = {
     SpotLight,
     DefaultLightShader,
     BasicLineShader,
+    DefaultLambertShader,
     PerspectiveCamera,
     OrthoCamera,
     Mat4: MathApi.Mat4,
     Vec3: MathApi.Vec3,
-    Quat: MathApi.Quat
+    Quat: MathApi.Quat,
+    Mat3: MathApi.Mat3
 };
