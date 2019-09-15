@@ -57,7 +57,7 @@ export const DefaultLambertFrag: string =
         directDiffuse = vDirectResult;
         directDiffuse *= BRDF_Diffuse_Lambert(diffuseColor.rgb) * 1.0;
 
+        //最后的光照是间接光照+直接光照+自发光
         vec3 outgoingLight = directDiffuse + indirectDiffuse + uEmissive;
         fragColor = vec4(outgoingLight, diffuseColor.a);
-    }
-    `;
+    }`;

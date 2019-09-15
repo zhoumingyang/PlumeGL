@@ -29,6 +29,7 @@ export const CONSTANT = {
     SPOTLIGHT: Symbol('SpotLight'),
     DEFAULTLIGHTSHADER: Symbol('DefaultLightShader'),
     BASICLINESHADER: Symbol('BasicLineShader'),
+    DEFAULTLAMBERTSHADER: Symbol('DefaultLambertShader'),
     CAMERA: Symbol('Camera'),
     PERSPECTIVECAMERA: Symbol('PerspectiveCamera'),
     ORTHOCAMERA: Symbol('OrthoCamera'),

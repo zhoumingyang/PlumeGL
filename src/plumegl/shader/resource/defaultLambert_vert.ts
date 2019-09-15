@@ -6,8 +6,7 @@ import { pointLightMax, pointLightDefine, calculatePointLightIrradiance, calcula
 import { spotLightMax, spotLightDefine, calculateSpotLightIrradiance, calculateSpotLightTotalDiffuseIrradiance } from "../chunk/spotlight";
 
 export const DefaultLambertVert: string =
-    `${Version}
-    precision highp float;
+    `precision highp float;
     precision highp int;
     ${Attribute}
     ${Common}
@@ -68,5 +67,4 @@ export const DefaultLambertVert: string =
 
         ${calculateSpotLightTotalDiffuseIrradiance}
 
-    }
-    `;
+    }`;
