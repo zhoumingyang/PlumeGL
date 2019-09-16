@@ -291,7 +291,7 @@ export const DrawSpotLightPlane = () => {
     let left = Float32Array.from([1.0, 0.0, 0.0]);
     let eyePos = Float32Array.from([0.0, 1.0, -11.0]);
     let center = Float32Array.from([0.0, 0.0, 0.0]);
-    let cameraDir = Float32Array.from([0.0, -1.0, 0.0]);
+    let cameraDir = Float32Array.from([0.0, -1.0, 11.0]);
     let up = cross(cameraDir, left);
     viewMat = lookAt(eyePos, center, up);
 
@@ -309,7 +309,7 @@ export const DrawSpotLightPlane = () => {
         scene.forEachRender((shaderObj: any) => {
             if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTLIGHTSHADER) {
                 shaderObj.setUniformData(shaderObj.uniform.mvp, [mvp, false]);
-                shaderObj.setUniformData(shaderObj.uniform.worlMatirx, [modelMat, false]);
+                shaderObj.setUniformData(shaderObj.uniform.worldMatrix, [modelMat, false]);
                 shaderObj.setUniformData(shaderObj.uniform.normalMatrix, [modelMat, false]);
                 shaderObj.setUniformData(shaderObj.uniform.eyePosition, [eyePos[0], eyePos[1], eyePos[2]]);
                 shaderObj.forEachDraw((obj: any) => {
