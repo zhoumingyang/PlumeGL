@@ -13,14 +13,6 @@ export class DefaultLightShader extends Shader {
     public positionAttribute: string = "aPosition";
     public normalAttribute: string = "aNormal";
     public uvAttribute: string = "aUv";
-    // public uniformMvp: string = "uMvp";
-    // public uniformWorlMatirx: string = "uWorldMatrix";
-    // public uniformNormalMatrix: string = "uNormalMatrix";
-    // public uniformEyePosition: string = "uEyePosition";
-    // public uniformSpecStrength: string = "uSpecStrength";
-    // public uniformSpecPower: string = "uSpecPower";
-    // public uniformTexture: string = "uTexture";
-    // public uniformColor: string = "uColor";
 
     constructor(useMap: boolean = false, gl?: WGL | WGL2) {
         super(undefined, undefined, undefined, gl);

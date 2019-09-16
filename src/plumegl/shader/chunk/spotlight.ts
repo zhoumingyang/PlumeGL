@@ -58,7 +58,7 @@ export const spotLightCalculate: string =
         vec3 lightDirection = fragPos - light.position;
         float distance = length(lightDirection);
         lightDirection = normalize(lightDirection);
-        float spotFactor = dot(lightDirection, light.direction);
+        float spotFactor = dot(lightDirection, normalize(light.direction));
 
         vec3 diffuseColor  = vec3(0.0f, 0.0f, 0.0f);
         vec3 specularColor = vec3(0.0f, 0.0f, 0.0f);
