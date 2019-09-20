@@ -9,7 +9,12 @@ export const DefaultLambertVert: string =
     `precision highp float;
     precision highp int;
     ${Attribute}
-    ${Common}
+
+    ${Common.UniformMatrix}
+    ${Common.Defines}
+    ${Common.GA}
+    ${Common.ILA}
+    ${Common.RLA}
 
     out vec3 vDirectResult;
     out vec3 vIndirectResult;
@@ -17,7 +22,7 @@ export const DefaultLambertVert: string =
 
     ${lightAttenuation}
     
-    // parallel light
+    //parallel light
     ${parallelLightMax}
     ${parallelLightDefine}
     ${calculateParallelLightIrradiance}

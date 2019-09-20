@@ -53,5 +53,5 @@ export const diffuseBrdfCalculate: string =
 
 export const BlinnPhongCalculate: string =
     `void blinnPhong( const in ResultLight directLight, const in GeometryAttribute geometry, const in phongMaterialAttribute material, inout ReflectedLight reflectedLight ) {
-
+        
     }`;

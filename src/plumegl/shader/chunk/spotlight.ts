@@ -93,7 +93,7 @@ export const spotLightCalculate: string =
  *      vec3 viewDir;
  *  }
  * 
- *  resultLight: ResultLight {     (local)
+ *  resultLight: IncidentLightAttribute {     (local)
  *      vec3 color;
  *      vec3 direction;
  *      bool visible
@@ -107,7 +107,7 @@ export const spotLightCalculate: string =
 
 //calculate light in model view space,reference Threejs
 export const calculateSpotLightIrradiance: string =
-    `void calcSpotLightIrradiance(const in SpotLight light, const in GeometryAttribute geo, out ResultLight resultLight) {
+    `void calcSpotLightIrradiance(const in SpotLight light, const in GeometryAttribute geo, out IncidentLightAttribute resultLight) {
         vec3 l = light.position - geo.position;
         resultLight.direction = normalize(l);
         float distance = length(l);
@@ -127,9 +127,9 @@ export const calculateSpotLightIrradiance: string =
 export const calculateSpotLightTotalDiffuseIrradiance: string =
     `// #pragma unroll_loop
     for(int i = 0; i < numSpotLights; i++) {
-        calcSpotLightIrradiance(uSpotLights[i], geometry, resultLight);
-        float diffuseFactor = dot(geometry.normal, resultLight.direction);
-        vec3 diffuseColor = PI * resultLight.color;
+        calcSpotLightIrradiance(uSpotLights[i], geometry, idtLight);
+        float diffuseFactor = dot(geometry.normal, idtLight.direction);
+        vec3 diffuseColor = PI * idtLight.color;
         vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }
 `;
