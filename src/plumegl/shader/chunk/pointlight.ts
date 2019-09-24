@@ -115,3 +115,9 @@ export const calculatePointLightTotalDiffuseIrradiance: string =
         vec3 diffuseColor = PI * idtLight.color;
         vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }`;
+
+export const calculatePointLightTotalSpecularIrradiance: string = `
+for(int i = 0; i < numPointLights; i++) {
+    calcPointLightIrradiance(uPointLights[i], geometry, idtLight);
+    blinnPhong(idtLight, geometry, bpMtl, rftLight);
+}`;

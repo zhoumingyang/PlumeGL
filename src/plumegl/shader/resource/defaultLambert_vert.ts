@@ -11,9 +11,15 @@ export const DefaultLambertVert: string =
     ${Attribute}
 
     ${Common.UniformMatrix}
+
     ${Common.Defines}
+
     ${Common.GA}
+    GeometryAttribute geometry;
+
     ${Common.ILA}
+    IncidentLightAttribute idtLight;
+
     ${Common.RLA}
 
     out vec3 vDirectResult;

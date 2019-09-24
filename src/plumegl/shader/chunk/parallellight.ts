@@ -100,3 +100,9 @@ export const calculateParallelLightTotalDiffuseIrradiance: string =
         vec3 diffuseColor = PI * idtLight.color;
         vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }`;
+
+export const calculateParallelLightTotalSpecularIrradiance: string = `
+for(int i = 0; i < numParallelLights; i++) {
+    calcParallelLightIrradiance(uParallelLights[i], geometry, idtLight);
+    blinnPhong(idtLight, geometry, bpMtl, rftLight);
+}`;

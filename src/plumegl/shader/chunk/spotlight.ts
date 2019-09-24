@@ -133,3 +133,9 @@ export const calculateSpotLightTotalDiffuseIrradiance: string =
         vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }
 `;
+
+export const calculateSpotLightTotalSpecularIrradiance: string = `
+for(int i = 0; i < numSpotLights; i++) {
+    calcSpotLightIrradiance(uSpotLights[i], geometry, idtLight);
+    blinnPhong(idtLight, geometry, bpMtl, rftLight);
+}`;

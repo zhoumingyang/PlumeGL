@@ -39,16 +39,14 @@ struct GeometryAttribute {
     vec3 position;
     vec3 normal;
     vec3 viewDir;
-};
-GeometryAttribute geometry;`;
+};`;
 
 export const ILA: string = `
 struct IncidentLightAttribute {
     vec3 color;
     vec3 direction;
     bool visible;
-};
-IncidentLightAttribute idtLight;`;
+};`;
 
 export const RLA: string = `
 struct ReflectLightAttribute {
@@ -56,13 +54,21 @@ struct ReflectLightAttribute {
 	vec3 directSpecular;
 	vec3 indirectDiffuse;
 	vec3 indirectSpecular;
-};
-ReflectLightAttribute rftLight;`;
+};`;
+
+export const BPM: string = `
+struct BlinnPhongMaterial {
+    vec3 diffuseColor;
+    vec3 specularColor;
+    float specularShininess;
+    float specularStrength;
+};`;
 
 export const Common = {
     UniformMatrix,
     Defines,
     GA,
     ILA,
-    RLA
+    RLA,
+    BPM
 };
