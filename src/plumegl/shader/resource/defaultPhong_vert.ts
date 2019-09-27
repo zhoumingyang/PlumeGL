@@ -30,5 +30,4 @@ export const DefaultPhongVert: string =
         vViewPosition = -mvPosition.xyz;
         vec4 worldPosition = uModelMatrix * vec4( transformed, 1.0 );
         vWorldPosition = worldPosition.xyz;
-    }
-`;
+    }`;
