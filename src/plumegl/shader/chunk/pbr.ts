@@ -45,11 +45,10 @@ export const BlinnPhongBrdfCalculate: string =
         return F * ( G * D );
     }`;
 
-export const diffuseBrdfCalculate: string =
+export const DiffuseBrdfCalculate: string =
     `vec3 diffuseBrdf(const in vec3 diffuseColor) {
         return RECIPROCAL_PI * diffuseColor;
-    }
-`;
+    }`;
 
 export const BlinnPhongCalculate: string =
     `void blinnPhong( const in IncidentLightAttribute directLight, 
@@ -65,4 +64,45 @@ export const BlinnPhongCalculate: string =
 
         reflectedLight.directDiffuse += irradiance * diffuseBrdf(material.diffuseColor);
         reflectedLight.directSpecular += irradiance * blinnPhongBrdf(directLight, geometry, material.specularColor, material.specularShininess) * material.specularStrength;
+    }`;
+
+export const DiffuseBlinnPhong: string =
+    `void diffuseBlinnPhong( const in vec3 irradiance,
+                             const in GeometryAttribute geometry,
+                             const in phongMaterialAttribute material,
+                             inout ReflectLightAttribute reflectedLight)
+    {
+        reflectedLight.indirectDiffuse += irradiance * diffuseBrdf( material.diffuseColor );
+    }`;
+
+export const ShGetIrradianceAt: string =
+    `vec3 shGetIrradianceAt(in vec3 normal, in vec3 shCoefficients[9]) 
+    {
+        
+        float x = normal.x, y = normal.y, z = normal.z;
+
+        // band 0
+	    vec3 result = shCoefficients[ 0 ] * 0.886227;
+
+	    // band 1
+	    result += shCoefficients[ 1 ] * 2.0 * 0.511664 * y;
+	    result += shCoefficients[ 2 ] * 2.0 * 0.511664 * z;
+	    result += shCoefficients[ 3 ] * 2.0 * 0.511664 * x;
+
+	    // band 2
+	    result += shCoefficients[ 4 ] * 2.0 * 0.429043 * x * y;
+	    result += shCoefficients[ 5 ] * 2.0 * 0.429043 * y * z;
+	    result += shCoefficients[ 6 ] * ( 0.743125 * z * z - 0.247708 );
+	    result += shCoefficients[ 7 ] * 2.0 * 0.429043 * x * z;
+        result += shCoefficients[ 8 ] * 0.429043 * ( x * x - y * y );
+        
+	    return result;
+
+    }`;
+
+export const CalculateLightProbeIrradiance: string =
+    `vec3 calcLightProbeIrradiance(const in vec3 lightProbe[ 9 ], const in GeometricContext geometry) {
+        vec3 worldNormal = inverseTransformDirection( geometry.normal, viewMatrix );
+        vec3 irradiance = shGetIrradianceAt( worldNormal, lightProbe );
+        return irradiance;
     }`;

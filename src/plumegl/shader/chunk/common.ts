@@ -64,11 +64,17 @@ struct BlinnPhongMaterial {
     float specularStrength;
 };`;
 
+export const InverseTransformDirection: string = 
+`vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
+    return normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );
+}`;
+
 export const Common = {
     UniformMatrix,
     Defines,
     GA,
     ILA,
     RLA,
-    BPM
+    BPM,
+    InverseTransformDirection
 };

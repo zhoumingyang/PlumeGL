@@ -1,8 +1,9 @@
 import { Common } from "../chunk/common";
-import { SpecularfCalculate, SpecularGImplicitCalculate, SpeuclarDCalculate, diffuseBrdfCalculate, BlinnPhongCalculate } from "../chunk/pbr";
-import { calculateParallelLightTotalSpecularIrradiance } from "../chunk/parallellight";
-import { calculatePointLightTotalSpecularIrradiance } from "../chunk/pointlight";
-import { calculateSpotLightTotalSpecularIrradiance } from "../chunk/spotlight";
+import { SpecularfCalculate, SpecularGImplicitCalculate, SpeuclarDCalculate, DiffuseBrdfCalculate, BlinnPhongCalculate, DiffuseBlinnPhong} from "../chunk/pbr";
+import { parallelLightMax, parallelLightDefine, calculateParallelLightIrradiance, calculateParallelLightTotalSpecularIrradiance } from "../chunk/parallellight";
+import { pointLightMax, pointLightDefine, calculatePointLightIrradiance, calculatePointLightTotalSpecularIrradiance } from "../chunk/pointlight";
+import { spotLightMax, spotLightDefine, calculateSpotLightIrradiance, calculateSpotLightTotalSpecularIrradiance } from "../chunk/spotlight";
+import { ambientLightMax, ambientLightDefine, ambientLightCalculate, calculateAmbientLightTotalDiffuseIrradiance } from "../chunk/ambientlight";
 
 export const DefaultPhongFrag =
     `precision highp float;
@@ -18,6 +19,13 @@ export const DefaultPhongFrag =
 
     ${Common.Defines}
     #define RECIPROCAL_PI 0.31830988618
+    ${parallelLightMax}
+
+    ${pointLightMax}
+
+    ${spotLightMax}
+
+    ${ambientLightMax}
 
     ${Common.GA}
 
@@ -36,15 +44,33 @@ export const DefaultPhongFrag =
         uniform sampler2D uTexture;
     #endif
 
+    ${ambientLightDefine}
+
+    ${parallelLightDefine}
+
+    ${pointLightDefine}
+
+    ${spotLightDefine}
+
+    ${ambientLightCalculate}
+
     ${SpecularfCalculate}
 
     ${SpecularGImplicitCalculate}
 
     ${SpeuclarDCalculate}
 
-    ${diffuseBrdfCalculate}
+    ${DiffuseBrdfCalculate}
 
     ${BlinnPhongCalculate}
+
+    ${calculateParallelLightIrradiance}
+
+    ${calculatePointLightIrradiance}
+
+    ${calculateSpotLightIrradiance}
+
+    ${DiffuseBlinnPhong}
 
     out fragColor;
 
@@ -73,7 +99,26 @@ export const DefaultPhongFrag =
         geometry.normal = normal;
         geometry.viewDir = normalize(vWorldPosition);
 
-        IncidentLightAttribute directLight;
+        IncidentLightAttribute idtLight;
+        
+        ${calculateParallelLightTotalSpecularIrradiance}
+        
+        ${calculatePointLightTotalSpecularIrradiance}
+        
+        ${calculateSpotLightTotalSpecularIrradiance}
+
+        //间接光照计算
+        int numAmbientLight = uNumAmbientLight;
+        if(numAmbientLight > MAX_AMBIENT_LIGHT) {
+            numAmbientLight = MAX_AMBIENT_LIGHT;
+        }
+        ${calculateAmbientLightTotalDiffuseIrradiance}
+
+        diffuseBlinnPhong(ambientDiffuse, geometry, bpMtl, rftLight);
+
+        vec3 outgoingLight = rftLight.directDiffuse + rftLight.indirectDiffuse + rftLight.directSpecular + rftLight.indirectSpecular + uEmissive;
+
+        fragColor = vec4( outgoingLight, diffuseColor.a );
 
     }
     
