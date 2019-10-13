@@ -17,13 +17,14 @@ export const DefaultPhongVert: string =
     out vec3 vWorldPosition;
 
     void main() {
-        vUv = uv;
+        
+        vUv = aUv;
 
-        vec3 objectNormal = vec3(normal);
+        vec3 objectNormal = vec3(aNormal);
         vec3 transformedNormal = uNormalMatrix * objectNormal;
         vNormal = normalize( transformedNormal );
 
-        vec3 transformed = vec3( position );
+        vec3 transformed = vec3( aPosition );
         vec4 mvPosition = uModelViewMatrix * vec4( transformed, 1.0 );
         gl_Position = uProjectionMatrix * mvPosition;
 

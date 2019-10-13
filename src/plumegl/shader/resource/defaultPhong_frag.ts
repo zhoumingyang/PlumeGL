@@ -1,5 +1,5 @@
 import { Common } from "../chunk/common";
-import { SpecularfCalculate, SpecularGImplicitCalculate, SpeuclarDCalculate, DiffuseBrdfCalculate, BlinnPhongCalculate, DiffuseBlinnPhong} from "../chunk/pbr";
+import { SpecularfCalculate, SpecularGImplicitCalculate, SpeuclarDCalculate, DiffuseBrdfCalculate, BlinnPhongCalculate, DiffuseBlinnPhong } from "../chunk/pbr";
 import { parallelLightMax, parallelLightDefine, calculateParallelLightIrradiance, calculateParallelLightTotalSpecularIrradiance } from "../chunk/parallellight";
 import { pointLightMax, pointLightDefine, calculatePointLightIrradiance, calculatePointLightTotalSpecularIrradiance } from "../chunk/pointlight";
 import { spotLightMax, spotLightDefine, calculateSpotLightIrradiance, calculateSpotLightTotalSpecularIrradiance } from "../chunk/spotlight";
@@ -12,6 +12,10 @@ export const DefaultPhongFrag =
     uniform vec3 uDiffuse;
     uniform vec3 uEmissive;
     uniform float uOpacity;
+
+    #ifdef USE_TEXTURE
+        uniform sampler2D uTexture;
+    #endif
 
     uniform vec3 uSpecular;
     uniform float uSpecPower;
@@ -76,12 +80,12 @@ export const DefaultPhongFrag =
 
     void main() {
 
-        vec4 diffuseColor = vec4(diffuse, opacity);
+        vec4 diffuseColor = vec4(uDiffuse, uOpacity);
 
         ReflectLightAttribute rftLight = ReflectLightAttribute(vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ));
 
         #ifdef USE_TEXTURE
-            vec4 texelColor = texture2D( map, vUv );
+            vec4 texelColor = texture2D( uTexture, vUv );
             diffuseColor *= texelColor;
         #endif
 
@@ -98,6 +102,22 @@ export const DefaultPhongFrag =
         geometry.position = -vViewPosition;
         geometry.normal = normal;
         geometry.viewDir = normalize(vWorldPosition);
+
+        int numParallelLights = uNumParallelLight;
+        int numPointLights = uNumPointLight;
+        int numSpotLights = uNumSpotLight;
+    
+        if(numParallelLights > MAX_PARALLEL_LIGHT) {
+            numParallelLights = MAX_PARALLEL_LIGHT;
+        }
+        
+        if(numPointLights > MAX_POINT_LIGHT) {
+            numPointLights = MAX_POINT_LIGHT;
+        }
+        
+        if(numSpotLights > MAX_SPOT_LIGHT) {
+            numSpotLights = MAX_SPOT_LIGHT;
+        }
 
         IncidentLightAttribute idtLight;
         
