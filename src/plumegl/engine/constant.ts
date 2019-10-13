@@ -38,6 +38,8 @@ export const CONSTANT = {
     VEC3: Symbol('Vec3'),
     QUAT: Symbol('Quat'),
     MAT3: Symbol('Mat3'),
+    BASEGEOMETRY: Symbol('BaseGeometry'),
+    SPHEREGEOMETRY: Symbol('SphereGeometry'),
 };
 Object.freeze(CONSTANT);
 

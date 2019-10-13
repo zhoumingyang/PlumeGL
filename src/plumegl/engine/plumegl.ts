@@ -32,8 +32,10 @@ import { SpotLight } from '../light/spotlight';
 import { DefaultLightShader } from '../shader/defaultlight';
 import { BasicLineShader } from '../shader/basicline';
 import { DefaultLambertShader } from '../shader/lambert';
+import { DefaultPhongShader } from '../shader/phong';
 import { PerspectiveCamera } from '../camera/perspectivecamera';
 import { OrthoCamera } from "../camera/orthocamera";
+import { SphereGeometry } from '../geometry/sphere';
 import { MathApi } from '../math/api';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
@@ -86,8 +88,10 @@ export const PlumeGL = {
     DefaultLightShader,
     BasicLineShader,
     DefaultLambertShader,
+    DefaultPhongShader,
     PerspectiveCamera,
     OrthoCamera,
+    SphereGeometry,
     Mat4: MathApi.Mat4,
     Vec3: MathApi.Vec3,
     Quat: MathApi.Quat,

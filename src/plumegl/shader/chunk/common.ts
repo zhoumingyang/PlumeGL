@@ -57,7 +57,7 @@ struct ReflectLightAttribute {
 };`;
 
 export const BPM: string = `
-struct BlinnPhongMaterial {
+struct PhongMaterialAttribute {
     vec3 diffuseColor;
     vec3 specularColor;
     float specularShininess;

@@ -1,4 +1,5 @@
 import { Common } from "../chunk/common";
+import { lightAttenuation } from "../chunk/attenuation";
 import { SpecularfCalculate, SpecularGImplicitCalculate, SpeuclarDCalculate, DiffuseBrdfCalculate, BlinnPhongCalculate, DiffuseBlinnPhong } from "../chunk/pbr";
 import { parallelLightMax, parallelLightDefine, calculateParallelLightIrradiance, calculateParallelLightTotalSpecularIrradiance } from "../chunk/parallellight";
 import { pointLightMax, pointLightDefine, calculatePointLightIrradiance, calculatePointLightTotalSpecularIrradiance } from "../chunk/pointlight";
@@ -48,6 +49,8 @@ export const DefaultPhongFrag =
         uniform sampler2D uTexture;
     #endif
 
+    ${lightAttenuation}
+
     ${ambientLightDefine}
 
     ${parallelLightDefine}
@@ -92,7 +95,7 @@ export const DefaultPhongFrag =
         vec3 normal = normalize(vNormal);
         vec3 geometryNormal = normal;
 
-        BlinnPhongMaterial bpMtl;
+        PhongMaterialAttribute bpMtl;
         bpMtl.diffuseColor = diffuseColor.rgb;
         bpMtl.specularColor = uSpecular;
         bpMtl.specularShininess = uSpecPower;

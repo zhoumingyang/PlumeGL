@@ -35,14 +35,19 @@ export const SpeuclarDCalculate: string =
     }`;
 
 export const BlinnPhongBrdfCalculate: string =
-    `vec3 blinnPhongBrdf(const in IncidentLightAttribute incidentLight, const in GeometryAttribute geometry, const in vec3 specularColor, const in float shininess) {
-        vec3 halfDir = normalize( incidentLight.direction + geometry.viewDir );
-        float dotNH = saturate( dot( geometry.normal, halfDir ) );
-        float dotLH = saturate( dot( incidentLight.direction, halfDir ) );
-        vec3 F = specularF( specularColor, dotLH );
-        float G = specularGImplicit();
-        float D = specularD( shininess, dotNH );
-        return F * ( G * D );
+    `vec3 blinnPhongBrdf(const in IncidentLightAttribute incidentLight, 
+                         const in GeometryAttribute geometry, 
+                         const in vec3 specularColor, 
+                         const in float shininess) {
+
+                             vec3 halfDir = normalize( incidentLight.direction + geometry.viewDir );
+                             float dotNH = saturate( dot( geometry.normal, halfDir ) );
+                             float dotLH = saturate( dot( incidentLight.direction, halfDir ) );
+                             vec3 F = specularF( specularColor, dotLH );
+                             float G = specularGImplicit();
+                             float D = specularD( shininess, dotNH );
+                             return F * ( G * D );
+
     }`;
 
 export const DiffuseBrdfCalculate: string =
@@ -53,7 +58,7 @@ export const DiffuseBrdfCalculate: string =
 export const BlinnPhongCalculate: string =
     `void blinnPhong( const in IncidentLightAttribute directLight, 
                       const in GeometryAttribute geometry, 
-                      const in phongMaterialAttribute material, 
+                      const in PhongMaterialAttribute material, 
                       inout ReflectLightAttribute reflectedLight ) 
     {
         float diffuseFactor = saturate(dot(geometry.normal, directLight.direction));
@@ -69,15 +74,14 @@ export const BlinnPhongCalculate: string =
 export const DiffuseBlinnPhong: string =
     `void diffuseBlinnPhong( const in vec3 irradiance,
                              const in GeometryAttribute geometry,
-                             const in phongMaterialAttribute material,
+                             const in PhongMaterialAttribute material,
                              inout ReflectLightAttribute reflectedLight)
     {
         reflectedLight.indirectDiffuse += irradiance * diffuseBrdf( material.diffuseColor );
     }`;
 
 export const ShGetIrradianceAt: string =
-    `vec3 shGetIrradianceAt(in vec3 normal, in vec3 shCoefficients[9]) 
-    {
+    `vec3 shGetIrradianceAt(in vec3 normal, in vec3 shCoefficients[9]) {
         
         float x = normal.x, y = normal.y, z = normal.z;
 
