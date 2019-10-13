@@ -1,6 +1,6 @@
 import { Common } from "../chunk/common";
 import { lightAttenuation } from "../chunk/attenuation";
-import { SpecularfCalculate, SpecularGImplicitCalculate, SpeuclarDCalculate, DiffuseBrdfCalculate, BlinnPhongCalculate, DiffuseBlinnPhong } from "../chunk/pbr";
+import { SpecularfCalculate, SpecularGImplicitCalculate, SpeuclarDCalculate, BlinnPhongBrdfCalculate, DiffuseBrdfCalculate, BlinnPhongCalculate, DiffuseBlinnPhong } from "../chunk/pbr";
 import { parallelLightMax, parallelLightDefine, calculateParallelLightIrradiance, calculateParallelLightTotalSpecularIrradiance } from "../chunk/parallellight";
 import { pointLightMax, pointLightDefine, calculatePointLightIrradiance, calculatePointLightTotalSpecularIrradiance } from "../chunk/pointlight";
 import { spotLightMax, spotLightDefine, calculateSpotLightIrradiance, calculateSpotLightTotalSpecularIrradiance } from "../chunk/spotlight";
@@ -67,6 +67,8 @@ export const DefaultPhongFrag =
 
     ${SpeuclarDCalculate}
 
+    ${BlinnPhongBrdfCalculate}
+
     ${DiffuseBrdfCalculate}
 
     ${BlinnPhongCalculate}
@@ -79,7 +81,7 @@ export const DefaultPhongFrag =
 
     ${DiffuseBlinnPhong}
 
-    out fragColor;
+    out vec4 fragColor;
 
     void main() {
 
