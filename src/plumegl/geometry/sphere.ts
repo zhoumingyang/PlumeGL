@@ -75,14 +75,14 @@ export class SphereGeometry extends BaseGeometry {
             grid.push(verticesRow);
         }
 
-        for (iy = 0; iy < horizontalSegments; iy++) {
+        for (iy = 0; iy < verticalSegments; iy++) {
             for (ix = 0; ix < horizontalSegments; ix++) {
                 let a = grid[iy][ix + 1];
                 let b = grid[iy][ix];
                 let c = grid[iy + 1][ix];
                 let d = grid[iy + 1][ix + 1];
                 if (iy !== 0 || thetaStart > 0) indices.push(a, b, d);
-                if (iy !== horizontalSegments - 1 || thetaEnd < Math.PI) indices.push(b, c, d);
+                if (iy !== verticalSegments - 1 || thetaEnd < Math.PI) indices.push(b, c, d);
             }
         }
 

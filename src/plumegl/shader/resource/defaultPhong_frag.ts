@@ -139,7 +139,7 @@ export const DefaultPhongFrag =
         }
         ${calculateAmbientLightTotalDiffuseIrradiance}
 
-        diffuseBlinnPhong(ambientDiffuse, geometry, bpMtl, rftLight);
+        diffuseBlinnPhong(ambientDiffuse.xyz, geometry, bpMtl, rftLight);
 
         vec3 outgoingLight = rftLight.directDiffuse + rftLight.indirectDiffuse + rftLight.directSpecular + rftLight.indirectSpecular + uEmissive;
 
