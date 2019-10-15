@@ -42,8 +42,16 @@ export const DrawPhongSphere = () => {
     parallelLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     parallelLight.setDirection(new PlumeGL.Vec3(-2.0, -2.0, -2.0));
 
+    const pointLight = new PlumeGL.PointLight();
+    pointLight.setPosition(new PlumeGL.Vec3(4, 3.5, -0.5));
+    pointLight.setAttenuation({
+        constant: 1.0,
+        linear: 0.0,
+        exponent: 0.0
+    });
+
     scene.addLight(ambientLight);
-    scene.addLight(parallelLight);
+    scene.addLight(pointLight);
 
     const mesh = new PlumeGL.Mesh();
     mesh.setGeometryAttribute(sphereGeometry.vertices, defaultPhongShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
