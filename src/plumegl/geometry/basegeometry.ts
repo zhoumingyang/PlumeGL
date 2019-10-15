@@ -5,7 +5,7 @@ export class BaseGeometry {
     protected _vertices: Float32Array;
     protected _normals: Float32Array;
     protected _uvs: Float32Array;
-    protected _indices: Int32Array;
+    protected _indices: Uint16Array;
 
     constructor() {
 
@@ -23,7 +23,7 @@ export class BaseGeometry {
         return this._uvs;
     }
 
-    get indices(): Int32Array {
+    get indices(): Uint16Array {
         return this._indices;
     }
 
