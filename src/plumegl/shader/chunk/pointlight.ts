@@ -83,7 +83,7 @@ export const pointLightCalculate: string =
  *      vec3 viewDir;
  *  }
  * 
- *  resultLight: ResultLight {     (local)
+ *  resultLight: IncidentLightAttribute {     (local)
  *      vec3 color;
  *      vec3 direction;
  *      bool visible
@@ -97,7 +97,7 @@ export const pointLightCalculate: string =
 
 //calculate light in model view space,reference Threejs
 export const calculatePointLightIrradiance: string =
-    `void calcPointLightIrradiance(const in PointLight light, const in GeometryAttribute geo, out ResultLight resultLight) {
+    `void calcPointLightIrradiance(const in PointLight light, const in GeometryAttribute geo, out IncidentLightAttribute resultLight) {
         vec3 l = light.position - geo.position;
         resultLight.direction = normalize(l);
         float distance = length(l);
@@ -110,8 +110,14 @@ export const calculatePointLightIrradiance: string =
 export const calculatePointLightTotalDiffuseIrradiance: string =
     `// #pragma unroll_loop
     for(int i = 0; i < numPointLights; i++) {
-        calcPointLightIrradiance(uPointLights[i], geometry, resultLight);
-        float diffuseFactor = dot(geometry.normal, resultLight.direction);
-        vec3 diffuseColor = PI * resultLight.color;
+        calcPointLightIrradiance(uPointLights[i], geometry, idtLight);
+        float diffuseFactor = dot(geometry.normal, idtLight.direction);
+        vec3 diffuseColor = PI * idtLight.color;
         vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }`;
+
+export const calculatePointLightTotalSpecularIrradiance: string = `
+for(int i = 0; i < numPointLights; i++) {
+    calcPointLightIrradiance(uPointLights[i], geometry, idtLight);
+    blinnPhong(idtLight, geometry, bpMtl, rftLight);
+}`;

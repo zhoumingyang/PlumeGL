@@ -1,5 +1,5 @@
-import { DefaultLambertVert } from "./resource/defaultLambert_vert";
-import { DefaultLambertFrag } from "./resource/defaultLambert_frag";
+import { DefaultPhongVert } from "./resource/defaultPhong_vert";
+import { DefaultPhongFrag } from "./resource/defaultPhong_frag";
 import { Shader } from './shader';
 import { Version } from './chunk/version';
 import { CONSTANT } from '../engine/constant';
@@ -7,8 +7,8 @@ import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
-export class DefaultLambertShader extends Shader {
-    public type: Symbol = CONSTANT.DEFAULTLAMBERTSHADER;
+export class DefaultPhongShader extends Shader {
+    public type: Symbol = CONSTANT.DEFAULTPHONGSHADER;
     public positionAttribute: string = "aPosition";
     public normalAttribute: string = "aNormal";
     public uvAttribute: string = "aUv";
@@ -16,11 +16,13 @@ export class DefaultLambertShader extends Shader {
     constructor(useTexture: boolean = false, gl?: WGL | WGL2) {
         super(undefined, undefined, undefined, gl);
 
-        let vs: string = DefaultLambertVert;
-        let fs: string = DefaultLambertFrag;
+        let vs: string = DefaultPhongVert;
+        let fs: string = DefaultPhongFrag;
+
         if (useTexture) {
             fs = `#define USE_TEXTURE 1 \n` + fs;
         }
+
         vs = Version + vs;
         fs = Version + fs;
         this.setShaderSource(vs, fs);
@@ -38,6 +40,18 @@ export class DefaultLambertShader extends Shader {
             "uOpacity": {
                 type: 'float',
                 value: [1.0]
+            },
+            "uSpecular": {
+                type: 'vec3',
+                value: [0.0, 0.0, 0.0]
+            },
+            "uSpecPower": {
+                type: 'float',
+                value: [2.0]
+            },
+            "uSpecStrength": {
+                type: 'float',
+                value: [1.0]
             }
         };
 
@@ -49,6 +63,9 @@ export class DefaultLambertShader extends Shader {
             diffuse: "uDiffuse",
             emissive: "uEmissive",
             opacity: "uOpacity",
+            specular: "uSpecular",
+            specularPower: "uSpecPower",
+            specularStrength: "uSpecStrength",
         };
     }
 

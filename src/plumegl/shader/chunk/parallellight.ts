@@ -72,7 +72,7 @@ export const parallelLightCalculate =
  *      vec3 viewDir;
  *  }
  * 
- *  resultLight: ResultLight {     (local)
+ *  resultLight: IncidentLightAttribute {     (local)
  *      vec3 color;
  *      vec3 direction;
  *      bool visible
@@ -86,7 +86,7 @@ export const parallelLightCalculate =
 
 //calculate light in model view space,reference Threejs
 export const calculateParallelLightIrradiance: string =
-    `void calcParallelLightIrradiance(const in ParallelLight light, const in GeometryAttribute geo, out ResultLight resultLight) {
+    `void calcParallelLightIrradiance(const in ParallelLight light, const in GeometryAttribute geo, out IncidentLightAttribute resultLight) {
         resultLight.color = light.color;
 		resultLight.direction = -light.direction;
 		resultLight.visible = true;
@@ -95,8 +95,14 @@ export const calculateParallelLightIrradiance: string =
 export const calculateParallelLightTotalDiffuseIrradiance: string =
     `// #pragma unroll_loop
     for(int i = 0; i < numParallelLights; i++) {
-        calcParallelLightIrradiance(uParallelLights[i], geometry, resultLight);
-        float diffuseFactor = dot(geometry.normal, resultLight.direction);
-        vec3 diffuseColor = PI * resultLight.color;
+        calcParallelLightIrradiance(uParallelLights[i], geometry, idtLight);
+        float diffuseFactor = dot(geometry.normal, idtLight.direction);
+        vec3 diffuseColor = PI * idtLight.color;
         vDirectResult += saturate(diffuseFactor) * diffuseColor;
     }`;
+
+export const calculateParallelLightTotalSpecularIrradiance: string = `
+for(int i = 0; i < numParallelLights; i++) {
+    calcParallelLightIrradiance(uParallelLights[i], geometry, idtLight);
+    blinnPhong(idtLight, geometry, bpMtl, rftLight);
+}`;

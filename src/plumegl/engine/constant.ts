@@ -30,6 +30,7 @@ export const CONSTANT = {
     DEFAULTLIGHTSHADER: Symbol('DefaultLightShader'),
     BASICLINESHADER: Symbol('BasicLineShader'),
     DEFAULTLAMBERTSHADER: Symbol('DefaultLambertShader'),
+    DEFAULTPHONGSHADER: Symbol('DefaultPhongShader'),
     CAMERA: Symbol('Camera'),
     PERSPECTIVECAMERA: Symbol('PerspectiveCamera'),
     ORTHOCAMERA: Symbol('OrthoCamera'),
@@ -37,6 +38,8 @@ export const CONSTANT = {
     VEC3: Symbol('Vec3'),
     QUAT: Symbol('Quat'),
     MAT3: Symbol('Mat3'),
+    BASEGEOMETRY: Symbol('BaseGeometry'),
+    SPHEREGEOMETRY: Symbol('SphereGeometry'),
 };
 Object.freeze(CONSTANT);
 
