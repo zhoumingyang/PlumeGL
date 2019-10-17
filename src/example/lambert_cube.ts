@@ -1,68 +1,5 @@
 import { PlumeGL } from '../plumegl/engine/plumegl';
 
-let cubeVert: number[] = [
-    //front
-    -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0,
-    -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0,
-    //right
-    1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, -1.0,
-    1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
-    //back
-    1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, 1.0, -1.0,
-    -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-    //left
-    -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
-    -1.0, 1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0,
-    //top
-    1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, 1.0,
-    1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
-    //bottom
-    1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
-    1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, -1.0
-];
-
-let cubeNormal: number[] = [
-    //front
-    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-    //right
-    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-    //back
-    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0,
-    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0,
-    //left
-    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
-    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
-    //top
-    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-    //bottom
-    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-];
-
-let cubeUv: number[] = [
-    //front
-    -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
-    -1.0, -1.0, 1.0, -1.0, 1.0, 1.0,
-    //right
-    1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
-    1.0, -1.0, 1.0, -1.0, 1.0, 1.0,
-    //back
-    1.0, 1.0, 1.0, -1.0, -1.0, 1.0,
-    -1.0, 1.0, 1.0, -1.0, -1.0, -1.0,
-    //left
-    -1.0, 1.0, -1.0, -1.0, -1.0, -1.0,
-    -1.0, 1.0, -1.0, -1.0, -1.0, 1.0,
-    //top
-    1.0, 1.0, -1.0, 1.0, 1.0, 1.0,
-    1.0, 1.0, -1.0, 1.0, -1.0, 1.0,
-    //bottom
-    1.0, -1.0, 1.0, -1.0, -1.0, -1.0,
-    1.0, -1.0, -1.0, -1.0, -1.0, -1.0
-];
-
 let cav: any;
 const createGLContext = () => {
     cav = document.getElementById('main-canvas');
@@ -84,16 +21,19 @@ export const DrawLambertCube = () => {
         return;
     }
 
+    const cubeGeometry = new PlumeGL.CubeGeometry();
+    cubeGeometry.create(2, 2, 2);
+
     const normaLines: any[] = [];
     const offset: number = 0.2;
-    for (let i = 0, len = cubeVert.length; i < len; i += 6) {
+    for (let i = 0, len = cubeGeometry.vertices.length; i < len; i += 6) {
         for (let j = i; j + 2 < (i + 6); j += 3) {
-            let s: number[] = [cubeVert[j], cubeVert[j + 1], cubeVert[j + 2]];
-            let n: number[] = [cubeNormal[j], cubeNormal[j + 1], cubeNormal[j + 2]];
+            let s: number[] = [cubeGeometry.vertices[j], cubeGeometry.vertices[j + 1], cubeGeometry.vertices[j + 2]];
+            let n: number[] = [cubeGeometry.normals[j], cubeGeometry.normals[j + 1], cubeGeometry.normals[j + 2]];
             let e: number[] = [
-                cubeVert[j] + cubeNormal[j] * offset,
-                cubeVert[j + 1] + cubeNormal[j + 1] * offset,
-                cubeVert[j + 2] + cubeNormal[j + 2] * offset];
+                cubeGeometry.vertices[j] + cubeGeometry.normals[j] * offset,
+                cubeGeometry.vertices[j + 1] + cubeGeometry.normals[j + 1] * offset,
+                cubeGeometry.vertices[j + 2] + cubeGeometry.normals[j + 2] * offset];
             normaLines.push([s, e]);
         }
     }
@@ -133,13 +73,10 @@ export const DrawLambertCube = () => {
     scene.addLight(parallelLight);
     scene.addLight(pointLight);
 
-    const vertices = new Float32Array(cubeVert);
-    const normals = new Float32Array(cubeNormal);
-    const uvs = new Float32Array(cubeUv);
     const mesh = new PlumeGL.Mesh();
-    mesh.setGeometryAttribute(vertices, defaultLambertShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
-    mesh.setGeometryAttribute(normals, defaultLambertShader.normalAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
-    mesh.setGeometryAttribute(uvs, defaultLambertShader.uvAttribute, gl.STATIC_DRAW, 2, gl.FLOAT, false);
+    mesh.setGeometryAttribute(cubeGeometry.vertices, defaultLambertShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
+    mesh.setGeometryAttribute(cubeGeometry.normals, defaultLambertShader.normalAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
+    mesh.setGeometryAttribute(cubeGeometry.uvs, defaultLambertShader.uvAttribute, gl.STATIC_DRAW, 2, gl.FLOAT, false);
     mesh.initBufferAttributePoint(defaultLambertShader);
 
     let p3d = new PlumeGL.P3D(mesh);
