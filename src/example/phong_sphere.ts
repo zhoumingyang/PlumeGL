@@ -23,12 +23,26 @@ export const DrawPhongSphere = () => {
 
     const defaultPhongShader = new PlumeGL.DefaultPhongShader();
     defaultPhongShader.initParameters();
+    const basicLineShader = new PlumeGL.BasicLineShader();
+    basicLineShader.initParameters();
 
     const sphereGeometry = new PlumeGL.SphereGeometry();
     sphereGeometry.create(2.0, 50, 50);
 
+    const normalLines: any[] = [];
+    const offset: number = 0.3;
+    for (let i = 0, len = sphereGeometry.indices.length; i < len; i++) {
+        let s: number[] = [sphereGeometry.vertices[i * 3], sphereGeometry.vertices[i * 3 + 1], sphereGeometry.vertices[i * 3 + 2]];
+        let e: number[] = [
+            sphereGeometry.vertices[i * 3] + sphereGeometry.normals[i * 3] * offset,
+            sphereGeometry.vertices[i * 3 + 1] + sphereGeometry.normals[i * 3 + 1] * offset,
+            sphereGeometry.vertices[i * 3 + 2] + sphereGeometry.normals[i * 3 + 2] * offset];
+        normalLines.push([s, e]);
+    }
+
     const scene = new PlumeGL.Scene();
     scene.add(defaultPhongShader);
+    scene.add(basicLineShader);
     scene.setSceneState(new PlumeGL.State());
     scene.state.setClearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.setClear(true, false, false);
@@ -43,6 +57,7 @@ export const DrawPhongSphere = () => {
     parallelLight.setDirection(new PlumeGL.Vec3(-2.0, -2.0, -2.0));
 
     const pointLight = new PlumeGL.PointLight();
+    pointLight.color = new PlumeGL.Vec3(1.0, 1.0, 1.0);
     pointLight.setPosition(new PlumeGL.Vec3(4, 3.5, -0.5));
     pointLight.setAttenuation({
         constant: 1.0,
@@ -51,7 +66,7 @@ export const DrawPhongSphere = () => {
     });
 
     scene.addLight(ambientLight);
-    scene.addLight(pointLight);
+    scene.addLight(parallelLight);
 
     const mesh = new PlumeGL.Mesh();
     mesh.setGeometryAttribute(sphereGeometry.vertices, defaultPhongShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
@@ -62,6 +77,16 @@ export const DrawPhongSphere = () => {
 
     let p3d = new PlumeGL.P3D(mesh);
     defaultPhongShader.addDrawObject(p3d);
+
+    for (let i = 0; i < normalLines.length; i++) {
+        const line = new PlumeGL.Line();
+        const data: Float32Array = Float32Array.from(normalLines[i][0].concat(normalLines[i][1]));
+        line.setGeometryAttribute(data, basicLineShader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
+        line.initBufferAttributePoint(basicLineShader);
+        p3d = new PlumeGL.P3D(line);
+        basicLineShader.addDrawObject(p3d);
+        p3d.setSelfUniform(basicLineShader.uniform.color, [0.4, 0.4, 1.0]);
+    }
 
     const fieldOfView: number = 45.0 * Math.PI / 180;
     const aspect: number = 512 / 512;
@@ -108,6 +133,16 @@ export const DrawPhongSphere = () => {
                     shaderObj.setUniformData(shaderObj.uniform.normalMatrix, [normalMat.value, false]);
                     obj.prepare();
                     mesh.draw(undefined, { cnt: sphereGeometry.indices.length, type: gl.UNSIGNED_SHORT });
+                    obj.unPrepare();
+                });
+            }
+            if (shaderObj.type === PlumeGL.CONSTANT.BASICLINESHADER) {
+                shaderObj.forEachDraw((obj: any) => {
+                    const modelMat = tmpModelMat.clone().multiply(obj.getModelMat());
+                    const MVP = activeCamera.getProjectViewModelMat(modelMat);
+                    shaderObj.setUniformData(shaderObj.uniform.mvp, [MVP.value, false]);
+                    obj.prepare();
+                    obj.draw({ start: 0, cnt: 2 });
                     obj.unPrepare();
                 });
             }
