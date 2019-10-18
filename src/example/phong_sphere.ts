@@ -77,6 +77,8 @@ export const DrawPhongSphere = () => {
 
     let p3d = new PlumeGL.P3D(mesh);
     defaultPhongShader.addDrawObject(p3d);
+    p3d.setSelfUniform('uSpecPower', [12.0]);
+    p3d.setSelfUniform('uSpecular', [1.0, 1.0, 1.0]);
 
     for (let i = 0; i < normalLines.length; i++) {
         const line = new PlumeGL.Line();
@@ -118,6 +120,16 @@ export const DrawPhongSphere = () => {
         // tmpModelMat = tmpModelMat.rotate(cubeRotation * 0.7, yAxis);
         // tmpNormalMat = tmpNormalMat.rotate(cubeRotation, zAxis);
         // tmpNormalMat = tmpNormalMat.rotate(cubeRotation * 0.7, yAxis);
+
+        let si = Math.sin(now);
+        if (now % 2 === 0) {
+            si = Math.sin(now);
+        } else {
+            si = Math.cos(now);
+        }
+
+        parallelLight.setDirection(new PlumeGL.Vec3(-2.0 * -si, -2.0 * -si, -2.0 * -si));
+        pointLight.setPosition(new PlumeGL.Vec3(4 * -si, 3.5 * -si, -0.5 * -si));
 
         scene.state.stateChange();
         scene.forEachRender((shaderObj: any) => {
