@@ -106,7 +106,7 @@ export const DefaultPhongFrag =
         GeometryAttribute geometry;
         geometry.position = -vViewPosition;
         geometry.normal = normal;
-        geometry.viewDir = normalize(vWorldPosition);
+        geometry.viewDir = normalize(vViewPosition);
 
         int numParallelLights = uNumParallelLight;
         int numPointLights = uNumPointLight;

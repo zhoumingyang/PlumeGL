@@ -65,7 +65,7 @@ export const BlinnPhongCalculate: string =
         vec3 irradiance = diffuseFactor * directLight.color;
 
         // do physical correct
-        irradiance *= PI;
+        // irradiance *= PI;
 
         reflectedLight.directDiffuse += irradiance * diffuseBrdf(material.diffuseColor);
         reflectedLight.directSpecular += irradiance * blinnPhongBrdf(directLight, geometry, material.specularColor, material.specularShininess) * material.specularStrength;
