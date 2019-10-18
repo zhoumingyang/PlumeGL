@@ -86,3 +86,5 @@ scene.forEachRender((shaderObj: any) => {
 ![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/bufferuniform.png)<br>
 ### 示例：fbo multisample
 ![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/multifbo.png)<br>
+### 示例：phong shpere
+![image](https://github.com/zhoumingyang/PlumeGL/blob/master/demoimage/phongsphere.png)<br>
