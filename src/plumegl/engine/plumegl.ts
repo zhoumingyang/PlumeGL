@@ -31,6 +31,7 @@ import { PointLight } from '../light/pointlight';
 import { SpotLight } from '../light/spotlight';
 import { DefaultLightShader } from '../shader/defaultlight';
 import { BasicLineShader } from '../shader/basicline';
+import { DefaultColorShader } from '../shader/defaultcolor';
 import { DefaultLambertShader } from '../shader/lambert';
 import { DefaultPhongShader } from '../shader/phong';
 import { PerspectiveCamera } from '../camera/perspectivecamera';
@@ -88,6 +89,7 @@ export const PlumeGL = {
     SpotLight,
     DefaultLightShader,
     BasicLineShader,
+    DefaultColorShader,
     DefaultLambertShader,
     DefaultPhongShader,
     PerspectiveCamera,

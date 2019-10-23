@@ -40,7 +40,7 @@ const appRun = () => {
     // DrawPointLightCube();
     // DrawSpotLightPlane();
     // DrawOrthoCube();
-    // DrawLambertCube();
-    DrawPhongSphere();
+    DrawLambertCube();
+    // DrawPhongSphere();
 };
 appRun();
