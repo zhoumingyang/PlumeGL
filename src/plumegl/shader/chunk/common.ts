@@ -64,10 +64,15 @@ struct PhongMaterialAttribute {
     float specularStrength;
 };`;
 
-export const InverseTransformDirection: string = 
-`vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
-    return normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );
-}`;
+export const InverseTransformDirection: string =
+    `vec3 inverseTransformDirection(in vec3 dir, in mat4 matrix) {
+        return normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );
+    }`;
+
+export const TransformDirection: string =
+    `vec3 transformDirection( in vec3 dir, in mat4 matrix ) {
+        return normalize( ( matrix * vec4( dir, 0.0 ) ).xyz );
+    }`;
 
 export const Common = {
     UniformMatrix,
@@ -76,5 +81,6 @@ export const Common = {
     ILA,
     RLA,
     BPM,
-    InverseTransformDirection
+    InverseTransformDirection,
+    TransformDirection
 };
