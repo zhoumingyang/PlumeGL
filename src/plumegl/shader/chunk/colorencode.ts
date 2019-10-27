@@ -9,7 +9,7 @@ export const MapTexelToLinear: string =
     }`;
 
 export const LinearToneMapping: string =
-    `vec 3 linearToneMapping(vec3 color) {
+    `vec3 linearToneMapping(vec3 color) {
         return uToneMappingExposure * color;
     }`;
 

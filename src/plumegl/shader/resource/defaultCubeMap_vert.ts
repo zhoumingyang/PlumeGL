@@ -9,13 +9,14 @@ export const DefaultCubeMapVert: string =
     
     out vec3 vWorldDirection;
 
+    uniform mat4 uModelMatrix;
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
     
     ${TransformDirection}
 
     void main() {
-        vWorldDirection = transformDirection(aPosition, modelMatrix);
+        vWorldDirection = transformDirection(aPosition, uModelMatrix);
 
         vec4 mvPosition = vec4(aPosition, 1.0);
 

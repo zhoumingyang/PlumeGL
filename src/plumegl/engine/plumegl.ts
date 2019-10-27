@@ -34,6 +34,7 @@ import { BasicLineShader } from '../shader/basicline';
 import { DefaultColorShader } from '../shader/defaultcolor';
 import { DefaultLambertShader } from '../shader/lambert';
 import { DefaultPhongShader } from '../shader/phong';
+import { DefaultCubeMapShader } from '../shader/cubemap';
 import { PerspectiveCamera } from '../camera/perspectivecamera';
 import { OrthoCamera } from "../camera/orthocamera";
 import { SphereGeometry } from '../geometry/sphere';
@@ -92,6 +93,7 @@ export const PlumeGL = {
     DefaultColorShader,
     DefaultLambertShader,
     DefaultPhongShader,
+    DefaultCubeMapShader,
     PerspectiveCamera,
     OrthoCamera,
     SphereGeometry,

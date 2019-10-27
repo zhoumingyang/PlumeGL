@@ -23,14 +23,16 @@ export const DefaultCubeMapFrag: string =
 
     ${LinearToOutputTexel}
 
+    out vec4 fragColor;
+
     void main() {
         
-        vec4 texColor = textureCube(uCube, vec3(uFlip * vWorldDirection.x, vWorldDirection.yz));
-        gl_FragColor = mapTexelToLinear( texColor );
-        gl_FragColor.a *= uOpacity;
+        vec4 texColor = texture(uCube, vec3(uFlip * vWorldDirection.x, vWorldDirection.yz));
+        fragColor = mapTexelToLinear( texColor );
+        fragColor.a *= uOpacity;
 
-        gl_FragColor.rgb = linearToneMapping(gl_FragColor.rgb);
+        fragColor.rgb = linearToneMapping(fragColor.rgb);
 
-        gl_FragColor = linearToOutputTexel( gl_FragColor );
+        fragColor = linearToOutputTexel(fragColor);
     }
 `;
