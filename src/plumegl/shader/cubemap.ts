@@ -23,7 +23,6 @@ export class DefaultCubeMapShader extends Shader {
             exposure: 'uToneMappingExposure',
         };
 
-
         this.selfUniform = {
             "uOpacity": {
                 type: 'float',
