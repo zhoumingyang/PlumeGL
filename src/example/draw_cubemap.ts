@@ -20,28 +20,24 @@ export const DrawCubeMap = () => {
 
     const defaultCubeMap = new PlumeGL.DefaultCubeMapShader();
     defaultCubeMap.initParameters();
-    const defaultColor = new PlumeGL.DefaultColorShader();
-    defaultColor.initParameters();
 
     const imgUrls: string[] = [
         '../../res/cubemap/right.jpg', '../../res/cubemap/left.jpg',
-        '../../res/cubemap/front.jpg', '../../res/cubemap/back.jpg',
-        '../../res/cubemap/up.jpg', '../../res/cubemap/down.jpg'];
+        '../../res/cubemap/up.jpg', '../../res/cubemap/down.jpg',
+        '../../res/cubemap/front.jpg', '../../res/cubemap/back.jpg'];
 
     const cubeGeometry = new PlumeGL.CubeGeometry();
     cubeGeometry.create(200, 200, 200);
     const mesh = new PlumeGL.Mesh();
     mesh.setGeometryAttribute(cubeGeometry.vertices, defaultCubeMap.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
-    mesh.initBufferAttributePoint(defaultColor);
+    mesh.initBufferAttributePoint(defaultCubeMap);
 
     const cubTex = new PlumeGL.TextureCube();
     cubTex.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
 
     const p3d = new PlumeGL.P3D(mesh, cubTex);
     defaultCubeMap.addDrawObject(p3d);
-    // defaultColor.addDrawObject(p3d);
     p3d.setSelfUniform('uOpacity', [1.0]);
-    // p3d.setSelfUniform('uColor', [1.0, 0.0, 0.0])
     p3d.setSelfUniform('uFlip', [1.0]);
     p3d.setSelfUniform('uToneMappingExposure', [1.0]);
 
@@ -59,18 +55,26 @@ export const DrawCubeMap = () => {
 
     const scene = new PlumeGL.Scene();
     scene.add(defaultCubeMap);
-    // scene.add(defaultColor);
     scene.setSceneState(new PlumeGL.State());
     scene.state.setClearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.setClear(true, false, false);
     scene.state.setDepthTest(true);
-    // scene.state.setCullFace(true, PlumeGL.STATE.CULLFACE_FRONT);
-    // scene.state.setCullFace(true, PlumeGL.STATE.CULLFACE_BACK);
-    // scene.state.setCullFace(true, PlumeGL.STATE.CULLFACE_FRONT_AND_BACK);
+    scene.state.setDepthFunc(PlumeGL.STATE.FUNC_LESSEQUAL);
     scene.setActiveCamera(camera);
+
+    const axis = new PlumeGL.Vec3(0.0, 1.0, 0.0);
+    let angle = 0.0;
 
     function render() {
         scene.stateChange();
+        angle += 0.005;
+        let rad = angle * Math.PI / 180;
+        if (rad > 2 * Math.PI) {
+            angle = 0.0;
+        }
+        const cameraRotMat = new PlumeGL.Mat4().rotate(angle, axis);
+        camera.updateMat();
+        camera.applyMat(cameraRotMat);
         scene.forEachRender((shaderObj: any) => {
             const projectMat = camera.getProjectMat();
             if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCUBEMAPSHADER) {
@@ -85,17 +89,6 @@ export const DrawCubeMap = () => {
                     obj.unPrepare();
                 });
             }
-            if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOLORSHADER) {
-                shaderObj.forEachDraw((obj: any) => {
-                    // const modelMat = obj.getModelMat();
-                    // const modelViewMat = camera.getModelViewMat(modelMat);
-                    // shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [modelViewMat.value, false]);
-                    // shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [projectMat.value, false]);
-                    // obj.prepare();
-                    // obj.draw({ start: 0, cnt: 36 });
-                    // obj.unPrepare();
-                });
-            }
         });
         requestAnimationFrame(render);
     }
@@ -108,23 +101,25 @@ export const DrawCubeMap = () => {
         let img: any[] = new Array(urls.length);
         let len: number = urls.length;
         for (let i = 0; i < len; i++) {
-            img[i] = new Image();
-            img[i].crossOrigin = 'anonymous';
-            img[i].onload = () => {
-                cnt++;
-                if (cnt === 6) {
-                    for (let j = 0; j < cnt; j++) {
-                        cubTex.setTextureFromImage(img[i], j);
-                        cubTex.wrapMode(true);
-                        cubTex.filterMode(true, false, false);
+            ((j) => {
+                img[j] = new Image();
+                img[j].crossOrigin = 'anonymous';
+                img[j].onload = () => {
+                    cnt++;
+                    if (cnt === 6) {
+                        for (let k = 0; k < cnt; k++) {
+                            cubTex.setTextureFromImage(img[k], k);
+                            cubTex.wrapMode(true);
+                            cubTex.filterMode(true, false, false);
+                        }
+                        cubTex.mipmap();
                     }
-                    cubTex.mipmap();
-                    requestAnimationFrame(render);
                 }
-            }
-            img[i].src = urls[i];
+                img[j].src = urls[j];
+            })(i);
         }
     }
 
     loadTextureCube(imgUrls);
+    requestAnimationFrame(render);
 };
