@@ -19,6 +19,7 @@ import { DrawSpotLightPlane } from './example/spot_light_plane';
 import { DrawOrthoCube } from './example/orthocamera_cube';
 import { DrawLambertCube } from './example/lambert_cube';
 import { DrawPhongSphere } from './example/phong_sphere';
+import { DrawCubeMap } from './example/draw_cubemap';
 
 const appRun = () => {
     // SampleObject();
@@ -40,7 +41,8 @@ const appRun = () => {
     // DrawPointLightCube();
     // DrawSpotLightPlane();
     // DrawOrthoCube();
-    DrawLambertCube();
+    // DrawLambertCube();
     // DrawPhongSphere();
+    DrawCubeMap();
 };
 appRun();

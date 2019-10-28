@@ -63,6 +63,10 @@ export class Camera {
 
     }
 
+    public applyMat(mat: Mat4): void {
+        this.viewMatrix.multiply(mat);
+    }
+
     public updateView(view: View): void {
         this.position = view.position || this.position;
         this.target = view.target || this.target;
