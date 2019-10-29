@@ -1,5 +1,10 @@
+import { InverseTransformDirection } from '../chunk/common';
+
 export const DefaultEnvMapVert: string =
     `#version 300 es
+    precision highp float;
+    precision highp int;
+    
     layout(location = 0) in vec3 aPosition;
     layout(location = 1) in vec3 aNormal;
 
@@ -13,6 +18,8 @@ export const DefaultEnvMapVert: string =
     uniform float uRefractionRatio;
     uniform vec3 uCameraPosition;
 
+    ${InverseTransformDirection}
+
     void main() {
 
         vec4 mvPosition = uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
@@ -24,6 +31,6 @@ export const DefaultEnvMapVert: string =
 
         vec3 worldNormal = inverseTransformDirection(uNormalMatrix * vec3(aNormal), viewMatrix);
 
-        vReflect = reflect(cameraToVertex, worldNormal);
+        vReflect = reflect(cameraToVertex, worldNormal, uRefractionRatio);
 
     }`;
