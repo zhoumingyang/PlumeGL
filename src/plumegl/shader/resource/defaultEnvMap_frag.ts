@@ -1,3 +1,5 @@
+import { EnvMapTexelToLinear } from '../chunk/colorencode';
+
 export const DefaultEnvMapFrag: string =
     `#version 300 es
     precision highp float;
@@ -5,14 +7,16 @@ export const DefaultEnvMapFrag: string =
     
     in vec3 vReflect;
 
-    uniform float uflipEnvMap;
+    uniform float uEnvMapFlip;
     uniform samplerCube uEnvMap;
 
     out vec4 fragColor;
 
+    ${EnvMapTexelToLinear}
+
     void main() {
         vec3 reflectVec = vReflect;
-        vec4 envColor = textureCube(uEnvMap, vec3( uflipEnvMap * reflectVec.x, reflectVec.yz ));
+        vec4 envColor = textureCube(uEnvMap, vec3( uEnvMapFlip * reflectVec.x, reflectVec.yz ));
         envColor = envMapTexelToLinear( envColor );
         fragColor = envColor;
     }

@@ -33,6 +33,7 @@ export const CONSTANT = {
     DEFAULTPHONGSHADER: Symbol('DefaultPhongShader'),
     DEFAULTCOLORSHADER: Symbol('DefaultColorShader'),
     DEFAULTCUBEMAPSHADER: Symbol('DefaultCubeMapShader'),
+    DEFAULTENVMAPSHADER: Symbol('DefaultEnvMapShader'),
     CAMERA: Symbol('Camera'),
     PERSPECTIVECAMERA: Symbol('PerspectiveCamera'),
     ORTHOCAMERA: Symbol('OrthoCamera'),
