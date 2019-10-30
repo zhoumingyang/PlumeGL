@@ -11,9 +11,9 @@ export const DefaultEnvMapVert: string =
     out vec3 vReflect;
     
     uniform mat4 uViewMatrix;
-    uniform mat4 uNormalMatrix;
     uniform mat4 uModelMatrix;
     uniform mat4 uProjectionMatrix;
+    uniform mat3 uNormalMatrix;
 
     uniform float uRefractionRatio;
     uniform vec3 uCameraPosition;
@@ -29,8 +29,8 @@ export const DefaultEnvMapVert: string =
 
         vec3 cameraToVertex = normalize(worldPosition.xyz - uCameraPosition);
 
-        vec3 worldNormal = inverseTransformDirection(uNormalMatrix * vec3(aNormal), viewMatrix);
+        vec3 worldNormal = inverseTransformDirection(uNormalMatrix * vec3(aNormal), uViewMatrix);
 
-        vReflect = reflect(cameraToVertex, worldNormal, uRefractionRatio);
+        vReflect = refract(cameraToVertex, worldNormal, uRefractionRatio);
 
     }`;

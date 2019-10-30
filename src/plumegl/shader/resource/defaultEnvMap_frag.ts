@@ -1,4 +1,4 @@
-import { EnvMapTexelToLinear } from '../chunk/colorencode';
+import { LinearToLinear, EnvMapTexelToLinear } from '../chunk/colorencode';
 
 export const DefaultEnvMapFrag: string =
     `#version 300 es
@@ -12,11 +12,13 @@ export const DefaultEnvMapFrag: string =
 
     out vec4 fragColor;
 
+    ${LinearToLinear}
+
     ${EnvMapTexelToLinear}
 
     void main() {
         vec3 reflectVec = vReflect;
-        vec4 envColor = textureCube(uEnvMap, vec3( uEnvMapFlip * reflectVec.x, reflectVec.yz ));
+        vec4 envColor = texture(uEnvMap, vec3( uEnvMapFlip * reflectVec.x, reflectVec.yz ));
         envColor = envMapTexelToLinear( envColor );
         fragColor = envColor;
     }
