@@ -20,7 +20,7 @@ import { P3D } from '../core/p3d';
 import { UniformBuffer } from '../buffer/uniformbuffer';
 import { Scene } from '../core/scene';
 import { Query } from '../aid/query';
-import { CONSTANT, STATE } from './constant';
+import { CONSTANT, STATE, ENVMAP } from './constant';
 import { FeedBack } from '../aid/feedback';
 import { GL, WGL, WGL2 } from './gl';
 import { Util } from '../util/util';
@@ -35,6 +35,7 @@ import { DefaultColorShader } from '../shader/defaultcolor';
 import { DefaultLambertShader } from '../shader/lambert';
 import { DefaultPhongShader } from '../shader/phong';
 import { DefaultCubeMapShader } from '../shader/cubemap';
+import { DefaultEnvMapShader } from '../shader/envmap';
 import { PerspectiveCamera } from '../camera/perspectivecamera';
 import { OrthoCamera } from "../camera/orthocamera";
 import { SphereGeometry } from '../geometry/sphere';
@@ -80,6 +81,7 @@ export const PlumeGL = {
     Query,
     CONSTANT,
     STATE,
+    ENVMAP,
     FeedBack,
     initGL,
     Util,
@@ -94,6 +96,7 @@ export const PlumeGL = {
     DefaultLambertShader,
     DefaultPhongShader,
     DefaultCubeMapShader,
+    DefaultEnvMapShader,
     PerspectiveCamera,
     OrthoCamera,
     SphereGeometry,

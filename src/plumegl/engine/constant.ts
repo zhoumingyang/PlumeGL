@@ -33,6 +33,7 @@ export const CONSTANT = {
     DEFAULTPHONGSHADER: Symbol('DefaultPhongShader'),
     DEFAULTCOLORSHADER: Symbol('DefaultColorShader'),
     DEFAULTCUBEMAPSHADER: Symbol('DefaultCubeMapShader'),
+    DEFAULTENVMAPSHADER: Symbol('DefaultEnvMapShader'),
     CAMERA: Symbol('Camera'),
     PERSPECTIVECAMERA: Symbol('PerspectiveCamera'),
     ORTHOCAMERA: Symbol('OrthoCamera'),
@@ -100,3 +101,9 @@ export const TEXTURE = {
     COMPARE_FUNC: 'COMPARE_FUNC'
 };
 Object.freeze(TEXTURE);
+
+export const ENVMAP = {
+    REFLECT: 'reflect',
+    REFRACT: 'refract',
+};
+Object.freeze(ENVMAP);
