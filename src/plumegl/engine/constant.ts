@@ -101,3 +101,9 @@ export const TEXTURE = {
     COMPARE_FUNC: 'COMPARE_FUNC'
 };
 Object.freeze(TEXTURE);
+
+export const ENVMAP = {
+    REFLECT: 'reflect',
+    REFRACT: 'refract',
+};
+Object.freeze(ENVMAP);

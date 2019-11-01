@@ -1,8 +1,7 @@
 import { InverseTransformDirection } from '../chunk/common';
 
 export const DefaultEnvMapVert: string =
-    `#version 300 es
-    precision highp float;
+    `precision highp float;
     precision highp int;
     
     layout(location = 0) in vec3 aPosition;
@@ -31,6 +30,10 @@ export const DefaultEnvMapVert: string =
 
         vec3 worldNormal = inverseTransformDirection(uNormalMatrix * vec3(aNormal), uViewMatrix);
 
-        vReflect = refract(cameraToVertex, worldNormal, uRefractionRatio);
+        #ifdef ENVMAP_REFLECTION
+            vReflect = reflect(cameraToVertex, worldNormal);
+        #else
+            vReflect = refract(cameraToVertex, worldNormal, uRefractionRatio);
+        #endif
 
     }`;
