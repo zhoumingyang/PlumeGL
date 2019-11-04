@@ -1,4 +1,4 @@
-const DefaultDashLineFrag: string =
+export const DefaultDashLineFrag: string =
     `#version 300 es
     precision highp float;
     precision highp int;
@@ -14,7 +14,7 @@ const DefaultDashLineFrag: string =
  
     void main() {
         float wholeSize = uDashSize + uGapSize;
-        if (mod(vLineDistance, wholeSize) > dashSize) {
+        if (mod(vLineLength, wholeSize) > uDashSize) {
             discard;
         }
         fragColor = vec4(uColor.rgb, uOpacity);

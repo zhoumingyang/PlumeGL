@@ -1,4 +1,4 @@
-const DefaultDashLineVert: string =
+export const DefaultDashLineVert: string =
     `#version 300 es
     precision highp float;
     precision highp int;
