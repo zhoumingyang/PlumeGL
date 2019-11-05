@@ -21,6 +21,7 @@ import { DrawLambertCube } from './example/lambert_cube';
 import { DrawPhongSphere } from './example/phong_sphere';
 import { DrawCubeMap } from './example/draw_cubemap';
 import { DrawEnvMap } from './example/draw_envmap';
+import { DrawDashLine } from './example/draw_dashline';
 
 const appRun = () => {
     // SampleObject();
@@ -45,6 +46,7 @@ const appRun = () => {
     // DrawLambertCube();
     // DrawPhongSphere();
     // DrawCubeMap();
-    DrawEnvMap();
+    // DrawEnvMap();
+    DrawDashLine();
 };
 appRun();
