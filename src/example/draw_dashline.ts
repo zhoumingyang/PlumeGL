@@ -40,7 +40,7 @@ export const DrawDashLine = (): void => {
 
     const COUNT: number = 6;
     const line = new PlumeGL.Line();
-    line.setDrawType(gl.LINE_LOOP);
+    line.setDrawType(gl.LINE_STRIP);
     const position2D = createPolygon(COUNT, 0.15);
     let position3D: number[] = [];
     for (let i = 0; i < position2D.length; i += 2) {
@@ -51,9 +51,9 @@ export const DrawDashLine = (): void => {
     line.initBufferAttributePoint(defaultDashLineShader);
     const p3d = new PlumeGL.P3D(line);
     defaultDashLineShader.addDrawObject(p3d);
-    p3d.setSelfUniform("uColor", [1.0, 0.0, 0.0]);
-    p3d.setSelfUniform("uDashSize",[0.5]);
-    p3d.setSelfUniform("uGapSize",[0.5]);
+    p3d.setSelfUniform("uColor", [1.0, 0.0, 1.0]);
+    p3d.setSelfUniform("uDashSize", [0.1]);
+    p3d.setSelfUniform("uGapSize", [0.1]);
 
     scene.state.stateChange();
     const proMat = new PlumeGL.Mat4();

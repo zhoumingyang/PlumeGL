@@ -14,8 +14,8 @@ export const DefaultDashLineFrag: string =
  
     void main() {
         float wholeSize = uDashSize + uGapSize;
+        fragColor = vec4(uColor.rgb, uOpacity);
         if (mod(vLineLength, wholeSize) > uDashSize) {
             discard;
         }
-        fragColor = vec4(uColor.rgb, uOpacity);
     }`;
