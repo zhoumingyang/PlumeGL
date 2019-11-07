@@ -44,7 +44,9 @@ export const CONSTANT = {
     MAT3: Symbol('Mat3'),
     BASEGEOMETRY: Symbol('BaseGeometry'),
     SPHEREGEOMETRY: Symbol('SphereGeometry'),
-    CUBEGEOMETRY: Symbol('CubeGeometry')
+    CUBEGEOMETRY: Symbol('CubeGeometry'),
+    PLANEGEOMETRY: Symbol('PlaneGeometry'),
+    RINGGEOMETRY: Symbol('RingGeometry')
 };
 Object.freeze(CONSTANT);
 
