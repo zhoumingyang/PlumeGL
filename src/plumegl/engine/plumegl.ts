@@ -41,6 +41,8 @@ import { PerspectiveCamera } from '../camera/perspectivecamera';
 import { OrthoCamera } from "../camera/orthocamera";
 import { SphereGeometry } from '../geometry/sphere';
 import { CubeGeometry } from '../geometry/cube';
+import { PlaneGeometry } from '../geometry/plane';
+import { TorusGeometry } from '../geometry/torus';
 import { MathApi } from '../math/api';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
@@ -103,6 +105,8 @@ export const PlumeGL = {
     OrthoCamera,
     SphereGeometry,
     CubeGeometry,
+    PlaneGeometry,
+    TorusGeometry,
     Mat4: MathApi.Mat4,
     Vec3: MathApi.Vec3,
     Quat: MathApi.Quat,

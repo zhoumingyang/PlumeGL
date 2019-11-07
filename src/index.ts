@@ -22,6 +22,7 @@ import { DrawPhongSphere } from './example/phong_sphere';
 import { DrawCubeMap } from './example/draw_cubemap';
 import { DrawEnvMap } from './example/draw_envmap';
 import { DrawDashLine } from './example/draw_dashline';
+import { DrawBasicGeometry } from './example/draw_basic_geometry';
 
 const appRun = () => {
     // SampleObject();
@@ -47,6 +48,7 @@ const appRun = () => {
     // DrawPhongSphere();
     // DrawCubeMap();
     // DrawEnvMap();
-    DrawDashLine();
+    // DrawDashLine();
+    DrawBasicGeometry();
 };
 appRun();
