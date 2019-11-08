@@ -1,6 +1,5 @@
 import { BaseGeometry } from './basegeometry';
 import { CONSTANT } from "../engine/constant";
-import { Vec3 } from "../math/vec3";
 
 export class SphereGeometry extends BaseGeometry {
     public type: Symbol = CONSTANT.SPHEREGEOMETRY;
