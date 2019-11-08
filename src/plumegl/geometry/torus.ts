@@ -3,7 +3,6 @@ import { CONSTANT } from "../engine/constant";
 
 export class TorusGeometry extends BaseGeometry {
     public type: Symbol = CONSTANT.TORUSGEOMETRY;
-
     constructor() {
         super();
     }

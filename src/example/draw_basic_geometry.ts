@@ -49,13 +49,17 @@ const initMeshFromGeometry = (geometry: any, shader: any, gl: any, option?: any)
     if (shader.uvAttribute) {
         mesh.setGeometryAttribute(geometry.normals, shader.normalAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
     }
-    if (option.setIndices) {
+    if (!option || option.setIndices) {
         mesh.setIndices(geometry.indices, gl.STATIC_DRAW);
     }
+    mesh.initBufferAttributePoint(shader);
     return mesh;
 }
 
 const initDrawObject = (shader: any, gl: any): any => {
+    const planeGeometry = new PlumeGL.PlaneGeometry();
+    planeGeometry.create(50, 50, 5, 5);
+    const planeMesh = initMeshFromGeometry(planeGeometry, shader, gl);
 
 }
 
@@ -66,8 +70,12 @@ export const DrawBasicGeometry = () => {
         return;
     }
 
+    const defaultColorShader = new PlumeGL.DefaultColorShader();
+    defaultColorShader.initParameters();
+
     //init scene
     const scene = initScene();
+    scene.add(defaultColorShader);
 
     //init camera
     const camera = initCamera();
