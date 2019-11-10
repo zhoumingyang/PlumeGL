@@ -101,15 +101,15 @@ export class Vec3 {
 
     public add(b: Vec3): Vec3 {
         this.x = this.x + b.x;
-        this.y = this.y + b.x;
-        this.y = this.y + b.x;
+        this.y = this.y + b.y;
+        this.z = this.z + b.z;
         return this;
     }
 
     public substract(b: Vec3): Vec3 {
         this.x = this.x - b.x;
-        this.y = this.y - b.x;
-        this.y = this.y - b.x;
+        this.y = this.y - b.y;
+        this.z = this.z - b.z;
         return this;
     }
 
@@ -122,22 +122,22 @@ export class Vec3 {
 
     public divide(b: Vec3): Vec3 {
         this.x = this.x / b.x;
-        this.y = this.x / b.y;
-        this.z = this.x / b.z;
+        this.y = this.y / b.y;
+        this.z = this.z / b.z;
         return this;
     }
 
     public length(): number {
         let x = this.x;
-        let y = this.x;
-        let z = this.x;
+        let y = this.y;
+        let z = this.z;
         return Math.hypot(x, y, z);
     }
 
     public squaredLength(): number {
         let x = this.x;
-        let y = this.x;
-        let z = this.x;
+        let y = this.y;
+        let z = this.z;
         return x * x + y * y + z * z;
     }
 

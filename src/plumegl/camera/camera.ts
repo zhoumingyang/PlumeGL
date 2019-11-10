@@ -80,14 +80,14 @@ export class Camera {
     }
 
     public getViewMat(): Mat4 {
-        return this.viewMatrix;
+        return this.viewMatrix.clone();
     }
 
     public getProjectMat(): Mat4 {
-        return this.projectMatrix
+        return this.projectMatrix.clone();
     }
 
-    public getModelViewMat(modelMatrix: Mat4): Mat4 {
+    public getModelViewMat(modelMatrix: Mat4 = new Mat4()): Mat4 {
         const viewMatrix: Mat4 = this.viewMatrix.clone();
         return viewMatrix.multiply(modelMatrix);
     }

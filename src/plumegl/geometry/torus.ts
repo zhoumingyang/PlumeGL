@@ -1,5 +1,10 @@
+/**
+ *https://threejs.org/docs/index.html#api/en/geometries/TorusBufferGeometry
+ */
+
 import { BaseGeometry } from './basegeometry';
 import { CONSTANT } from "../engine/constant";
+import { Vec3 } from "../math/vec3";
 
 export class TorusGeometry extends BaseGeometry {
     public type: Symbol = CONSTANT.TORUSGEOMETRY;
@@ -7,49 +12,47 @@ export class TorusGeometry extends BaseGeometry {
         super();
     }
 
-    create(slices: number = 10, loops: number = 20, ir: number = 1, or: number = 3): void {
+    create(radius: number = 1, tube: number = 0.4,
+        radialSegments: number = 8, tubularSegments: number = 6,
+        arc: number = Math.PI * 2): void {
 
-        slices = Math.floor(slices);
-        loops = Math.floor(loops);
+        let vertexPositionData: number[] = [];
+        let normalData: number[] = [];
+        let textureCoordData: number[] = [];
+        let indexData: number[] = [];
 
-        let vertexPositionData = [];
-        let normalData = [];
-        let textureCoordData = [];
-        let indexData = [];
+        for (let j = 0; j <= radialSegments; j++) {
+            for (let i = 0; i <= tubularSegments; i++) {
+                let u: number = i / tubularSegments * arc;
+                let v: number = j / radialSegments * Math.PI * 2;
 
-        for (let i = 0; i < slices; i++) {
-            const v: number = i / slices;
-            const slcAngle: number = v * 2 * Math.PI;
-
-            const cosSlice: number = Math.cos(slcAngle);
-            const sinSlice: number = Math.sin(slcAngle);
-            const sliceRad: number = ir * cosSlice + or;
-
-            for (let j = 0; j < loops; j++) {
-                const u: number = j / loops;
-                const loopAngle: number = u * 2 * Math.PI;
-                const cosLoops: number = Math.cos(loopAngle);
-                const sinLoops: number = Math.sin(loopAngle);
-
-                const x: number = sliceRad * cosLoops;
-                const y: number = sliceRad * sinLoops;
-                const z: number = ir * sinSlice;
+                let x: number = (radius + tube * Math.cos(v)) * Math.cos(u);
+                let y: number = (radius + tube * Math.cos(v)) * Math.sin(u);
+                let z: number = tube * Math.sin(v);
 
                 vertexPositionData.push(x, y, z);
-                normalData.push(cosLoops * sinSlice, sinLoops * sinSlice, cosSlice);
-                textureCoordData.push(u, v);
+
+                let cx: number = radius * Math.cos(u);
+                let cy: number = radius * Math.sin(u);
+
+                let ver = new Vec3(x, y, z);
+                let cer = new Vec3(cx, cy, 0);
+                let nor = ver.clone().substract(cer.clone()).normalize();
+                normalData.push(nor.x, nor.y, nor.z);
+
+                textureCoordData.push(i / tubularSegments, j / radialSegments);
             }
         }
 
-        const cnt: number = loops + 1;
-        for (let i = 0; i < slices; i++) {
-            let v1: number = i * cnt;
-            let v2: number = v1 + cnt;
-            for (let j = 0; j < loops; j++) {
-                indexData.push(v1, v1 + 1, v2);
-                indexData.push(v2, v1 + 1, v2 + 1);
-                v1 += 1;
-                v2 += 1;
+        for (let j = 1; j <= radialSegments; j++) {
+            for (let i = 1; i <= tubularSegments; i++) {
+                let a: number = (tubularSegments + 1) * j + i - 1;
+                let b: number = (tubularSegments + 1) * (j - 1) + i - 1;
+                let c: number = (tubularSegments + 1) * (j - 1) + i;
+                let d: number = (tubularSegments + 1) * j + i;
+
+                indexData.push(a, b, d);
+                indexData.push(b, c, d);
             }
         }
 
