@@ -180,6 +180,8 @@ export const DrawOffscreenEdge = () => {
     defaultColorShader.initParameters();
     const defaultSobelShader = new PlumeGL.DefaultSobelShader();
     defaultSobelShader.initParameters();
+    const defaultCopyShader = new PlumeGL.DefaultCopyShader();
+    defaultCopyShader.initParameters();
 
     //init scene
     const scene = initScene();
@@ -191,10 +193,14 @@ export const DrawOffscreenEdge = () => {
     scene.setActiveCamera(camera);
 
     const { frameBuffer, texture } = initFBO(gl);
+    // PlumeGL.Util.errorCheck(gl);
 
     initDrawPass1Object(defaultColorShader);
-    initDrawPass2Object(defaultSobelShader, texture);
+    initDrawPass2Object(defaultCopyShader, texture);
+    // PlumeGL.Util.errorCheck(gl);
 
     drawPass1(scene, gl, frameBuffer);
+    // PlumeGL.Util.errorCheck(gl);
     drawPass2(scene, gl);
+    // PlumeGL.Util.errorCheck(gl);
 }

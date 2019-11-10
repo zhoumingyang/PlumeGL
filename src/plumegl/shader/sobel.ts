@@ -1,4 +1,4 @@
-import { DefaultSobleVert } from './resource/defaultsobel_vert';
+import { DefaultSobelVert } from './resource/defaultsobel_vert';
 import { DefaultSobelFrag } from './resource/defaultsobel_frag';
 import { Shader } from './shader';
 import { CONSTANT } from '../engine/constant';
@@ -12,7 +12,7 @@ export class DefaultSobelShader extends Shader {
     public normalAttribute: string = "aUv";
 
     constructor(gl?: WGL | WGL2) {
-        super(DefaultSobleVert, DefaultSobelFrag, undefined, gl);
+        super(DefaultSobelVert, DefaultSobelFrag, undefined, gl);
 
         this.selfUniform = {
             "uResolution": {

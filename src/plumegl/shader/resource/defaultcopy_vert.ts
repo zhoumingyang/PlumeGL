@@ -1,4 +1,4 @@
-export const DefaultSobelVert: string =
+export const DefaultCopyVert: string =
     `#version 300 es
     precision highp float;
     precision highp int;
