@@ -38,28 +38,10 @@ const initCamera = (): any => {
     return camera;
 };
 
-const initMeshFromGeometry = (geometry: any, shader: any, gl: any, option?: any): any => {
-    const mesh = new PlumeGL.Mesh();
-    if (shader.positionAttribute) {
-        mesh.setGeometryAttribute(geometry.vertices, shader.positionAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
-    }
-    if (shader.normalAttribute) {
-        mesh.setGeometryAttribute(geometry.normals, shader.normalAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
-    }
-    if (shader.uvAttribute) {
-        mesh.setGeometryAttribute(geometry.normals, shader.normalAttribute, gl.STATIC_DRAW, 3, gl.FLOAT, false);
-    }
-    if (!option || option.setIndices) {
-        mesh.setIndices(geometry.indices, gl.STATIC_DRAW);
-    }
-    mesh.initBufferAttributePoint(shader);
-    return mesh;
-}
-
-const initDrawObject = (shader: any, gl: any): any => {
+const initDrawObject = (shader: any): any => {
     const planeGeometry = new PlumeGL.PlaneGeometry();
     planeGeometry.create(25, 25, 5, 5);
-    const planeMesh = initMeshFromGeometry(planeGeometry, shader, gl);
+    const planeMesh = new PlumeGL.Mesh().initFromGeometry(planeGeometry, shader);
     const planeP3d = new PlumeGL.P3D(planeMesh);
     shader.addDrawObject(planeP3d);
     planeP3d.setSelfUniform('uColor', [0.5, 0.0, 0.7]);
@@ -68,7 +50,7 @@ const initDrawObject = (shader: any, gl: any): any => {
 
     const torusGeometry = new PlumeGL.TorusGeometry();
     torusGeometry.create(1.5, 0.5, 12, 24, Math.PI * 2);
-    const torusMesh = initMeshFromGeometry(torusGeometry, shader, gl);
+    const torusMesh = new PlumeGL.Mesh().initFromGeometry(torusGeometry, shader);
     const torusP3d = new PlumeGL.P3D(torusMesh);
     shader.addDrawObject(torusP3d);
     torusP3d.setSelfUniform('uColor', [0.5, 0.6, 0.0]);
@@ -79,7 +61,7 @@ const initDrawObject = (shader: any, gl: any): any => {
 
     const cubeGeometry = new PlumeGL.CubeGeometry();
     cubeGeometry.create(2.0, 2.0, 2.0);
-    const cubeMesh = initMeshFromGeometry(cubeGeometry, shader, gl);
+    const cubeMesh = new PlumeGL.Mesh().initFromGeometry(cubeGeometry, shader);
     const cubeP3d = new PlumeGL.P3D(cubeMesh);
     shader.addDrawObject(cubeP3d);
     cubeP3d.setSelfUniform('uColor', [0.3, 0.8, 0.5]);
@@ -92,7 +74,7 @@ const initDrawObject = (shader: any, gl: any): any => {
 
     const sphereGeometry = new PlumeGL.SphereGeometry();
     sphereGeometry.create(2.0, 30, 30);
-    const sphereMesh = initMeshFromGeometry(sphereGeometry, shader, gl);
+    const sphereMesh = new PlumeGL.Mesh().initFromGeometry(sphereGeometry, shader);
     const sphereP3d = new PlumeGL.P3D(sphereMesh);
     shader.addDrawObject(sphereP3d);
     sphereP3d.setSelfUniform('uColor', [0.8, 0.8, 0.8]);
@@ -125,7 +107,7 @@ export const DrawBasicGeometry = () => {
     const camera = initCamera();
     scene.setActiveCamera(camera);
 
-    initDrawObject(defaultColorShader, gl);
+    initDrawObject(defaultColorShader);
 
     scene.state.change();
     scene.forEachRender((shaderObj: any) => {
