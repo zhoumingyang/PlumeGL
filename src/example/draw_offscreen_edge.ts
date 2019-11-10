@@ -59,24 +59,24 @@ const initFBO = (gl: any): any => {
     frameBuffer.setDrawBuffers([gl.COLOR_ATTACHMENT0]);
     PlumeGL.FrameBuffer.unBind();
 
-    return frameBuffer;
+    return { frameBuffer, texture };
 };
 
-const initDrawObject = (shader: any): any => {
+const initDrawPass1Object = (shaderPass1: any): any => {
     const planeGeometry = new PlumeGL.PlaneGeometry();
     planeGeometry.create(25, 25, 5, 5);
-    const planeMesh = new PlumeGL.Mesh().initFromGeometry(planeGeometry, shader);
+    const planeMesh = new PlumeGL.Mesh().initFromGeometry(planeGeometry, shaderPass1);
     const planeP3d = new PlumeGL.P3D(planeMesh);
-    shader.addDrawObject(planeP3d);
+    shaderPass1.addDrawObject(planeP3d);
     planeP3d.setSelfUniform('uColor', [0.5, 0.0, 0.7]);
     const rotMat = new PlumeGL.Mat4().rotate(-Math.PI / 2, new PlumeGL.Vec3(1.0, 0.0, 0.0));
     planeP3d.modelMatrix = rotMat.clone();
 
     const torusGeometry = new PlumeGL.TorusGeometry();
     torusGeometry.create(1.5, 0.5, 12, 24, Math.PI * 2);
-    const torusMesh = new PlumeGL.Mesh().initFromGeometry(torusGeometry, shader);
+    const torusMesh = new PlumeGL.Mesh().initFromGeometry(torusGeometry, shaderPass1);
     const torusP3d = new PlumeGL.P3D(torusMesh);
-    shader.addDrawObject(torusP3d);
+    shaderPass1.addDrawObject(torusP3d);
     torusP3d.setSelfUniform('uColor', [0.5, 0.6, 0.0]);
     const transMat = new PlumeGL.Mat4().translate(new PlumeGL.Vec3(-3.0, 4.0, 1.5));
     const scaleMat = new PlumeGL.Mat4().scale(new PlumeGL.Vec3(1.0, 1.0, 1.0));
@@ -85,9 +85,9 @@ const initDrawObject = (shader: any): any => {
 
     const cubeGeometry = new PlumeGL.CubeGeometry();
     cubeGeometry.create(2.0, 2.0, 2.0);
-    const cubeMesh = new PlumeGL.Mesh().initFromGeometry(cubeGeometry, shader);
+    const cubeMesh = new PlumeGL.Mesh().initFromGeometry(cubeGeometry, shaderPass1);
     const cubeP3d = new PlumeGL.P3D(cubeMesh);
-    shader.addDrawObject(cubeP3d);
+    shaderPass1.addDrawObject(cubeP3d);
     cubeP3d.setSelfUniform('uColor', [0.3, 0.8, 0.5]);
     const tm = new PlumeGL.Mat4().translate(new PlumeGL.Vec3(5.0, 2.0, 2.4));
     const rm = new PlumeGL.Mat4().rotate(-Math.PI / 4, new PlumeGL.Vec3(0.0, 1.0, 0.0));
@@ -98,9 +98,9 @@ const initDrawObject = (shader: any): any => {
 
     const sphereGeometry = new PlumeGL.SphereGeometry();
     sphereGeometry.create(2.0, 30, 30);
-    const sphereMesh = new PlumeGL.Mesh().initFromGeometry(sphereGeometry, shader);
+    const sphereMesh = new PlumeGL.Mesh().initFromGeometry(sphereGeometry, shaderPass1);
     const sphereP3d = new PlumeGL.P3D(sphereMesh);
-    shader.addDrawObject(sphereP3d);
+    shaderPass1.addDrawObject(sphereP3d);
     sphereP3d.setSelfUniform('uColor', [0.8, 0.8, 0.8]);
     const stm = new PlumeGL.Mat4().translate(new PlumeGL.Vec3(0.8, 1.5, 0.0));
     sphereP3d.modelMatrix = stm.clone();
@@ -111,24 +111,61 @@ const initDrawObject = (shader: any): any => {
         cubeP3d,
         sphereP3d,
     };
-}
+};
 
-const draw = (scene: any, gl: any) => {
+const initDrawPass2Object = (shaderPass2: any, texture: any): any => {
+    const screenPlaneGeometry = new PlumeGL.ScreenPlaneGeometry();
+    screenPlaneGeometry.create();
+    const screenPlaneMesh = new PlumeGL.Mesh().initFromGeometry(screenPlaneGeometry, shaderPass2);
+    const screenPlaneP3d = new PlumeGL.P3D(screenPlaneMesh, texture);
+    shaderPass2.addDrawObject(screenPlaneP3d);
+
+    return {
+        screenPlaneP3d
+    };
+};
+
+const drawPass1 = (scene: any, gl: any, fbo?: any) => {
     scene.state.change();
+    fbo && fbo.bind();
     scene.forEachRender((shaderObj: any) => {
-        const pm = scene.activeCamera.getProjectMat();
-        shaderObj.forEachDraw((obj: any) => {
-            const mv = scene.activeCamera.getModelViewMat(obj.getModelMat());
+        if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOLORSHADER) {
+            const pm = scene.activeCamera.getProjectMat();
+            shaderObj.forEachDraw((obj: any) => {
+                const mv = scene.activeCamera.getModelViewMat(obj.getModelMat());
+                shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
+                shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pm.value, false]);
+                obj.prepare();
+                if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
+                    obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
+                } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
+                    obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
+                }
+                obj.unPrepare();
+            });
+        }
+    });
+};
+
+const drawPass2 = (scene: any, gl: any) => {
+    scene.state.change();
+    PlumeGL.FrameBuffer.unBind();
+    const mv = new PlumeGL.Mat4();
+    const pro = new PlumeGL.Mat4();
+    scene.forEachRender((shaderObj: any) => {
+        if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTSOBELSHADER) {
             shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
-            shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pm.value, false]);
-            obj.prepare();
-            if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
-                obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
-            } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
-                obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
-            }
-            obj.unPrepare();
-        });
+            shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pro.value, false]);
+            shaderObj.forEachDraw((obj: any) => {
+                obj.prepare();
+                if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
+                    obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
+                } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
+                    obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
+                }
+                obj.unPrepare();
+            });
+        }
     });
 };
 
@@ -147,14 +184,17 @@ export const DrawOffscreenEdge = () => {
     //init scene
     const scene = initScene();
     scene.add(defaultColorShader);
+    scene.add(defaultSobelShader);
 
     //init camera
     const camera = initCamera();
     scene.setActiveCamera(camera);
 
-    initDrawObject(defaultColorShader);
+    const { frameBuffer, texture } = initFBO(gl);
 
-    const fbo = initFBO(gl);
+    initDrawPass1Object(defaultColorShader);
+    initDrawPass2Object(defaultSobelShader, texture);
 
-    draw(scene, gl);
+    drawPass1(scene, gl, frameBuffer);
+    drawPass2(scene, gl);
 }

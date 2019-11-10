@@ -47,7 +47,8 @@ export const CONSTANT = {
     SPHEREGEOMETRY: Symbol('SphereGeometry'),
     CUBEGEOMETRY: Symbol('CubeGeometry'),
     PLANEGEOMETRY: Symbol('PlaneGeometry'),
-    TORUSGEOMETRY: Symbol('TORUSEGEOMETRY')
+    TORUSGEOMETRY: Symbol('TORUSEGEOMETRY'),
+    SCREENPLANEGEOMETRY: Symbol('ScreenPlaneGeometry')
 };
 Object.freeze(CONSTANT);
 
