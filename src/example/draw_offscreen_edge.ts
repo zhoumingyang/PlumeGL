@@ -59,6 +59,7 @@ const initFBO = (gl: any): any => {
     frameBuffer.setDrawBuffers([gl.COLOR_ATTACHMENT0]);
     PlumeGL.FrameBuffer.unBind();
 
+    frameBuffer.statusCheck();
     return { frameBuffer, texture };
 };
 
@@ -153,7 +154,7 @@ const drawPass2 = (scene: any, gl: any) => {
     const mv = new PlumeGL.Mat4();
     const pro = new PlumeGL.Mat4();
     scene.forEachRender((shaderObj: any) => {
-        if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTSOBELSHADER) {
+        if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOPYSHADER) {
             shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
             shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pro.value, false]);
             shaderObj.forEachDraw((obj: any) => {
@@ -186,21 +187,17 @@ export const DrawOffscreenEdge = () => {
     //init scene
     const scene = initScene();
     scene.add(defaultColorShader);
-    scene.add(defaultSobelShader);
+    scene.add(defaultCopyShader);
 
     //init camera
     const camera = initCamera();
     scene.setActiveCamera(camera);
 
     const { frameBuffer, texture } = initFBO(gl);
-    // PlumeGL.Util.errorCheck(gl);
 
     initDrawPass1Object(defaultColorShader);
     initDrawPass2Object(defaultCopyShader, texture);
-    // PlumeGL.Util.errorCheck(gl);
 
     drawPass1(scene, gl, frameBuffer);
-    // PlumeGL.Util.errorCheck(gl);
     drawPass2(scene, gl);
-    // PlumeGL.Util.errorCheck(gl);
 }
