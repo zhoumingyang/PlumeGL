@@ -32,3 +32,9 @@ export const EnvMapTexelToLinear: string =
     `vec4 envMapTexelToLinear(vec4 value) {
         return linearToLinear(value);
     }`;
+
+export const RgbToLuminance: string =
+    `float rgbToLuminance(in vec3 color) {
+        const vec3 lum = vec3(0.2126, 0.7152, 0.0722);
+        return dot(lum, color);
+    }`;

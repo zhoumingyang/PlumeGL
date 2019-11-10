@@ -90,7 +90,7 @@ export const DefaultPhongFrag =
         ReflectLightAttribute rftLight = ReflectLightAttribute(vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ));
 
         #ifdef USE_TEXTURE
-            vec4 texelColor = texture2D( uTexture, vUv );
+            vec4 texelColor = texture( uTexture, vUv );
             diffuseColor *= texelColor;
         #endif
 
