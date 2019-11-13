@@ -44,21 +44,21 @@ const initFBO = (gl: any): any => {
 
     //init texture
     const texture = new PlumeGL.Texture2D();
+    texture.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
     texture.setTextureFromData(null, [512, 512]);
     texture.filterMode(false, false, false);
     texture.setLevelSection(0, 0);
     frameBuffer.attachTexture(texture, gl.COLOR_ATTACHMENT0);
-    PlumeGL.Texture2D.unBind();
+    // PlumeGL.Texture2D.unBind();
 
     //init depth render buffer
-    const depthBuffer = new PlumeGL.RenderBuffer(gl.DEPTH_COMPONENT24);
+    const depthBuffer = new PlumeGL.RenderBuffer();
     depthBuffer.setSize(512, 512);
     depthBuffer.allocate();
     frameBuffer.attachRenderBuffer(depthBuffer, gl.DEPTH_ATTACHMENT);
 
     frameBuffer.setDrawBuffers([gl.COLOR_ATTACHMENT0]);
     PlumeGL.FrameBuffer.unBind();
-
     frameBuffer.statusCheck();
     return { frameBuffer, texture };
 };
@@ -107,7 +107,7 @@ const initDrawPass1Object = (shaderPass1: any): any => {
     sphereP3d.modelMatrix = stm.clone();
 
     return {
-        planeP3d,
+        // planeP3d,
         torusP3d,
         cubeP3d,
         sphereP3d,
@@ -127,9 +127,11 @@ const initDrawPass2Object = (shaderPass2: any, texture: any): any => {
 };
 
 const drawPass1 = (scene: any, gl: any, fbo?: any) => {
-    scene.state.change();
-    fbo && fbo.bind();
+    // scene.state.change();
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.viewport(0, 0, 512, 512);
     scene.forEachRender((shaderObj: any) => {
+        fbo && fbo.bind();
         if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOLORSHADER) {
             const pm = scene.activeCamera.getProjectMat();
             shaderObj.forEachDraw((obj: any) => {
@@ -149,7 +151,9 @@ const drawPass1 = (scene: any, gl: any, fbo?: any) => {
 };
 
 const drawPass2 = (scene: any, gl: any) => {
-    scene.state.change();
+    // scene.state.change();
+    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.viewport(0, 0, 512, 512);
     PlumeGL.FrameBuffer.unBind();
     const mv = new PlumeGL.Mat4();
     const pro = new PlumeGL.Mat4();
@@ -157,6 +161,7 @@ const drawPass2 = (scene: any, gl: any) => {
         if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOPYSHADER) {
             shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
             shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pro.value, false]);
+            shaderObj.setUniformData(shaderObj.uniform.texture, [0]);
             shaderObj.forEachDraw((obj: any) => {
                 obj.prepare();
                 if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
@@ -170,9 +175,20 @@ const drawPass2 = (scene: any, gl: any) => {
     });
 };
 
+let scene: any, gl: any, frameBuffer: any;
+
+const drawScene = () => {
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+    drawPass1(scene, gl, frameBuffer);
+    drawPass2(scene, gl);
+    // drawPass1(scene, gl);
+    requestAnimationFrame(drawScene);
+}
+
 export const DrawOffscreenEdge = () => {
 
-    const gl = createGLContext();
+    gl = createGLContext();
     if (!gl) {
         return;
     }
@@ -185,7 +201,7 @@ export const DrawOffscreenEdge = () => {
     defaultCopyShader.initParameters();
 
     //init scene
-    const scene = initScene();
+    scene = initScene();
     scene.add(defaultColorShader);
     scene.add(defaultCopyShader);
 
@@ -193,11 +209,10 @@ export const DrawOffscreenEdge = () => {
     const camera = initCamera();
     scene.setActiveCamera(camera);
 
-    const { frameBuffer, texture } = initFBO(gl);
-
+    const obj = initFBO(gl);
+    frameBuffer = obj.frameBuffer;
     initDrawPass1Object(defaultColorShader);
-    initDrawPass2Object(defaultCopyShader, texture);
+    initDrawPass2Object(defaultCopyShader, obj.texture);
 
-    drawPass1(scene, gl, frameBuffer);
-    drawPass2(scene, gl);
+    drawScene();
 }

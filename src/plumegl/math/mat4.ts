@@ -133,6 +133,26 @@ export class Mat4 {
         }
         det = 1.0 / det;
 
+        let out = new Mat4();
+
+        out.value[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+        out.value[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+        out.value[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+        out.value[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+        out.value[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+        out.value[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+        out.value[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+        out.value[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+        out.value[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+        out.value[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+        out.value[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+        out.value[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+        out.value[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+        out.value[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+        out.value[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+        out.value[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+
+        return out;
     }
 
     public multiply(m: Mat4): Mat4 {

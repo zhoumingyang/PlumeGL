@@ -11,8 +11,8 @@ export class ScreenPlaneGeometry extends BaseGeometry {
     create(): void {
 
         const vertexPositionData: number[] = [
-            -1.0 / 2, -1.0 / 2, 0.0, 1.0 / 2, -1.0 / 2, 0.0, 1.0 / 2, 1.0 / 2, 0.0,
-            -1.0 / 2, -1.0 / 2, 0.0, 1.0 / 2, 1.0 / 2, 0.0, -1.0 / 2, 1.0 / 2, 0.0
+            -1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0,
+            -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, 1.0, 0.0
         ];
 
         const textureCoordData: number[] = [

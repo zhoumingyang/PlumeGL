@@ -68,7 +68,7 @@ export class RenderBuffer {
         const _gl: WGL | WGL2 = this.gl;
         _gl.bindRenderbuffer(_gl.RENDERBUFFER, this.instance);
         _gl.renderbufferStorage(_gl.RENDERBUFFER, this.format, this.width, this.height);
-        _gl.bindRenderbuffer(_gl.RENDERBUFFER, null);
+        //_gl.bindRenderbuffer(_gl.RENDERBUFFER, null);
     }
 
     private _renderBufferStorageMultisample(samples: number = 4): void {
