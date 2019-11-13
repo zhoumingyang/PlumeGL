@@ -52,7 +52,7 @@ const appRun = () => {
     // DrawEnvMap();
     // DrawDashLine();
     // DrawBasicGeometry();
-    // DrawOffscreenEdge();
-    DrawFrameBufferTest();
+    DrawOffscreenEdge();
+    // DrawFrameBufferTest();
 };
 appRun();

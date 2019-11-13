@@ -15,9 +15,10 @@ const createGLContext = () => {
 const initScene = (): any => {
     const scene = new PlumeGL.Scene();
     scene.setSceneState(new PlumeGL.State());
-    scene.state.setClearColor(0.0, 0.0, 0.0, 1.0);
-    scene.state.setClear(true, false, false);
+    // scene.state.setClearColor(0.0, 0.0, 0.0, 1.0);
+    scene.state.setClear(true, true, false);
     scene.state.setDepthTest(true);
+    scene.state.setViewPort(0, 0, 512, 512);
     return scene;
 };
 
@@ -127,11 +128,10 @@ const initDrawPass2Object = (shaderPass2: any, texture: any): any => {
 };
 
 const drawPass1 = (scene: any, gl: any, fbo?: any) => {
-    // scene.state.change();
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.viewport(0, 0, 512, 512);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    scene.state.change();
+    fbo && fbo.bind();
     scene.forEachRender((shaderObj: any) => {
-        fbo && fbo.bind();
         if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOLORSHADER) {
             const pm = scene.activeCamera.getProjectMat();
             shaderObj.forEachDraw((obj: any) => {
@@ -151,9 +151,8 @@ const drawPass1 = (scene: any, gl: any, fbo?: any) => {
 };
 
 const drawPass2 = (scene: any, gl: any) => {
-    // scene.state.change();
-    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.viewport(0, 0, 512, 512);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    scene.state.change();
     PlumeGL.FrameBuffer.unBind();
     const mv = new PlumeGL.Mat4();
     const pro = new PlumeGL.Mat4();
@@ -178,7 +177,6 @@ const drawPass2 = (scene: any, gl: any) => {
 let scene: any, gl: any, frameBuffer: any;
 
 const drawScene = () => {
-    gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
     drawPass1(scene, gl, frameBuffer);
     drawPass2(scene, gl);
