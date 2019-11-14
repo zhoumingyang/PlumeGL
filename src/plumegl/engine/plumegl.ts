@@ -39,6 +39,7 @@ import { DefaultEnvMapShader } from '../shader/envmap';
 import { DefaultDashLineShader } from '../shader/dashline';
 import { DefaultSobelShader } from '../shader/sobel';
 import { DefaultCopyShader } from '../shader/copy';
+import { DefaultImageProcessShader } from '../shader/imageprocess';
 import { PerspectiveCamera } from '../camera/perspectivecamera';
 import { OrthoCamera } from "../camera/orthocamera";
 import { SphereGeometry } from '../geometry/sphere';
@@ -106,6 +107,7 @@ export const PlumeGL = {
     DefaultDashLineShader,
     DefaultSobelShader,
     DefaultCopyShader,
+    DefaultImageProcessShader,
     PerspectiveCamera,
     OrthoCamera,
     SphereGeometry,
