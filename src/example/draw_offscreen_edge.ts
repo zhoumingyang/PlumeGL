@@ -15,7 +15,6 @@ const createGLContext = () => {
 const initScene = (): any => {
     const scene = new PlumeGL.Scene();
     scene.setSceneState(new PlumeGL.State());
-    // scene.state.setClearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.setClear(true, true, false);
     scene.state.setDepthTest(true);
     scene.state.setViewPort(0, 0, 512, 512);
@@ -39,6 +38,18 @@ const initCamera = (): any => {
     return camera;
 };
 
+const initAnotherCamera = (): any => {
+    const fov: number = 60.0 * Math.PI / 180;
+    const aspect: number = 512 / 512;
+    const zNear: number = 0.1;
+    const zFar: number = 1000.0;
+    const camera = new PlumeGL.PerspectiveCamera();
+    camera.setPersective(fov, aspect, zNear, zFar);
+    camera.setView(new PlumeGL.Vec3(0, 0, 2), new PlumeGL.Vec3(0, 0, 0), new PlumeGL.Vec3(0, 1, 0));
+    camera.updateMat();
+    return camera;
+};
+
 const initFBO = (gl: any): any => {
     const frameBuffer = new PlumeGL.FrameBuffer();
     frameBuffer.bind();
@@ -48,7 +59,8 @@ const initFBO = (gl: any): any => {
     texture.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
     texture.setTextureFromData(null, [512, 512]);
     texture.filterMode(false, false, false);
-    texture.setLevelSection(0, 0);
+    // texture.setLevelSection(0, 0);
+    texture.setWrapMode(gl.CLAMP_TO_EDGE);
     frameBuffer.attachTexture(texture, gl.COLOR_ATTACHMENT0);
     // PlumeGL.Texture2D.unBind();
 
@@ -131,6 +143,8 @@ const drawPass1 = (scene: any, gl: any, fbo?: any) => {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.change();
     fbo && fbo.bind();
+    const camera = initCamera();
+    scene.setActiveCamera(camera);
     scene.forEachRender((shaderObj: any) => {
         if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOLORSHADER) {
             const pm = scene.activeCamera.getProjectMat();
@@ -154,14 +168,16 @@ const drawPass2 = (scene: any, gl: any) => {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.change();
     PlumeGL.FrameBuffer.unBind();
-    const mv = new PlumeGL.Mat4();
-    const pro = new PlumeGL.Mat4();
+    const camera = initAnotherCamera();
+    scene.setActiveCamera(camera);
     scene.forEachRender((shaderObj: any) => {
         if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOPYSHADER) {
-            shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
-            shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pro.value, false]);
-            shaderObj.setUniformData(shaderObj.uniform.texture, [0]);
+            const pm = scene.activeCamera.getProjectMat();
             shaderObj.forEachDraw((obj: any) => {
+                const mv = scene.activeCamera.getModelViewMat(obj.getModelMat());
+                shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
+                shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pm.value, false]);
+                shaderObj.setUniformData(shaderObj.uniform.texture, [0]);
                 obj.prepare();
                 if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
                     obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
