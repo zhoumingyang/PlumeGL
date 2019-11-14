@@ -23,6 +23,8 @@ import { DrawCubeMap } from './example/draw_cubemap';
 import { DrawEnvMap } from './example/draw_envmap';
 import { DrawDashLine } from './example/draw_dashline';
 import { DrawBasicGeometry } from './example/draw_basic_geometry';
+import { DrawOffscreenEdge } from './example/draw_offscreen_edge';
+import { DrawFrameBufferTest } from './example/draw_framebuffer_test';
 
 const appRun = () => {
     // SampleObject();
@@ -49,6 +51,8 @@ const appRun = () => {
     // DrawCubeMap();
     // DrawEnvMap();
     // DrawDashLine();
-    DrawBasicGeometry();
+    // DrawBasicGeometry();
+    DrawOffscreenEdge();
+    // DrawFrameBufferTest();
 };
 appRun();

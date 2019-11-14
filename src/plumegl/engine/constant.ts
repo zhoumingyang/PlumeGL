@@ -35,6 +35,8 @@ export const CONSTANT = {
     DEFAULTCUBEMAPSHADER: Symbol('DefaultCubeMapShader'),
     DEFAULTENVMAPSHADER: Symbol('DefaultEnvMapShader'),
     DEFAULTDASHLINESHADER: Symbol('DefaultDashLineShader'),
+    DEFAULTSOBELSHADER: Symbol('DefaultSobelShader'),
+    DEFAULTCOPYSHADER: Symbol('DefaultCopyShader'),
     CAMERA: Symbol('Camera'),
     PERSPECTIVECAMERA: Symbol('PerspectiveCamera'),
     ORTHOCAMERA: Symbol('OrthoCamera'),
@@ -46,7 +48,8 @@ export const CONSTANT = {
     SPHEREGEOMETRY: Symbol('SphereGeometry'),
     CUBEGEOMETRY: Symbol('CubeGeometry'),
     PLANEGEOMETRY: Symbol('PlaneGeometry'),
-    TORUSGEOMETRY: Symbol('TORUSEGEOMETRY')
+    TORUSGEOMETRY: Symbol('TORUSEGEOMETRY'),
+    SCREENPLANEGEOMETRY: Symbol('ScreenPlaneGeometry')
 };
 Object.freeze(CONSTANT);
 

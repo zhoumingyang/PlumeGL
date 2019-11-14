@@ -35,7 +35,7 @@ export const DefaultLambertFrag: string =
         //计算自身的diffuse color以及纹理采样，作为间接光照的一部分
         vec4 diffuseColor = vec4(uDiffuse, uOpacity);
         #ifdef USE_TEXTURE
-            vec4 textureColor = texture2D(uTexture, vUv);
+            vec4 textureColor = texture(uTexture, vUv);
             diffuseColor *= textureColor;
         #endif
 
