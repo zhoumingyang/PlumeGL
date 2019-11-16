@@ -24,14 +24,20 @@ export class DefaultImageProcessShader extends Shader {
                 value: [1.0]
             },
             "uTexture": {
-                type: "uTexture",
+                type: "sampler2D",
                 value: [0]
             },
             "uTextureSize": {
-
+                type: "vec2",
+                value: [0, 0]
             },
             "uKernelWeight": {
-
+                type: "float",
+                value: [1]
+            },
+            "uKernel[0]": {
+                type: "float array",
+                value: [0, 0, 0, 0, 1, 0, 0, 0, 0]
             }
         };
 

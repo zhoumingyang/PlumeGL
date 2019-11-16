@@ -1,10 +1,10 @@
 export const DefaultImageProcessVert: string =
-    `#verison 300 es
+    `#version 300 es
     precision highp float;
     precision highp int;
 
-    location(layout = 0) in aPosition;
-    location(layout = 1) in aUv;
+    layout(location = 0) in vec2 aPosition;
+    layout(location = 1) in vec2 aUv;
 
     uniform vec2 uResolution;
     uniform float uFlipY;
