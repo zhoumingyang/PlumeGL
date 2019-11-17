@@ -46,12 +46,16 @@ export class DefaultImageProcessShader extends Shader {
             textureSize: 'uTextureSize',
             kernelWeight: 'uKernelWeight',
             resolution: 'uResolution',
-            flipY: 'uFlipY'
+            flipY: 'uFlipY',
+            kernel:'uKernel[0]',
         };
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {
-
+        super.addDrawObject(p3d);
+        if (p3d instanceof P3D && this.selfUniform) {
+            p3d.mountSelfUniform(this.selfUniform);
+        }
     }
 
 }

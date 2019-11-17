@@ -78,7 +78,13 @@ export class UniformFactory {
             let setF: Function;
             if (arguments.length === 1 && arguments[0].length !== undefined) {
                 setF = glUniformFunction(`${funcName}v`, gl);
-                setF && setF(location, arguments[0]);
+                if(setF) {
+                    if(setF === gl.uniform1fv) {
+                        gl.uniform1fv(location, arguments[0]);
+                    } else {
+                        setF(location, arguments[0]);
+                    }
+                }  
             } else if (arguments.length > 0) {
                 setF = glUniformFunction(funcName, gl);
                 setF && setF.apply(gl, Array.prototype.concat.apply(location, arguments));
