@@ -169,17 +169,35 @@ const drawPass1 = (scene: any, gl: any, fbo?: any) => {
 
 const drawPass2 = (scene: any, gl: any) => {
     PlumeGL.FrameBuffer.unBind(); 
-    gl.clearColor(0.0, 0.2, 0.3, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.stateChange();
-    const camera = initAnotherCamera();
-    scene.setActiveCamera(camera);
     scene.forEachRender((shaderObj: any) => {
         if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTCOPYSHADER) {
-            const pm = scene.activeCamera.getProjectMat();
             shaderObj.forEachDraw((obj: any) => {
-                const mv = scene.activeCamera.getModelViewMat(obj.getModelMat());
-                shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
-                shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pm.value, false]);
+                shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [new PlumeGL.Mat4().value, false]);
+                shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [new PlumeGL.Mat4().value, false]);
+                shaderObj.setUniformData(shaderObj.uniform.texture, [0]);
+                obj.prepare();
+                if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
+                    obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
+                } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
+                    obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
+                }
+                obj.unPrepare();
+            });
+        }
+    });
+};
+
+const drawPass3 = (scene: any, gl: any) => {
+    PlumeGL.FrameBuffer.unBind(); 
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    scene.state.stateChange();
+    scene.forEachRender((shaderObj: any) => {
+        if (shaderObj.type === PlumeGL.CONSTANT.DEFAULTSOBELSHADER) {
+            shaderObj.forEachDraw((obj: any) => {
+                shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [new PlumeGL.Mat4().value, false]);
+                shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [new PlumeGL.Mat4().value, false]);
                 shaderObj.setUniformData(shaderObj.uniform.texture, [0]);
                 obj.prepare();
                 if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
@@ -196,6 +214,7 @@ const drawPass2 = (scene: any, gl: any) => {
 const drawScene = () => {
     drawPass1(scene, gl, frameBuffer);
     drawPass2(scene, gl);
+    // drawPass3(scene, gl);
     // drawPass1(scene, gl);
     requestAnimationFrame(drawScene);
 }
@@ -218,6 +237,7 @@ export const DrawOffscreenEdge = () => {
     scene = initScene();
     scene.add(defaultColorShader);
     scene.add(defaultCopyShader);
+    scene.add(defaultSobelShader);
 
     //init camera
     const camera = initCamera();
@@ -228,6 +248,7 @@ export const DrawOffscreenEdge = () => {
     texture = obj.texture;
     initDrawPass1Object(defaultColorShader);
     initDrawPass2Object(defaultCopyShader, texture);
+    initDrawPass2Object(defaultSobelShader, texture);
 
     drawScene();
 }
