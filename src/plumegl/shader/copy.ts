@@ -9,7 +9,7 @@ import { Primitive } from '../primitive/primitive';
 export class DefaultCopyShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTCOPYSHADER;
     public positionAttribute: string = "aPosition";
-    public normalAttribute: string = "aUv";
+    public uvAttribute: string = "aUv";
 
     constructor(gl?: WGL | WGL2) {
         super(DefaultCopyVert, DefaultCopyFrag, undefined, gl);

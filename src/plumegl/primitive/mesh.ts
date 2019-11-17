@@ -39,7 +39,7 @@ export class Mesh extends Primitive {
             this.setGeometryAttribute(geometry.normals, shader.normalAttribute, this.gl.STATIC_DRAW, 3, this.gl.FLOAT, false);
         }
         if (shader.uvAttribute) {
-            this.setGeometryAttribute(geometry.normals, shader.normalAttribute, this.gl.STATIC_DRAW, 2, this.gl.FLOAT, false);
+            this.setGeometryAttribute(geometry.uvs, shader.uvAttribute, this.gl.STATIC_DRAW, 2, this.gl.FLOAT, false);
         }
         if (!option || option.setIndices) {
             this.setIndices(geometry.indices, this.gl.STATIC_DRAW);
