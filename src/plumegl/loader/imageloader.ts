@@ -13,6 +13,7 @@ export class ImageLoader {
                         onError(e);
                         console.warn(`load image error: ${url}`);
                     }
+                    console.error(e);
                 }
             }
         };

@@ -39,6 +39,7 @@ import { DefaultEnvMapShader } from '../shader/envmap';
 import { DefaultDashLineShader } from '../shader/dashline';
 import { DefaultSobelShader } from '../shader/sobel';
 import { DefaultCopyShader } from '../shader/copy';
+import { DefaultImageProcessShader } from '../shader/imageprocess';
 import { PerspectiveCamera } from '../camera/perspectivecamera';
 import { OrthoCamera } from "../camera/orthocamera";
 import { SphereGeometry } from '../geometry/sphere';
@@ -47,6 +48,7 @@ import { PlaneGeometry } from '../geometry/plane';
 import { TorusGeometry } from '../geometry/torus';
 import { ScreenPlaneGeometry } from '../geometry/screenplane';
 import { MathApi } from '../math/api';
+import { ImageLoader } from '../loader/imageloader';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     if (ele instanceof HTMLCanvasElement) {
@@ -106,6 +108,7 @@ export const PlumeGL = {
     DefaultDashLineShader,
     DefaultSobelShader,
     DefaultCopyShader,
+    DefaultImageProcessShader,
     PerspectiveCamera,
     OrthoCamera,
     SphereGeometry,
@@ -116,5 +119,6 @@ export const PlumeGL = {
     Mat4: MathApi.Mat4,
     Vec3: MathApi.Vec3,
     Quat: MathApi.Quat,
-    Mat3: MathApi.Mat3
+    Mat3: MathApi.Mat3,
+    ImageLoader
 };

@@ -37,6 +37,7 @@ export const CONSTANT = {
     DEFAULTDASHLINESHADER: Symbol('DefaultDashLineShader'),
     DEFAULTSOBELSHADER: Symbol('DefaultSobelShader'),
     DEFAULTCOPYSHADER: Symbol('DefaultCopyShader'),
+    DEFAULTIMAGEPROCESSSHADER: Symbol('DefaultImageProcessShader'),
     CAMERA: Symbol('Camera'),
     PERSPECTIVECAMERA: Symbol('PerspectiveCamera'),
     ORTHOCAMERA: Symbol('OrthoCamera'),

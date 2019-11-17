@@ -25,6 +25,7 @@ import { DrawDashLine } from './example/draw_dashline';
 import { DrawBasicGeometry } from './example/draw_basic_geometry';
 import { DrawOffscreenEdge } from './example/draw_offscreen_edge';
 import { DrawFrameBufferTest } from './example/draw_framebuffer_test';
+import { DrawImageProcess } from './example/draw_image_process';
 
 const appRun = () => {
     // SampleObject();
@@ -52,7 +53,8 @@ const appRun = () => {
     // DrawEnvMap();
     // DrawDashLine();
     // DrawBasicGeometry();
-    DrawOffscreenEdge();
+    // DrawOffscreenEdge();
     // DrawFrameBufferTest();
+    DrawImageProcess();
 };
 appRun();
