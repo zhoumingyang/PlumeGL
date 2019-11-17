@@ -1,5 +1,8 @@
 import { PlumeGL } from '../plumegl/engine/plumegl';
 
+let scene: any, gl: any, frameBuffer: any;
+let texture: any;
+
 let cav: any;
 const createGLContext = () => {
     cav = document.getElementById('main-canvas');
@@ -59,7 +62,7 @@ const initFBO = (gl: any): any => {
     texture.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
     texture.setTextureFromData(null, [512, 512]);
     texture.filterMode(false, false, false);
-    // texture.setLevelSection(0, 0);
+    texture.setLevelSection(0, 0);
     texture.setWrapMode(gl.CLAMP_TO_EDGE);
     frameBuffer.attachTexture(texture, gl.COLOR_ATTACHMENT0);
     // PlumeGL.Texture2D.unBind();
@@ -140,9 +143,9 @@ const initDrawPass2Object = (shaderPass2: any, texture: any): any => {
 };
 
 const drawPass1 = (scene: any, gl: any, fbo?: any) => {
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    scene.state.change();
     fbo && fbo.bind();
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    scene.state.stateChange();
     const camera = initCamera();
     scene.setActiveCamera(camera);
     scene.forEachRender((shaderObj: any) => {
@@ -165,9 +168,9 @@ const drawPass1 = (scene: any, gl: any, fbo?: any) => {
 };
 
 const drawPass2 = (scene: any, gl: any) => {
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    scene.state.change();
-    PlumeGL.FrameBuffer.unBind();
+    PlumeGL.FrameBuffer.unBind(); 
+    gl.clearColor(0.0, 0.2, 0.3, 1.0);
+    scene.state.stateChange();
     const camera = initAnotherCamera();
     scene.setActiveCamera(camera);
     scene.forEachRender((shaderObj: any) => {
@@ -190,10 +193,7 @@ const drawPass2 = (scene: any, gl: any) => {
     });
 };
 
-let scene: any, gl: any, frameBuffer: any;
-
 const drawScene = () => {
-    gl.enable(gl.DEPTH_TEST);
     drawPass1(scene, gl, frameBuffer);
     drawPass2(scene, gl);
     // drawPass1(scene, gl);
@@ -225,8 +225,9 @@ export const DrawOffscreenEdge = () => {
 
     const obj = initFBO(gl);
     frameBuffer = obj.frameBuffer;
+    texture = obj.texture;
     initDrawPass1Object(defaultColorShader);
-    initDrawPass2Object(defaultCopyShader, obj.texture);
+    initDrawPass2Object(defaultCopyShader, texture);
 
     drawScene();
 }
