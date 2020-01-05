@@ -8,6 +8,7 @@ import { PointLight } from '../light/pointlight';
 import { ParallelLight } from '../light/parallellight';
 import { SpotLight } from '../light/spotlight';
 import { Camera } from '../camera/camera';
+import { Node } from './node';
 
 let uuid: number = 0;
 export class Scene {
@@ -21,6 +22,7 @@ export class Scene {
     public spotLights: any;
     public activeCamera: Camera;
     public cameras: any;
+    public rootNode: Node = new Node();
     static MAX_AMBIENT_LIGHTS = 10;
     static MAX_PARALLEL_LIGHTS = 10;
     static MAX_POINT_LIGHTS = 10;
@@ -176,9 +178,9 @@ export class Scene {
             const spotLight = this.spotLights[key];
             shader.setUniformData(`uSpotLights[${i}].color`, [spotLight.color.value[0], spotLight.color.value[1], spotLight.color.value[2]]);
             // shader.setUniformData(`uSpotLights[${i}].ambient`, [spotLight.ambient]);
-            shader.setUniformData(`uSpotLights[${i}].coneCos`,[spotLight.coneCos]);
-            shader.setUniformData(`uSpotLights[${i}].penumbraCos`,[spotLight.penumbraCos]);
-            shader.setUniformData(`uSpotLights[${i}].cutoff`,[spotLight.cutoff]);
+            shader.setUniformData(`uSpotLights[${i}].coneCos`, [spotLight.coneCos]);
+            shader.setUniformData(`uSpotLights[${i}].penumbraCos`, [spotLight.penumbraCos]);
+            shader.setUniformData(`uSpotLights[${i}].cutoff`, [spotLight.cutoff]);
             shader.setUniformData(`uSpotLights[${i}].diffuse`, [spotLight.diffuse]);
             shader.setUniformData(`uSpotLights[${i}].position`, [spotLight.position.value[0], spotLight.position.value[1], spotLight.position.value[2]]);
             shader.setUniformData(`uSpotLights[${i}].direction`, [spotLight.direction.value[0], spotLight.direction.value[1], spotLight.direction.value[2]]);
@@ -213,6 +215,14 @@ export class Scene {
 
     public stateChange(name?: string): void {
         this.state.stateChange(name);
+    }
+
+    public addNode(node: Node): void {
+        this.rootNode.addChild(node);
+    }
+
+    public render(): void {
+
     }
 
     public dispose(): void {
