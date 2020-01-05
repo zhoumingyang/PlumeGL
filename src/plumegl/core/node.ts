@@ -9,6 +9,7 @@ export class Node extends BaseObject {
     private _p3d: P3D;
     private _worldMatrix: Mat4 = new Mat4();
     private _matrix: Mat4 = new Mat4();
+    private _enable: boolean = true;
     public type: Symbol = CONSTANT.NODE;
 
     constructor(p3d?: P3D) {
@@ -44,6 +45,10 @@ export class Node extends BaseObject {
 
     public get p3d() {
         return this._p3d;
+    }
+
+    public setEnable(able: boolean) {
+        this._enable = able;
     }
 
     public getChild(index?: number) {

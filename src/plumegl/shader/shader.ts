@@ -35,7 +35,7 @@ export class Shader {
     public uniformSetterMap: Map<string, Function> = new Map();
     public uniformLocationMap: Map<string, WebGLUniformLocation> = new Map();
     public uniformBufferMap: Map<string, UniformBuffer> = new Map();
-    private p3ds: Map<string, P3D | Primitive> = new Map();
+    private _p3ds: Map<string, P3D | Primitive> = new Map();
     public type: Symbol = CONSTANT.SHADER;
     public fb: FeedBack;
     public selfUniform: any = undefined;
@@ -61,6 +61,10 @@ export class Shader {
     public setShaderSource(vertexSource?: string, fragmentSource?: string) {
         this.vertexSource = vertexSource;
         this.fragmentSource = fragmentSource;
+    }
+
+    public get p3ds() {
+        return this._p3ds;
     }
 
     private compileSource(shaderSource: string, type: number): WebGLShader {
@@ -372,11 +376,14 @@ export class Shader {
     }
 
     public addDrawObject(p3d: P3D | Primitive): void {
-        this.p3ds.set(p3d.uid, p3d);
+        this._p3ds.set(p3d.uid, p3d);
+        if (p3d instanceof P3D) {
+            p3d.shader = this;
+        }
     }
 
     public forEachDraw(callback: Function): void {
-        this.p3ds.forEach((p3d: P3D | Primitive, key: string) => {
+        this._p3ds.forEach((p3d: P3D | Primitive, key: string) => {
             p3d.initSelfUniform(this);
             callback.call(this, p3d, key);
         });
@@ -409,15 +416,15 @@ export class Shader {
 
     public dispose3D(arg: string | P3D | Primitive): void {
         const key: string = ((arg instanceof P3D) || (arg instanceof Primitive)) ? arg.uid : arg;
-        this.p3ds.has(key) && this.p3ds.get(key).dispose();
-        this.p3ds.delete(key);
+        this._p3ds.has(key) && this._p3ds.get(key).dispose();
+        this._p3ds.delete(key);
     }
 
     public dispose3Ds(): void {
-        this.p3ds.forEach((p3d: P3D | Primitive) => {
+        this._p3ds.forEach((p3d: P3D | Primitive) => {
             p3d && p3d.dispose();
         });
-        this.p3ds.clear();
-        this.p3ds = new Map();
+        this._p3ds.clear();
+        this._p3ds = new Map();
     }
 }

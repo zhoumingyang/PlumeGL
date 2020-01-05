@@ -217,12 +217,20 @@ export class Scene {
         this.state.stateChange(name);
     }
 
-    public addNode(node: Node): void {
+    public addChild(node: Node): void {
         this.rootNode.addChild(node);
     }
 
-    public render(): void {
-
+    public render(callback: Function): void {
+        this.rootNode.traverse((child: Node) => {
+            if (child && child.p3d) {
+                const drawObject = child.p3d;
+                if (drawObject.shader && !drawObject.shader.p3ds.has(drawObject.uid)) {
+                    drawObject.shader.addDrawObject(child.p3d);
+                }
+            }
+        });
+        this.forEachRender(callback);
     }
 
     public dispose(): void {
