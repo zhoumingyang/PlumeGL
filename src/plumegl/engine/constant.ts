@@ -17,6 +17,8 @@ export const CONSTANT = {
     POINT: Symbol('Point'),
     SCENE: Symbol('Scene'),
     P3D: Symbol('P3D'),
+    BASEOBJECT: Symbol('BaseObject'),
+    NODE: Symbol('Node'),
     SHADER: Symbol('Shader'),
     STATE: Symbol('State'),
     VAO: Symbol('Vao'),

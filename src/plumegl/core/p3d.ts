@@ -17,6 +17,15 @@ export class P3D {
     public modelMatrix: Mat4 = new Mat4();
     public normalMatrix: Mat4 = new Mat4();
     private selfUniform: any = undefined;
+    private _shader: Shader;
+
+    public get shader() {
+        return this._shader;
+    }
+
+    public set shader(s: Shader) {
+        this._shader = s;
+    }
 
     constructor(primitive: Primitive, texture?: Texture, state?: State) {
         this.primitive = primitive;
