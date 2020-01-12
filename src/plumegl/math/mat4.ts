@@ -4,6 +4,7 @@
  * */
 
 import { CONSTANT } from "../engine/constant";
+import { Vec3 } from "./vec3";
 
 const EPSILON = 0.000001;
 
@@ -581,6 +582,101 @@ export class Mat4 {
         this._value[15] = 1;
 
         return this;
+    }
+
+    public compose(position: any, quaternion: any, scale: any): void {
+        let x: number = quaternion.x, y: number = quaternion.y, z: number = quaternion.z, w: number = quaternion.w;
+        let x2: number = x + x, y2: number = y + y, z2: number = z + z;
+        let xx: number = x * x2, xy: number = x * y2, xz: number = x * z2;
+        let yy: number = y * y2, yz: number = y * z2, zz: number = z * z2;
+        let wx: number = w * x2, wy: number = w * y2, wz: number = w * z2;
+
+        let sx = scale.x, sy = scale.y, sz = scale.z;
+
+        this._value[0] = (1 - (yy + zz)) * sx;
+        this._value[1] = (xy + wz) * sx;
+        this._value[2] = (xz - wy) * sx;
+        this._value[3] = 0;
+
+        this._value[4] = (xy - wz) * sy;
+        this._value[5] = (1 - (xx + zz)) * sy;
+        this._value[6] = (yz + wx) * sy;
+        this._value[7] = 0;
+
+        this._value[8] = (xz + wy) * sz;
+        this._value[9] = (yz - wx) * sz;
+        this._value[10] = (1 - (xx + yy)) * sz;
+        this._value[11] = 0;
+
+        this._value[12] = position.x;
+        this._value[13] = position.y;
+        this._value[14] = position.z;
+        this._value[15] = 1;
+    }
+
+    public determinant(): number {
+        let a00 = this._value[0], a01 = this._value[1], a02 = this._value[2], a03 = this._value[3];
+        let a10 = this._value[4], a11 = this._value[5], a12 = this._value[6], a13 = this._value[7];
+        let a20 = this._value[8], a21 = this._value[9], a22 = this._value[10], a23 = this._value[11];
+        let a30 = this._value[12], a31 = this._value[13], a32 = this._value[14], a33 = this._value[15];
+
+        let b00 = a00 * a11 - a01 * a10;
+        let b01 = a00 * a12 - a02 * a10;
+        let b02 = a00 * a13 - a03 * a10;
+        let b03 = a01 * a12 - a02 * a11;
+        let b04 = a01 * a13 - a03 * a11;
+        let b05 = a02 * a13 - a03 * a12;
+        let b06 = a20 * a31 - a21 * a30;
+        let b07 = a20 * a32 - a22 * a30;
+        let b08 = a20 * a33 - a23 * a30;
+        let b09 = a21 * a32 - a22 * a31;
+        let b10 = a21 * a33 - a23 * a31;
+        let b11 = a22 * a33 - a23 * a32;
+
+        // Calculate the determinant
+        return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+        return 0;
+    }
+
+    public decomspose(position: any, quaternion: any, scale: any): void {
+
+        let _v1 = new Vec3(this._value[0], this._value[1], this._value[2]);
+        let sx: number = _v1.length();
+        _v1 = new Vec3(this._value[4], this._value[5], this._value[6]);
+        let sy: number = _v1.length();
+        _v1 = new Vec3(this._value[8], this._value[9], this._value[10]);
+        let sz: number = _v1.length();
+
+        let det: number = this.determinant();
+        if (det < 0) sx = - sx;
+
+        position.x = this._value[12];
+        position.y = this._value[13];
+        position.z = this._value[14];
+
+        let _m1 = this.clone();
+
+        let invSX = 1 / sx;
+        let invSY = 1 / sy;
+        let invSZ = 1 / sz;
+
+        _m1.value[0] *= invSX;
+        _m1.value[1] *= invSX;
+        _m1.value[2] *= invSX;
+
+        _m1.value[4] *= invSY;
+        _m1.value[5] *= invSY;
+        _m1.value[6] *= invSY;
+
+        _m1.value[8] *= invSZ;
+        _m1.value[9] *= invSZ;
+        _m1.value[10] *= invSZ;
+
+        quaternion.setFromRotationMatrix( _m1 );
+
+        scale.x = sx;
+        scale.y = sy;
+        scale.z = sz;
     }
 
 }

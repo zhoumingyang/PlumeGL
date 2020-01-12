@@ -49,6 +49,7 @@ import { TorusGeometry } from '../geometry/torus';
 import { ScreenPlaneGeometry } from '../geometry/screenplane';
 import { MathApi } from '../math/api';
 import { ImageLoader } from '../loader/imageloader';
+import { Node } from '../core/node';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     if (ele instanceof HTMLCanvasElement) {
@@ -120,5 +121,6 @@ export const PlumeGL = {
     Vec3: MathApi.Vec3,
     Quat: MathApi.Quat,
     Mat3: MathApi.Mat3,
-    ImageLoader
+    ImageLoader,
+    Node
 };

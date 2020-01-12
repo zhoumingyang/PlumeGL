@@ -2,6 +2,8 @@ import { BaseObject } from './baseobject';
 import { CONSTANT } from '../engine/constant';
 import { Mat4 } from '../math/mat4';
 import { P3D } from './p3d';
+import { Vec3 } from '../math/vec3';
+import { Quat } from '../math/quat';
 
 export class Node extends BaseObject {
     private _father: Node;
@@ -15,6 +17,7 @@ export class Node extends BaseObject {
     constructor(p3d?: P3D) {
         super();
         this._p3d = p3d;
+        this._children = [];
     }
 
     public set father(f: Node) {
@@ -55,6 +58,14 @@ export class Node extends BaseObject {
         return this._children[index];
     }
 
+    public setWorldTransform(position: Vec3, quaternion: Quat, scale: Vec3): void {
+        this._worldMatrix.compose(position, quaternion, scale);
+    }
+
+    public getWorldTransform(position: Vec3, quaternion: Quat, scale: Vec3): void {
+        this._worldMatrix.decomspose(position, quaternion, scale);
+    }
+
     public updateP3D(p3d: P3D): void {
         this._p3d = p3d;
         this._dirty = true;
@@ -73,7 +84,7 @@ export class Node extends BaseObject {
     }
 
     public addChild(child: Node): void {
-        if (this._children.includes(child)) {
+        if (!this._children.includes(child)) {
             this._children.push(child);
             child.father = this;
         }
@@ -101,6 +112,6 @@ export class Node extends BaseObject {
         }
 
         this._matrix = cloneMat.clone();
-        this._dirty = true;
+        this._dirty = false;
     }
 };
