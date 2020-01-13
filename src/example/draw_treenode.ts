@@ -21,7 +21,7 @@ const createSphereP3D = (shader: any, color?: any): any => {
     mesh.initBufferAttributePoint(shader);
     const p3d = new PlumeGL.P3D(mesh);
     p3d.shader = shader;
-    if (color) { 
+    if (color) {
         p3d.setSelfUniform('uColor', [color.x, color.y, color.z]);
     }
     return p3d;
@@ -39,12 +39,12 @@ export const DrawTreeNode = () => {
 
     const p3d1 = createSphereP3D(defaultColor, new PlumeGL.Vec3(1.0, 0.0, 0.0));
     const node1 = new PlumeGL.Node(p3d1);
-    node1.setWorldTransform(new PlumeGL.Vec3(-6.0, 0.0, 0.0), new PlumeGL.Quat(), new PlumeGL.Vec3());
+    node1.setWorldTransform(new PlumeGL.Vec3(-4.0, 0.0, 0.0), new PlumeGL.Quat(0.0, 0.0, 0.0, 1.0), new PlumeGL.Vec3(0.7, 0.7, 0.7));
     const p3d2 = createSphereP3D(defaultColor, new PlumeGL.Vec3(0.0, 1.0, 0.0));
     const node2 = new PlumeGL.Node(p3d2);
-    const p3d3 = createSphereP3D(defaultColor, new PlumeGL.Vec3(0.0, 1.0, 0.0));
+    const p3d3 = createSphereP3D(defaultColor, new PlumeGL.Vec3(0.0, 0.0, 1.0));
     const node3 = new PlumeGL.Node(p3d3);
-    node3.setWorldTransform(new PlumeGL.Vec3(6.0, 0.0, 0.0), new PlumeGL.Quat(), new PlumeGL.Vec3());
+    node3.setWorldTransform(new PlumeGL.Vec3(4.0, 0.0, 0.0), new PlumeGL.Quat(0.0, 0.0, 0.0, 1.0), new PlumeGL.Vec3(0.7, 0.7, 0.7));
 
     const scene = new PlumeGL.Scene();
     scene.addChild(node1);
