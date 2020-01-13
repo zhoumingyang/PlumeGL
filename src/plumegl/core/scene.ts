@@ -9,6 +9,8 @@ import { ParallelLight } from '../light/parallellight';
 import { SpotLight } from '../light/spotlight';
 import { Camera } from '../camera/camera';
 import { Node } from './node';
+import { P3D } from './p3d';
+import { Mat4 } from '../math/mat4';
 
 let uuid: number = 0;
 export class Scene {
@@ -221,8 +223,10 @@ export class Scene {
         this.rootNode.addChild(node);
     }
 
-    public render(callback: Function): void {
-        
+    public render(): void {
+        //状态改变
+        this.state.change();
+
         //矩阵更新同时转换到由shader管理
         this.rootNode.traverse((child: Node) => {
             child.updateWoldMatrix();
@@ -234,9 +238,42 @@ export class Scene {
             }
         });
 
-        
+        this.forEachRender((shaderObj: Shader) => {
+            if (!shaderObj) {
+                return;
+            }
 
-        this.forEachRender(callback);
+            shaderObj.forEachDraw((drawObj: P3D) => {
+                if (!drawObj) {
+                    return;
+                }
+                const modelMatrix: Mat4 = drawObj.getModelMat();
+                const modelViewMatrix: Mat4 = this.activeCamera.getModelViewMat(modelMatrix);
+                const projectionMatrix: Mat4 = this.activeCamera.getProjectMat();
+                if (shaderObj.uniform) {
+
+                    if (shaderObj.uniform.modelMatrix) {
+                        shaderObj.setUniformData(shaderObj.uniform.modelMatrix, [modelMatrix.value, false]);
+                    }
+
+                    if (shaderObj.uniform.modelViewMatrix) {
+                        shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [modelViewMatrix.value, false]);
+                    }
+
+                    if (shaderObj.uniform.projectionMatrix) {
+                        shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [projectionMatrix.value, false]);
+                    }
+                }
+
+                drawObj.prepare();
+                if (drawObj.primitive.attributes["indices"] && drawObj.primitive.attributes["indices"].length) {
+                    //drawObj.draw(undefined, { cnt: drawObj.primitive.attributes["indices"].length, type: this.gl.UNSIGNED_SHORT });
+                } else if (drawObj.primitive.attributes["aPosition"] && drawObj.primitive.attributes["aPosition"].length) {
+                    drawObj.draw({ start: 0, cnt: drawObj.primitive.attributes["aPosition"].length / 3 });
+                }
+                drawObj.unPrepare();
+            });
+        });
     }
 
     public dispose(): void {
