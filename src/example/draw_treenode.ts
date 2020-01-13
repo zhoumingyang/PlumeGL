@@ -63,8 +63,8 @@ export const DrawTreeNode = () => {
     const camera = new PlumeGL.PerspectiveCamera();
     camera.setPersective(fov, aspect, zNear, zFar);
     camera.setView(
-        new PlumeGL.Vec3(0.0, 0.0, -10.0),
-        new PlumeGL.Vec3(0.0, 0.0, 1000.0),
+        new PlumeGL.Vec3(0.0, 0.0, 10.0),
+        new PlumeGL.Vec3(0.0, 0.0, -1000.0),
         new PlumeGL.Vec3(0.0, 1.0, 0.0));
     camera.updateMat();
     scene.setActiveCamera(camera);
