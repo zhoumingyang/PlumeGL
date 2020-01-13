@@ -385,6 +385,8 @@ export class Shader {
     public forEachDraw(callback: Function): void {
         this._p3ds.forEach((p3d: P3D | Primitive, key: string) => {
             p3d.initSelfUniform(this);
+            //TODO set matrix uniform
+            
             callback.call(this, p3d, key);
         });
     }

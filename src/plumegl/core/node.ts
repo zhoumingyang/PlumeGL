@@ -17,6 +17,9 @@ export class Node extends BaseObject {
     constructor(p3d?: P3D) {
         super();
         this._p3d = p3d;
+        if (this._p3d) {
+            this._p3d.setRefNode(this);
+        }
         this._children = [];
     }
 

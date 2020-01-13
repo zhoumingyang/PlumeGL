@@ -56,7 +56,7 @@ const appRun = () => {
     // DrawBasicGeometry();
     // DrawOffscreenEdge();
     // DrawFrameBufferTest();
-    DrawImageProcess();
-    // DrawTreeNode();
+    // DrawImageProcess();
+    DrawTreeNode();
 };
 appRun();
