@@ -69,21 +69,10 @@ export const DrawTreeNode = () => {
     camera.updateMat();
     scene.setActiveCamera(camera);
 
-    scene.state.change();
-    scene.render((shaderObj: any) => {
-        shaderObj.forEachDraw((obj: any) => {
-            const pm = scene.activeCamera.getProjectMat();
-            const mv = scene.activeCamera.getModelViewMat(obj.getModelMat());
-            shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
-            shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pm.value, false]);
-            obj.prepare();
-            if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
-                obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
-            } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
-                obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
-            }
-            obj.unPrepare();
-        });
-    });
+    const render = () => {
+        scene.render();
+        requestAnimationFrame(render);
+    };
 
+    render();
 }
