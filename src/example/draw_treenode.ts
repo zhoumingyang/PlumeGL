@@ -71,8 +71,8 @@ export const DrawTreeNode = () => {
 
     scene.state.change();
     scene.render((shaderObj: any) => {
-        const pm = scene.activeCamera.getProjectMat();
         shaderObj.forEachDraw((obj: any) => {
+            const pm = scene.activeCamera.getProjectMat();
             const mv = scene.activeCamera.getModelViewMat(obj.getModelMat());
             shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
             shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pm.value, false]);
