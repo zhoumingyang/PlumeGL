@@ -5,6 +5,7 @@ import { Util } from '../util/util';
 import { CONSTANT } from '../engine/constant';
 import { Mat4 } from '../math/mat4';
 import { Shader } from '../shader/shader';
+import { Node } from './node';
 
 let uuid = 0;
 export class P3D {
@@ -18,14 +19,7 @@ export class P3D {
     public normalMatrix: Mat4 = new Mat4();
     private selfUniform: any = undefined;
     private _shader: Shader;
-
-    public get shader() {
-        return this._shader;
-    }
-
-    public set shader(s: Shader) {
-        this._shader = s;
-    }
+    private refNode: Node;
 
     constructor(primitive: Primitive, texture?: Texture, state?: State) {
         this.primitive = primitive;
@@ -33,6 +27,25 @@ export class P3D {
         this.state = state || new State();
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 1000) uuid = 0;
+    }
+
+    public get shader() {
+        return this._shader;
+    }
+
+    public set shader(s: Shader) {
+        this._shader = s;
+        if (this._shader) {
+            this.mountSelfUniform(this._shader.selfUniform);
+        }
+    }
+
+    public setRefNode(node: Node): void {
+        this.refNode = node;
+    }
+
+    public getRefNode(): Node {
+        return this.refNode;
     }
 
     private _prepareInner(slots: number[] = [0]): void {
@@ -91,6 +104,9 @@ export class P3D {
     public getModelMat(): Mat4 {
         const cloneModelMat: Mat4 = this.modelMatrix.clone();
         const primitiveModelMat: Mat4 = this.primitive.modelMatrix.clone();
+        if (this.refNode != undefined) {
+            return this.refNode.worldMatrix.multiply(cloneModelMat.multiply(primitiveModelMat));
+        }
         return cloneModelMat.multiply(primitiveModelMat);
     }
 
@@ -132,7 +148,12 @@ export class P3D {
         if (!shaderUniform) {
             return;
         }
-        this.selfUniform = JSON.parse(JSON.stringify(shaderUniform));
+        const tmpUniform = JSON.parse(JSON.stringify(shaderUniform));
+        if (this.selfUniform) {
+            this.selfUniform = Object.assign(tmpUniform,  this.selfUniform);
+        } else {
+            this.selfUniform = tmpUniform;
+        }
     }
 
     public initSelfUniform(shader: Shader): void {
