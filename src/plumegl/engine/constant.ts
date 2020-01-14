@@ -119,14 +119,23 @@ export const ENVMAP = {
 };
 Object.freeze(ENVMAP);
 
-export const TYPE = {
-    UNSIGNED_SHORT: GL.gl.UNSIGNED_SHORT,
-    UNSIGNED_BYTE: GL.gl.UNSIGNED_BYTE,
-    FLOAT: GL.gl.FLOAT,
-    STATIC_DRAW: GL.gl.STATIC_DRAW,
-    DYNAMIC_DRAW: GL.gl.DYNAMIC_DRAW,
-    RGBA: GL.gl.RGBA,
-    REPEAT: GL.gl.REPEAT,
-    CLAMP_TO_EDGE: GL.gl.CLAMP_TO_EDGE,
-    MIRRORED_REPEAT: GL.gl.MIRRORED_REPEAT,
+export const ATTRIBUTE = {
+    INDICES: "indices",
+    POSITION: "aPosition",
+    NORMAL: "aNormal",
+    UV: "aUv",
 };
+Object.freeze(ATTRIBUTE);
+
+export const TYPE = {
+    UNSIGNED_SHORT: 5123, //GL.gl.UNSIGNED_SHORT,
+    UNSIGNED_BYTE: 5121,
+    FLOAT: 5126,
+    STATIC_DRAW: 35044,
+    DYNAMIC_DRAW: 35048,
+    RGBA: 6408,
+    REPEAT: 10497,
+    CLAMP_TO_EDGE: 33071,
+    MIRRORED_REPEAT: 33648,
+};
+Object.freeze(TYPE);
