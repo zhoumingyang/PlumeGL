@@ -1,3 +1,5 @@
+import { GL } from '../engine/gl';
+
 export const CONSTANT = {
     BASEBUFFER: Symbol('BaseBuffer'),
     ARRAYBUFFER: Symbol('ArrayBuffer'),
@@ -116,3 +118,15 @@ export const ENVMAP = {
     REFRACT: 'refract',
 };
 Object.freeze(ENVMAP);
+
+export const TYPE = {
+    UNSIGNED_SHORT: GL.gl.UNSIGNED_SHORT,
+    UNSIGNED_BYTE: GL.gl.UNSIGNED_BYTE,
+    FLOAT: GL.gl.FLOAT,
+    STATIC_DRAW: GL.gl.STATIC_DRAW,
+    DYNAMIC_DRAW: GL.gl.DYNAMIC_DRAW,
+    RGBA: GL.gl.RGBA,
+    REPEAT: GL.gl.REPEAT,
+    CLAMP_TO_EDGE: GL.gl.CLAMP_TO_EDGE,
+    MIRRORED_REPEAT: GL.gl.MIRRORED_REPEAT,
+};
