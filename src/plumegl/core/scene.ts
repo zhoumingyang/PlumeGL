@@ -11,7 +11,7 @@ import { Camera } from '../camera/camera';
 import { Node } from './node';
 import { P3D } from './p3d';
 import { Mat4 } from '../math/mat4';
-import { TYPE } from '../engine/constant';
+import { TYPE, ATTRIBUTE } from '../engine/constant';
 
 let uuid: number = 0;
 export class Scene {
@@ -267,10 +267,10 @@ export class Scene {
                 }
 
                 drawObj.prepare();
-                if (drawObj.primitive.attributes["indices"] && drawObj.primitive.attributes["indices"].length) {
-                    drawObj.draw(undefined, { cnt: drawObj.primitive.attributes["indices"].length, type: TYPE.UNSIGNED_SHORT });
-                } else if (drawObj.primitive.attributes["aPosition"] && drawObj.primitive.attributes["aPosition"].length) {
-                    drawObj.draw({ start: 0, cnt: drawObj.primitive.attributes["aPosition"].length / 3 });
+                if (drawObj.primitive.attributes[ATTRIBUTE.INDICES] && drawObj.primitive.attributes[ATTRIBUTE.INDICES].length) {
+                    drawObj.draw(undefined, { cnt: drawObj.primitive.attributes[ATTRIBUTE.INDICES].length, type: TYPE.UNSIGNED_SHORT });
+                } else if (drawObj.primitive.attributes[ATTRIBUTE.POSITION] && drawObj.primitive.attributes[ATTRIBUTE.POSITION].length) {
+                    drawObj.draw({ start: 0, cnt: drawObj.primitive.attributes[ATTRIBUTE.POSITION].length / 3 });
                 }
                 drawObj.unPrepare();
             });

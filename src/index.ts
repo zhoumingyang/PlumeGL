@@ -27,6 +27,7 @@ import { DrawOffscreenEdge } from './example/draw_offscreen_edge';
 import { DrawFrameBufferTest } from './example/draw_framebuffer_test';
 import { DrawImageProcess } from './example/draw_image_process';
 import { DrawTreeNode } from './example/draw_treenode';
+import { DrawBasicGeometryWithNode } from './example/draw_basic_geometrwithnode';
 
 const appRun = () => {
     // SampleObject();
@@ -57,6 +58,7 @@ const appRun = () => {
     // DrawOffscreenEdge();
     // DrawFrameBufferTest();
     // DrawImageProcess();
-    DrawTreeNode();
+    // DrawTreeNode();
+    DrawBasicGeometryWithNode();
 };
 appRun();
