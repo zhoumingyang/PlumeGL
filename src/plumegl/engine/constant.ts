@@ -137,5 +137,13 @@ export const TYPE = {
     REPEAT: 10497,
     CLAMP_TO_EDGE: 33071,
     MIRRORED_REPEAT: 33648,
+    TRIANGLES: 4,
+    TRIANGLE_STRIP: 5,
+    TRIANGLE_FAN: 6,
+    POINTS: 0,
+    LINES: 1,
+    LINE_LOOP: 2,
+    LINE_STRIP: 3,
+
 };
 Object.freeze(TYPE);

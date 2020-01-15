@@ -18,7 +18,7 @@ export class Primitive {
     public type: Symbol = CONSTANT.PRIMITIVE;
     public DrawTypes: number[] = [];
     public uid: string;
-    public children: Primitive[] = [];  // TODO, now do not consider the children
+    // public children: Primitive[] = [];  // TODO, now do not consider the children
     public attributes: any = {};
     public buffers: any = {};
     public modelMatrix: Mat4 = new Mat4();
@@ -170,18 +170,18 @@ export class Primitive {
     }
 
     public addChild(child: Primitive): void {
-        if (!child) {
-            return;
-        }
-        this.children.push(child);
+        // if (!child) {
+        //     return;
+        // }
+        // this.children.push(child);
     }
 
     public deleteChild(index: number): void {
-        const len: number = this.children.length;
-        if (index >= len || index < 0) {
-            return;
-        }
-        this.children.splice(index, 1);
+        // const len: number = this.children.length;
+        // if (index >= len || index < 0) {
+        //     return;
+        // }
+        // this.children.splice(index, 1);
     }
 
     public draw(arrayArg?: any, elementArg?: any, option?: any): void {

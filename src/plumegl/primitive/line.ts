@@ -1,6 +1,6 @@
 import { Util } from '../util/util';
 import { Primitive } from './primitive';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, TYPE, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { Vec3 } from '../math/vec3';
 
@@ -10,8 +10,8 @@ export class Line extends Primitive {
     constructor(gl?: WGL | WGL2) {
         super(gl);
         this.type = CONSTANT.LINE;
-        this.DrawTypes = [this.gl.LINES, this.gl.LINE_LOOP, this.gl.LINE_STRIP];
-        this.setDrawType(this.gl.LINES);
+        this.DrawTypes = [TYPE.LINES, TYPE.LINE_LOOP, TYPE.LINE_STRIP];
+        this.setDrawType(TYPE.LINES);
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 1000) uuid = 0;
     }
@@ -22,8 +22,8 @@ export class Line extends Primitive {
     }
 
     initLineLengthAttribute(attributeName: string, drawType?: number): void {
-        if (this.attributes['aPosition']) {
-            const positionData = this.attributes['aPosition'];
+        if (this.attributes[ATTRIBUTE.POSITION]) {
+            const positionData = this.attributes[ATTRIBUTE.POSITION];
             const cnt = positionData.length / 3;
             let lineLength: any = new Array(cnt).fill(0);
             for (let i = 1; i < cnt; i++) {
@@ -35,7 +35,7 @@ export class Line extends Primitive {
                 lineLength[i] += start.distance(end);
             }
             lineLength = new Float32Array(lineLength);
-            this.setGeometryAttribute(lineLength, attributeName, drawType || this.gl.STATIC_DRAW, 1, this.gl.FLOAT, false);
+            this.setGeometryAttribute(lineLength, attributeName, drawType || TYPE.STATIC_DRAW, 1, TYPE.FLOAT, false);
         }
     }
 }
