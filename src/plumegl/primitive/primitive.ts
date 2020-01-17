@@ -27,6 +27,7 @@ export class Primitive {
     public indexBuffer: IndexBuffer;
     public uniqueBuffer: ArrayBuffer = undefined;
     protected drawType: number;
+    protected _order: number = 0;
 
     constructor(gl?: WGL | WGL2) {
         this.gl = gl || this.gl;
@@ -37,6 +38,10 @@ export class Primitive {
         if (this.gl instanceof WebGL2RenderingContext) {
             this.vao = new VAO(undefined, this.gl);
         }
+    }
+
+    public get order() {
+        return this._order;
     }
 
     public setDrawType(drawType: number): void {

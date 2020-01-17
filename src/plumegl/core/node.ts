@@ -57,6 +57,16 @@ export class Node extends BaseObject {
         this._enable = able;
     }
 
+    public get enable() {
+        return this._enable;
+    }
+
+    public set order(i: number) {
+        if (this._p3d) {
+            this._p3d.order = i;
+        }
+    }
+
     public getChild(index?: number) {
         return this._children[index];
     }
