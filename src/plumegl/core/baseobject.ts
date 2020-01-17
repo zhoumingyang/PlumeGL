@@ -6,6 +6,7 @@ export class BaseObject {
     public type: Symbol = CONSTANT.BASEOBJECT;
     public uid: string;
     protected _dirty: boolean = true;
+    protected _initialize: boolean = false;
 
     constructor() {
         this.uid = Util.random13(13, uuid++);

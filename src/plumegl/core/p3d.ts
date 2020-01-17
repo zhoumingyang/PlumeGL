@@ -20,6 +20,7 @@ export class P3D {
     private selfUniform: any = undefined;
     private _shader: Shader;
     private refNode: Node;
+    private _order: number = 0;
 
     constructor(primitive: Primitive, texture?: Texture, state?: State) {
         this.primitive = primitive;
@@ -38,6 +39,10 @@ export class P3D {
         if (this._shader) {
             this.mountSelfUniform(this._shader.selfUniform);
         }
+    }
+
+    public set order(i: number) {
+        this._order = i;
     }
 
     public setRefNode(node: Node): void {
@@ -150,7 +155,7 @@ export class P3D {
         }
         const tmpUniform = JSON.parse(JSON.stringify(shaderUniform));
         if (this.selfUniform) {
-            this.selfUniform = Object.assign(tmpUniform,  this.selfUniform);
+            this.selfUniform = Object.assign(tmpUniform, this.selfUniform);
         } else {
             this.selfUniform = tmpUniform;
         }

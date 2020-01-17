@@ -383,10 +383,16 @@ export class Shader {
     }
 
     public forEachDraw(callback: Function): void {
-        this._p3ds.forEach((p3d: P3D | Primitive, key: string) => {
+        if (!this._p3ds) {
+            return;
+        }
+        //sort p3ds by order
+        const p3dArray = Array.from(this._p3ds.values());
+        p3dArray.sort((a: P3D | Primitive, b: P3D | Primitive) => {
+            return a.order - b.order;
+        });
+        p3dArray.forEach((p3d: P3D | Primitive, key: number) => {
             p3d.initSelfUniform(this);
-            //TODO set matrix uniform
-            
             callback.call(this, p3d, key);
         });
     }

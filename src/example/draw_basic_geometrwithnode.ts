@@ -48,6 +48,7 @@ const initDrawObject = (shader: any): any => {
     const planeNode = new PlumeGL.Node(planeP3d);
     const rotMat = new PlumeGL.Mat4().rotate(-Math.PI / 2, new PlumeGL.Vec3(1.0, 0.0, 0.0));
     planeNode.worldMatrix = rotMat.clone();
+    planeNode.order = 0;
 
     const torusGeometry = new PlumeGL.TorusGeometry();
     torusGeometry.create(1.5, 0.5, 12, 24, Math.PI * 2);
@@ -60,6 +61,7 @@ const initDrawObject = (shader: any): any => {
     const scaleMat = new PlumeGL.Mat4().scale(new PlumeGL.Vec3(1.0, 1.0, 1.0));
     const mat = transMat.clone().multiply(scaleMat.clone());
     torusNode.worldMatrix = mat.clone();
+    torusNode.order = 1;
 
     const cubeGeometry = new PlumeGL.CubeGeometry();
     cubeGeometry.create(2.0, 2.0, 2.0);
@@ -74,6 +76,7 @@ const initDrawObject = (shader: any): any => {
     const fm = tm.clone().multiply(tmp);
     const cubeNode = new PlumeGL.Node(cubeP3d);
     cubeNode.worldMatrix = fm.clone();
+    cubeNode.order = 2;
 
     const sphereGeometry = new PlumeGL.SphereGeometry();
     sphereGeometry.create(2.0, 30, 30);
@@ -84,6 +87,7 @@ const initDrawObject = (shader: any): any => {
     const sphereNode = new PlumeGL.Node(sphereP3d);
     const stm = new PlumeGL.Mat4().translate(new PlumeGL.Vec3(0.8, 1.5, 0.0));
     sphereNode.worldMatrix = stm.clone();
+    sphereNode.order = 3;
 
     return {
         planeNode,
@@ -112,6 +116,7 @@ export const DrawBasicGeometryWithNode = () => {
     scene.setActiveCamera(camera);
 
     const { planeNode, torusNode, cubeNode, sphereNode } = initDrawObject(defaultColorShader);
+    cubeNode.setEnable(false);
     scene.addChild(planeNode);
     scene.addChild(torusNode);
     scene.addChild(cubeNode);
@@ -123,4 +128,6 @@ export const DrawBasicGeometryWithNode = () => {
     };
 
     render();
+    scene.rootNode.removeChild(cubeNode);
+    cubeNode.p3d.dispose();
 }
