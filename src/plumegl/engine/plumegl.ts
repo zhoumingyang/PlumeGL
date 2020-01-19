@@ -119,6 +119,7 @@ export const PlumeGL = {
     ScreenPlaneGeometry,
     Mat4: MathApi.Mat4,
     Vec3: MathApi.Vec3,
+    Vec2: MathApi.Vec3,
     Quat: MathApi.Quat,
     Mat3: MathApi.Mat3,
     ImageLoader,
