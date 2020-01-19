@@ -20,7 +20,7 @@ import { P3D } from '../core/p3d';
 import { UniformBuffer } from '../buffer/uniformbuffer';
 import { Scene } from '../core/scene';
 import { Query } from '../aid/query';
-import { CONSTANT, STATE, ENVMAP } from './constant';
+import { CONSTANT, STATE, ENVMAP, TYPE } from './constant';
 import { FeedBack } from '../aid/feedback';
 import { GL, WGL, WGL2 } from './gl';
 import { Util } from '../util/util';
@@ -50,6 +50,7 @@ import { ScreenPlaneGeometry } from '../geometry/screenplane';
 import { MathApi } from '../math/api';
 import { ImageLoader } from '../loader/imageloader';
 import { Node } from '../core/node';
+import { Vec2 } from '../math/vec2';
 
 const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     if (ele instanceof HTMLCanvasElement) {
@@ -62,7 +63,18 @@ const initGL = (ele?: WGL | WGL2 | HTMLCanvasElement): WGL | WGL2 => {
     } else {
         GL.gl = ele;
     }
+    GL.width = GL.gl.canvas.width;
+    GL.height = GL.gl.canvas.height;
     return GL.gl;
+};
+
+const getSize = (): Vec2 => {
+    return new Vec2(GL.width, GL.height);
+};
+
+const updateSize = (w?: number, h?: number): void => {
+    GL.width = w || GL.gl.canvas.width;
+    GL.height = h || GL.gl.canvas.height;
 };
 
 export const PlumeGL = {
@@ -89,10 +101,13 @@ export const PlumeGL = {
     Scene,
     Query,
     CONSTANT,
+    TYPE,
     STATE,
     ENVMAP,
     FeedBack,
     initGL,
+    getSize,
+    updateSize,
     Util,
     BaseLight,
     AmbientLight,

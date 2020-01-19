@@ -113,25 +113,25 @@ const createGLContext = () => {
 
 const createSourceTexture = (): any => {
     const sourceTexture = new PlumeGL.Texture2D();
-    sourceTexture.setFormat(gl.LUMINANCE, gl.LUMINANCE, gl.UNSIGNED_BYTE);
+    sourceTexture.setFormat(PlumeGL.TYPE.LUMINANCE, PlumeGL.TYPE.LUMINANCE, PlumeGL.TYPE.UNSIGNED_BYTE);
     const data = new Uint8Array([
         128, 64, 128,
         0, 192, 0
     ]);
-    PlumeGL.Texture2D.setPixelStorei(gl.UNPACK_ALIGNMENT, 1);
-    sourceTexture.setTextureFromData(data, [3, 2]);
-    sourceTexture.setFilterMode(gl.NEAREST, gl.NEAREST);
-    sourceTexture.setWrapMode(gl.CLAMP_TO_EDGE);
+    PlumeGL.Texture2D.setPixelStorei(PlumeGL.TYPE.UNPACK_ALIGNMENT, 1);
+    sourceTexture.setTextureFromData(data, new PlumeGL.Vec2(3, 2));
+    sourceTexture.setFilterMode(PlumeGL.TYPE.NEAREST, PlumeGL.TYPE.NEAREST);
+    sourceTexture.setWrapMode(PlumeGL.TYPE.CLAMP_TO_EDGE);
     return sourceTexture;
 };
 
 const createTargetTexture = (): any => {
     const targetTexture = new PlumeGL.Texture2D();
-    targetTexture.setFormat(gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
+    targetTexture.setFormat(PlumeGL.TYPE.RGBA, PlumeGL.TYPE.RGBA, PlumeGL.TYPE.UNSIGNED_BYTE);
     const data: any = null;
-    targetTexture.setTextureFromData(data, [256, 256]);
-    targetTexture.setFilterMode(gl.LINEAR, gl.LINEAR);
-    targetTexture.setWrapMode(gl.CLAMP_TO_EDGE);
+    targetTexture.setTextureFromData(data, new PlumeGL.Vec2(256, 256));
+    targetTexture.setFilterMode(PlumeGL.TYPE.LINEAR, PlumeGL.TYPE.LINEAR);
+    targetTexture.setWrapMode(PlumeGL.TYPE.CLAMP_TO_EDGE);
     return targetTexture;
 };
 
@@ -146,7 +146,7 @@ const initScene = (): any => {
 
 const createFbo = (attachTexture: any) => {
     const fb = new PlumeGL.FrameBuffer();
-    fb.attachTexture(attachTexture, gl.COLOR_ATTACHMENT0);
+    fb.attachTexture(attachTexture, PlumeGL.TYPE.COLOR_ATTACHMENT0);
     return fb;
 }
 
@@ -213,8 +213,8 @@ const renderScene = (time: number) => {
     //pass2
     tagTexture.bind();
     PlumeGL.FrameBuffer.unBind();
-    scene.state.setViewPort(0, 0, gl.canvas.clientWidth, gl.canvas.clientHeight);
-    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    scene.state.setViewPort(0, 0, PlumeGL.getSize().x, PlumeGL.getSize().y);
+    aspect = PlumeGL.getSize().x / PlumeGL.getSize().y;
     draw(aspect, false);
 
     requestAnimationFrame(renderScene);
@@ -233,8 +233,8 @@ export const DrawFrameBufferTest = () => {
     scene.add(shader);
 
     const mesh = new PlumeGL.Mesh();
-    mesh.setGeometryAttribute(new Float32Array(cubePositions), 'aPosition', gl.STATIC_DRAW, 3, gl.FLOAT, false);
-    mesh.setGeometryAttribute(new Float32Array(cubeTexcoords), 'aUv', gl.STATIC_DRAW, 2, gl.FLOAT, false);
+    mesh.setGeometryAttribute(new Float32Array(cubePositions), 'aPosition', PlumeGL.TYPE.STATIC_DRAW, 3, PlumeGL.TYPE.FLOAT, false);
+    mesh.setGeometryAttribute(new Float32Array(cubeTexcoords), 'aUv', PlumeGL.TYPE.STATIC_DRAW, 2, PlumeGL.TYPE.FLOAT, false);
     mesh.initBufferAttributePoint(shader);
 
     srcTexture = createSourceTexture();
