@@ -2,6 +2,8 @@ import { Util } from '../util/util';
 import { Sampler } from './sampler';
 import { CONSTANT } from '../engine/constant';
 import { GL, WGL, WGL2 } from '../engine/gl';
+import { Vec2 } from '../math/vec2';
+import { Vec3 } from '../math/vec3';
 
 let uuid: number = 0;
 export class Texture {
@@ -145,11 +147,11 @@ export class Texture {
 
     }
 
-    public setTextureFromData(data: any, sizes: number[], index?: number): void {
+    public setTextureFromData(data: any, sizes: number[] | Vec2 | Vec3, index?: number): void {
 
     }
 
-    public subStorage(data: any, offsets: number[], sizes: number[]): void {
+    public subStorage(data: any, offsets: number[] | Vec2 | Vec3, sizes: number[] | Vec2 | Vec3): void {
 
     }
 
