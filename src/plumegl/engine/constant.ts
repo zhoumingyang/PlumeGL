@@ -144,6 +144,10 @@ export const TYPE = {
     LINES: 1,
     LINE_LOOP: 2,
     LINE_STRIP: 3,
-
+    NEAREST: 9728,
+    LINEAR: 9729,
+    UNPACK_ALIGNMENT: 3317,
+    LUMINANCE: 6409,
+    COLOR_ATTACHMENT0: 36064,
 };
 Object.freeze(TYPE);
