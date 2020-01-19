@@ -163,7 +163,7 @@ export class Vec3 {
     }
 
     public negate(): Vec3 {
-        this.x = -this.z;
+        this.x = -this.x;
         this.y = -this.y;
         this.z = -this.z;
         return this;
