@@ -1,14 +1,14 @@
 import { DefaultCubeMapVert } from './resource/defaultCubeMap_vert';
 import { DefaultCubeMapFrag } from './resource/defaultCubeMap_frag';
 import { Shader } from './shader';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
 export class DefaultCubeMapShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTCUBEMAPSHADER;
-    public positionAttribute: string = "aPosition";
+    public positionAttribute: string = ATTRIBUTE.POSITION;
 
     constructor(gl?: WGL | WGL2) {
         super(DefaultCubeMapVert, DefaultCubeMapFrag, undefined, gl);

@@ -124,6 +124,7 @@ export const ATTRIBUTE = {
     POSITION: "aPosition",
     NORMAL: "aNormal",
     UV: "aUv",
+    LINELENGTH: "aLineLength"
 };
 Object.freeze(ATTRIBUTE);
 

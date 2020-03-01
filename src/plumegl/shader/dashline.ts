@@ -1,15 +1,15 @@
 import { DefaultDashLineVert } from './resource/defaultdashline_vert';
 import { DefaultDashLineFrag } from './resource/defaultdashline_frag';
 import { Shader } from './shader';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
 export class DefaultDashLineShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTDASHLINESHADER;
-    public positionAttribute: string = 'aPosition';
-    public lengthAttribute: string = 'aLineLength';
+    public positionAttribute: string = ATTRIBUTE.POSITION;
+    public lengthAttribute: string = ATTRIBUTE.LINELENGTH;
 
     constructor(gl?: WGL | WGL2) {
         super(DefaultDashLineVert, DefaultDashLineFrag, undefined, gl);

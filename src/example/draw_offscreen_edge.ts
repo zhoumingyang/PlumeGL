@@ -142,6 +142,9 @@ const initDrawPass2Object = (shaderPass2: any, texture: any): any => {
     };
 };
 
+const aIndices: string = PlumeGL.ATTRIBUTE.INDICES;
+const aPosition: string = PlumeGL.ATTRIBUTE.POSITION;
+
 const drawPass1 = (scene: any, gl: any, fbo?: any) => {
     fbo && fbo.bind();
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -156,10 +159,10 @@ const drawPass1 = (scene: any, gl: any, fbo?: any) => {
                 shaderObj.setUniformData(shaderObj.uniform.modelViewMatrix, [mv.value, false]);
                 shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [pm.value, false]);
                 obj.prepare();
-                if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
-                    obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
-                } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
-                    obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
+                if (obj.primitive.attributes[aIndices] && obj.primitive.attributes[aIndices].length) {
+                    obj.draw(undefined, { cnt: obj.primitive.attributes[aIndices].length, type: gl.UNSIGNED_SHORT });
+                } else if (obj.primitive.attributes[aPosition] && obj.primitive.attributes[aPosition].length) {
+                    obj.draw({ start: 0, cnt: obj.primitive.attributes[aPosition].length / 3 });
                 }
                 obj.unPrepare();
             });
@@ -168,7 +171,7 @@ const drawPass1 = (scene: any, gl: any, fbo?: any) => {
 };
 
 const drawPass2 = (scene: any, gl: any) => {
-    PlumeGL.FrameBuffer.unBind(); 
+    PlumeGL.FrameBuffer.unBind();
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.stateChange();
     scene.forEachRender((shaderObj: any) => {
@@ -178,10 +181,10 @@ const drawPass2 = (scene: any, gl: any) => {
                 shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [new PlumeGL.Mat4().value, false]);
                 shaderObj.setUniformData(shaderObj.uniform.texture, [0]);
                 obj.prepare();
-                if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
-                    obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
-                } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
-                    obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
+                if (obj.primitive.attributes[aIndices] && obj.primitive.attributes[aIndices].length) {
+                    obj.draw(undefined, { cnt: obj.primitive.attributes[aIndices].length, type: gl.UNSIGNED_SHORT });
+                } else if (obj.primitive.attributes[aPosition] && obj.primitive.attributes[aPosition].length) {
+                    obj.draw({ start: 0, cnt: obj.primitive.attributes[aPosition].length / 3 });
                 }
                 obj.unPrepare();
             });
@@ -190,7 +193,7 @@ const drawPass2 = (scene: any, gl: any) => {
 };
 
 const drawPass3 = (scene: any, gl: any) => {
-    PlumeGL.FrameBuffer.unBind(); 
+    PlumeGL.FrameBuffer.unBind();
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     scene.state.stateChange();
     scene.forEachRender((shaderObj: any) => {
@@ -200,10 +203,10 @@ const drawPass3 = (scene: any, gl: any) => {
                 shaderObj.setUniformData(shaderObj.uniform.projectionMatrix, [new PlumeGL.Mat4().value, false]);
                 shaderObj.setUniformData(shaderObj.uniform.texture, [0]);
                 obj.prepare();
-                if (obj.primitive.attributes["indices"] && obj.primitive.attributes["indices"].length) {
-                    obj.draw(undefined, { cnt: obj.primitive.attributes["indices"].length, type: gl.UNSIGNED_SHORT });
-                } else if (obj.primitive.attributes["aPosition"] && obj.primitive.attributes["aPosition"].length) {
-                    obj.draw({ start: 0, cnt: obj.primitive.attributes["aPosition"].length / 3 });
+                if (obj.primitive.attributes[aIndices] && obj.primitive.attributes[aIndices].length) {
+                    obj.draw(undefined, { cnt: obj.primitive.attributes[aIndices].length, type: gl.UNSIGNED_SHORT });
+                } else if (obj.primitive.attributes[aPosition] && obj.primitive.attributes[aPosition].length) {
+                    obj.draw({ start: 0, cnt: obj.primitive.attributes[aPosition].length / 3 });
                 }
                 obj.unPrepare();
             });

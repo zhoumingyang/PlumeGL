@@ -2,16 +2,16 @@ import { DefaultPhongVert } from "./resource/defaultPhong_vert";
 import { DefaultPhongFrag } from "./resource/defaultPhong_frag";
 import { Shader } from './shader';
 import { Version } from './chunk/version';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
 export class DefaultPhongShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTPHONGSHADER;
-    public positionAttribute: string = "aPosition";
-    public normalAttribute: string = "aNormal";
-    public uvAttribute: string = "aUv";
+    public positionAttribute: string = ATTRIBUTE.POSITION;
+    public normalAttribute: string = ATTRIBUTE.NORMAL;
+    public uvAttribute: string = ATTRIBUTE.UV;
 
     constructor(useTexture: boolean = false, gl?: WGL | WGL2) {
         super(undefined, undefined, undefined, gl);
