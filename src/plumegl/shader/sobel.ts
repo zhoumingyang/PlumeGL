@@ -1,15 +1,15 @@
 import { DefaultSobelVert } from './resource/defaultsobel_vert';
 import { DefaultSobelFrag } from './resource/defaultsobel_frag';
 import { Shader } from './shader';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
 export class DefaultSobelShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTSOBELSHADER;
-    public positionAttribute: string = "aPosition";
-    public normalAttribute: string = "aUv";
+    public positionAttribute: string = ATTRIBUTE.POSITION;
+    public normalAttribute: string = ATTRIBUTE.NORMAL;
 
     constructor(gl?: WGL | WGL2) {
         super(DefaultSobelVert, DefaultSobelFrag, undefined, gl);

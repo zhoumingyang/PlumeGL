@@ -1,7 +1,7 @@
 import { DefaultEnvMapVert } from './resource/defaultEnvMap_vert';
 import { DefaultEnvMapFrag } from './resource/defaultEnvMap_frag';
 import { Shader } from './shader';
-import { CONSTANT, ENVMAP } from '../engine/constant';
+import { CONSTANT, ENVMAP, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
@@ -9,8 +9,8 @@ import { Version } from './chunk/version';
 
 export class DefaultEnvMapShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTENVMAPSHADER;
-    public positionAttribute: string = "aPosition";
-    public normalAttribute: string = "aNormal";
+    public positionAttribute: string = ATTRIBUTE.POSITION;
+    public normalAttribute: string = ATTRIBUTE.NORMAL;
 
     constructor(mode?: string, gl?: WGL | WGL2) {
         super(undefined, undefined, undefined, gl);

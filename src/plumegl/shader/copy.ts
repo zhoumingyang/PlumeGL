@@ -1,15 +1,15 @@
 import { DefaultCopyVert } from './resource/defaultcopy_vert';
 import { DefaultCopyFrag } from './resource/defaultcopy_frag';
 import { Shader } from './shader';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
 export class DefaultCopyShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTCOPYSHADER;
-    public positionAttribute: string = "aPosition";
-    public uvAttribute: string = "aUv";
+    public positionAttribute: string = ATTRIBUTE.POSITION;
+    public uvAttribute: string = ATTRIBUTE.UV;
 
     constructor(gl?: WGL | WGL2) {
         super(DefaultCopyVert, DefaultCopyFrag, undefined, gl);

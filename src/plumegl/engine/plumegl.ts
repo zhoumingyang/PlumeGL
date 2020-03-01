@@ -20,7 +20,7 @@ import { P3D } from '../core/p3d';
 import { UniformBuffer } from '../buffer/uniformbuffer';
 import { Scene } from '../core/scene';
 import { Query } from '../aid/query';
-import { CONSTANT, STATE, ENVMAP, TYPE } from './constant';
+import { CONSTANT, STATE, ENVMAP, TYPE, ATTRIBUTE } from './constant';
 import { FeedBack } from '../aid/feedback';
 import { GL, WGL, WGL2 } from './gl';
 import { Util } from '../util/util';
@@ -101,6 +101,7 @@ export const PlumeGL = {
     Scene,
     Query,
     CONSTANT,
+    ATTRIBUTE,
     TYPE,
     STATE,
     ENVMAP,

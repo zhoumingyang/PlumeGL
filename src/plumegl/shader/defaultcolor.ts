@@ -1,14 +1,14 @@
 import { DefaultColorVert } from './resource/defaultcolor_vert';
 import { DefaultColorFrag } from './resource/defaultcolor_frag';
 import { Shader } from './shader';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
 export class DefaultColorShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTCOLORSHADER;
-    public positionAttribute: string = "aPosition";
+    public positionAttribute: string = ATTRIBUTE.POSITION;
 
     constructor(gl?: WGL | WGL2) {
         super(DefaultColorVert, DefaultColorFrag, undefined, gl);

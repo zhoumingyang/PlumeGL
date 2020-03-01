@@ -1,15 +1,15 @@
 import { DefaultImageProcessVert } from './resource/defaultimageprocess_vert';
 import { DefaultImageProcessFrag } from './resource/defaultimageprocess_frag';
 import { Shader } from './shader';
-import { CONSTANT } from '../engine/constant';
+import { CONSTANT, ATTRIBUTE } from '../engine/constant';
 import { WGL, WGL2 } from '../engine/gl';
 import { P3D } from '../core/p3d';
 import { Primitive } from '../primitive/primitive';
 
 export class DefaultImageProcessShader extends Shader {
     public type: Symbol = CONSTANT.DEFAULTIMAGEPROCESSSHADER;
-    public positionAttribute: string = 'aPosition';
-    public uvAttribute: string = 'aUv';
+    public positionAttribute: string = ATTRIBUTE.POSITION;
+    public uvAttribute: string = ATTRIBUTE.UV;
 
     constructor(gl?: WGL | WGL2) {
         super(DefaultImageProcessVert, DefaultImageProcessFrag, undefined, gl);
@@ -47,7 +47,7 @@ export class DefaultImageProcessShader extends Shader {
             kernelWeight: 'uKernelWeight',
             resolution: 'uResolution',
             flipY: 'uFlipY',
-            kernel:'uKernel[0]',
+            kernel: 'uKernel[0]',
         };
     }
 

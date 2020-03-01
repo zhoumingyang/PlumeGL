@@ -232,9 +232,11 @@ export const DrawFrameBufferTest = () => {
     shader.initParameters();
     scene.add(shader);
 
+    const aPosition = PlumeGL.ATTRIBUTE.POSITION;
+    const aUv = PlumeGL.ATTRIBUTE.UV;
     const mesh = new PlumeGL.Mesh();
-    mesh.setGeometryAttribute(new Float32Array(cubePositions), 'aPosition', PlumeGL.TYPE.STATIC_DRAW, 3, PlumeGL.TYPE.FLOAT, false);
-    mesh.setGeometryAttribute(new Float32Array(cubeTexcoords), 'aUv', PlumeGL.TYPE.STATIC_DRAW, 2, PlumeGL.TYPE.FLOAT, false);
+    mesh.setGeometryAttribute(new Float32Array(cubePositions), aPosition, PlumeGL.TYPE.STATIC_DRAW, 3, PlumeGL.TYPE.FLOAT, false);
+    mesh.setGeometryAttribute(new Float32Array(cubeTexcoords), aUv, PlumeGL.TYPE.STATIC_DRAW, 2, PlumeGL.TYPE.FLOAT, false);
     mesh.initBufferAttributePoint(shader);
 
     srcTexture = createSourceTexture();
