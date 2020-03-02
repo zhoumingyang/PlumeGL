@@ -89,7 +89,13 @@ export class Primitive {
         this.uniqueBuffer = arrayBuffer;
     }
 
-    public setGeometryAttribute(datas: number[] | Float32Array | number, name: string, drawType?: number, size?: number, type?: number, normalize?: boolean): void {
+    public setGeometryAttribute(
+        datas: number[] | Float32Array | number,
+        name: string,
+        drawType?: number,
+        size?: number,
+        type?: number,
+        normalize?: boolean): void {
         if (!datas) {
             console.warn(`data is undefined in setGeometryAttribute`);
             return;
@@ -102,6 +108,7 @@ export class Primitive {
 
         const _gl: WGL | WGL2 = this.gl;
         this.attributes[name] = datas;
+        this.attributes[name].size = size || 3;
         drawType = drawType || _gl.STATIC_DRAW;
         const arrayBuffer = new ArrayBuffer(drawType, _gl);
         arrayBuffer.setBufferData(datas);

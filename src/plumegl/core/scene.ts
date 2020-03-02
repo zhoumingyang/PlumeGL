@@ -230,7 +230,7 @@ export class Scene {
 
         //矩阵更新同时转换到由shader管理
         this.rootNode.traverse((child: Node) => {
-            child.updateWoldMatrix();
+            child.updateWorldMatrix();
             if (child && child.enable && child.p3d) {
                 const drawObject = child.p3d;
                 if (drawObject.shader && !drawObject.shader.p3ds.has(drawObject.uid)) {
@@ -266,11 +266,21 @@ export class Scene {
                     }
                 }
 
+                shaderObj.setGlobalUniformValues();
+
                 drawObj.prepare();
                 if (drawObj.primitive.attributes[ATTRIBUTE.INDICES] && drawObj.primitive.attributes[ATTRIBUTE.INDICES].length) {
                     drawObj.draw(undefined, { cnt: drawObj.primitive.attributes[ATTRIBUTE.INDICES].length, type: TYPE.UNSIGNED_SHORT });
                 } else if (drawObj.primitive.attributes[ATTRIBUTE.POSITION] && drawObj.primitive.attributes[ATTRIBUTE.POSITION].length) {
-                    drawObj.draw({ start: 0, cnt: drawObj.primitive.attributes[ATTRIBUTE.POSITION].length / 3 });
+                    if (!drawObj.isInstance) {
+                        drawObj.draw({ start: 0, cnt: drawObj.primitive.attributes[ATTRIBUTE.POSITION].length / (drawObj.primitive.attributes[ATTRIBUTE.POSITION].size || 3) });
+                    } else {
+                        drawObj.draw(
+                            { start: 0, cnt: drawObj.primitive.attributes[ATTRIBUTE.POSITION].length / (drawObj.primitive.attributes[ATTRIBUTE.POSITION].size || 3) },
+                            undefined,
+                            { instance: true, cnt: drawObj.instanceCount || 1 });
+                    }
+
                 }
                 drawObj.unPrepare();
             });

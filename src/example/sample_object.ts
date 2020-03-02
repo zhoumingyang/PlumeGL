@@ -28,6 +28,10 @@ const matData: number[] = [
     0.0, 0.0, 0.0, 1.0
 ];
 
+export const SampleObject2 = function () {
+
+}
+
 export const SampleObject = function () {
     const cav: any = document.getElementById('main-canvas');
     cav.width = Math.min(window.innerWidth, window.innerHeight);
@@ -42,14 +46,18 @@ export const SampleObject = function () {
 
     const program = new PlumeGL.Shader(sampleObjectVertexSource, sampleObjectFragmentSource);
     program.initParameters();
+    program.initGlobalUniformValues({
+        'material.diffuse[0]': [0],
+        'material.diffuse[1]': [1]
+    });
 
     const positions: Float32Array = new Float32Array(posData);
     const texcoords: Float32Array = new Float32Array(uvData);
 
-    const Mesh = new PlumeGL.Mesh();
-    Mesh.setGeometryAttribute(positions, 'position', gl.STATIC_DRAW, 2, gl.FLOAT, false);
-    Mesh.setGeometryAttribute(texcoords, 'textureCoordinates', gl.STATIC_DRAW, 2, gl.FLOAT, false);
-    Mesh.initBufferAttributePoint(program);
+    const mesh = new PlumeGL.Mesh();
+    mesh.setGeometryAttribute(positions, PlumeGL.ATTRIBUTE.POSITION, PlumeGL.TYPE.STATIC_DRAW, 2, PlumeGL.TYPE.FLOAT, false);
+    mesh.setGeometryAttribute(texcoords, PlumeGL.ATTRIBUTE.UV, PlumeGL.TYPE.STATIC_DRAW, 2, PlumeGL.TYPE.FLOAT, false);
+    mesh.initBufferAttributePoint(program);
 
     let texture = new PlumeGL.Texture2D();
     const samplerA = texture.generateSampler();
@@ -86,22 +94,36 @@ export const SampleObject = function () {
     sceneState.setClearColor(0.0, 0.0, 0.0, 1.0);
     sceneState.setClear(true, false, false);
 
-    const p3d = new PlumeGL.P3D(Mesh, texture);
+    const p3d = new PlumeGL.P3D(mesh, texture);
+    p3d.setInstance(true, 1);
+    p3d.shader = program;
+    const node = new PlumeGL.Node(p3d);
+    node.setWorldTransform(new PlumeGL.Vec3(0, 0, 0), new PlumeGL.Quat(0, 0, 0, 1), new PlumeGL.Vec3(0.8, 0.8, 0.8));
+
+    const scene = new PlumeGL.Scene();
+    scene.addChild(node);
+    scene.setSceneState(sceneState);
+    scene.add(program);
+
+    //camera
+    const fov: number = 60.0 * Math.PI / 180;
+    const aspect: number = 1;
+    const zNear: number = 0.1;
+    const zFar: number = 1000.0;
+    const camera = new PlumeGL.PerspectiveCamera();
+    camera.setPersective(fov, aspect, zNear, zFar);
+    camera.setView(
+        new PlumeGL.Vec3(0.0, 0.0, 10.0),
+        new PlumeGL.Vec3(0.0, 0.0, -1000.0),
+        new PlumeGL.Vec3(0.0, 1.0, 0.0));
+
+    scene.setActiveCamera(camera);
 
     function render() {
         if (!texture) {
             return;
         }
-        sceneState.stateChange();
-        program.use();
-        const matrix: Float32Array = new Float32Array(matData);
-        program.setUniformData('mvp', [matrix]);
-        program.setUniformData('material.diffuse[0]', [0]);
-        program.setUniformData('material.diffuse[1]', [1]);
-        p3d.prepare([0, 1]);
-        p3d.draw({ start: 0, cnt: 6 }, undefined, { instance: true, cnt: 1 });
-        p3d.dispose();
-        program.dispose();
+        scene.render();
     }
 
     ImageLoader.load('../res/Di-3d.png', (image: any) => {

@@ -21,6 +21,8 @@ export class P3D {
     private _shader: Shader;
     private refNode: Node;
     private _order: number = 0;
+    private _isInstance: boolean = false;
+    private _instanceCnt: number = 0;
 
     constructor(primitive: Primitive, texture?: Texture, state?: State) {
         this.primitive = primitive;
@@ -45,6 +47,19 @@ export class P3D {
         this._order = i;
     }
 
+    public get isInstance() {
+        return this._isInstance;
+    }
+
+    public get instanceCount() {
+        return this._instanceCnt;
+    }
+
+    public setInstance(ins: boolean, cnt: number) {
+        this._instanceCnt = cnt;
+        this._isInstance = ins;
+    }
+
     public setRefNode(node: Node): void {
         this.refNode = node;
     }
@@ -56,9 +71,16 @@ export class P3D {
     private _prepareInner(slots: number[] = [0]): void {
         this.primitive && this.primitive.prepare();
         if (this.texture) {
-            slots.forEach((slot) => {
-                this.texture.bind(slot);
-            });
+            if (this.texture.samplers) {
+                const len: number = Object.keys(this.texture.samplers).length;
+                for (let i = 0; i < len; i++) {
+                    this.texture.bind(i);
+                }
+            } else {
+                slots.forEach((slot) => {
+                    this.texture.bind(slot);
+                });
+            }
         }
     }
 
@@ -106,11 +128,12 @@ export class P3D {
         }
     }
 
+    //this method should be called after updateWorldMatrix
     public getModelMat(): Mat4 {
         const cloneModelMat: Mat4 = this.modelMatrix.clone();
         const primitiveModelMat: Mat4 = this.primitive.modelMatrix.clone();
-        if (this.refNode != undefined) {
-            return this.refNode.worldMatrix.multiply(cloneModelMat.multiply(primitiveModelMat));
+        if (this.refNode != undefined && this.refNode instanceof Node) {
+            return this.refNode.matrix.clone().multiply(cloneModelMat.multiply(primitiveModelMat));
         }
         return cloneModelMat.multiply(primitiveModelMat);
     }

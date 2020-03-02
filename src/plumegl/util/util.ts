@@ -39,5 +39,12 @@ export const Util = {
             default:
                 return 0;
         }
+    },
+
+    isEmptyObject: (obj: any): Boolean => {
+        if (JSON.stringify(obj) === "{}") {
+            return true;
+        }
+        return false;
     }
 };

@@ -40,6 +40,7 @@ export class Shader {
     public fb: FeedBack;
     public selfUniform: any = undefined;
     public uniform: any = {};
+    protected globalUniform: any = undefined;
 
     constructor(vertexSource?: string, fragmentSource?: string, fb?: FeedBack, gl?: WGL | WGL2, ) {
         this.gl = gl || this.gl;
@@ -56,6 +57,31 @@ export class Shader {
         if (vertexSource !== undefined && fragmentSource !== undefined) {
             this.compileShader();
         }
+    }
+
+    public initSelfUniform(uniformObj?: any): void {
+        this.selfUniform = uniformObj;
+    }
+
+    public initUniform(): void {
+        if (!this.uniform) {
+            this.uniform = {};
+        }
+        if (!Util.isEmptyObject(this.uniform)) {
+            return;
+        }
+        if (!this.uniformSetterMap) {
+            return;
+        }
+        this.uniformSetterMap.forEach((v: any, k: string) => {
+            let uniformAttr = k;
+            if (uniformAttr[0] === 'u') {
+                let uniformArray: string[] = Array.from(uniformAttr.slice(1));
+                uniformArray[0] = uniformArray[0].toLocaleLowerCase();
+                uniformAttr = uniformArray.join('');
+            }
+            this.uniform[uniformAttr] = k;
+        });
     }
 
     public setShaderSource(vertexSource?: string, fragmentSource?: string) {
@@ -317,6 +343,7 @@ export class Shader {
                 this.uniformLocationMap.set(uniformBlockName, j);
             }
         }
+        this.initUniform();
         this.readyState = true;
     }
 
@@ -353,7 +380,45 @@ export class Shader {
         this.uniformSetterMap.get(name).call(UniformFactory, uniformBuffer.instance);
     }
 
-    public setUniformData(name: string, arg: any[]) {
+    public initGlobalUniformValues(uniformParams: any): void {
+
+        if (!this.uniform || Util.isEmptyObject(this.uniform)) {
+            return;
+        }
+
+        //将uniform变量归为4个部分
+        //1. self uniform， 用于开发者设置，例如相关材质属性
+        //2. matrix uniform，矩阵信息，由绘制物品本身以及camera决定
+        //3. light uniform，由设置的光照决定
+        //4. global uniform，需要全局设置的的uniform，不属于上述3者情况
+
+        //该函数主要设置global uniform，由开发者决定哪些uniform变量是global类型
+        //在render的时候会调用gl低层函数设置对应参数
+
+        if (!this.globalUniform) {
+            this.globalUniform = {};
+        }
+
+        for (let key in uniformParams) {
+            if (!this.globalUniform[key]) {
+                this.globalUniform[key] = {};
+            }
+            this.globalUniform[key].value = uniformParams[key];
+        }
+    }
+
+    public setGlobalUniformValues(): void {
+
+        if (!this.globalUniform || Util.isEmptyObject(this.globalUniform)) {
+            return;
+        }
+
+        for (let key in this.globalUniform) {
+            this.setUniformData(key, this.globalUniform[key].value);
+        }
+    }
+
+    public setUniformData(name: string, arg: any[]): void {
         if (!name || !arg) {
             return;
         }

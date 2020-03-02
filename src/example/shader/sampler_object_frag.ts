@@ -6,13 +6,16 @@ export const sampleObjectFragmentSource =
     struct Material {
         sampler2D diffuse[2];
     };
-    uniform Material material;
-    in vec2 v_st;
-    layout(location = FRAG_COLOR_LOCATION) out vec4 color;
+    uniform Material uMaterial;
+
+    in vec2 vUv;
+
+    layout(location = FRAG_COLOR_LOCATION) out vec4 fragColor;
+
     void main() {
-        if (v_st.y / v_st.x < 1.0) {
-            color = texture(material.diffuse[0], v_st);
+        if (vUv.y / vUv.x < 1.0) {
+            fragColor = texture(uMaterial.diffuse[0], vUv);
         } else {
-            color = texture(material.diffuse[1], v_st) * 0.77;
+            fragColor = texture(uMaterial.diffuse[1], vUv) * 0.77;
         }
     }`;
