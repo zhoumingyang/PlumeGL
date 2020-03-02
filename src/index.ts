@@ -30,7 +30,7 @@ import { DrawTreeNode } from './example/draw_treenode';
 import { DrawBasicGeometryWithNode } from './example/draw_basic_geometrwithnode';
 
 const appRun = () => {
-    // SampleObject();
+    SampleObject();
     // FboBlit();
     // BufferUniform();
     // DrawInstancedUbo();
@@ -59,6 +59,6 @@ const appRun = () => {
     // DrawFrameBufferTest();
     // DrawImageProcess();
     // DrawTreeNode();
-    DrawBasicGeometryWithNode();
+    // DrawBasicGeometryWithNode();
 };
 appRun();

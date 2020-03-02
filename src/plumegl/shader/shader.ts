@@ -58,6 +58,25 @@ export class Shader {
         }
     }
 
+    public initSelfUniform(uniformObj?: any): void {
+        this.selfUniform = uniformObj;
+    }
+
+    public initUniform(): void {
+        if (!this.uniform) {
+            this.uniform = {};
+        }
+        this.uniformSetterMap.forEach((v: any, k: string) => {
+            let uniformAttr = k;
+            if (uniformAttr[0] === 'u') {
+                let uniformArray: string[] = Array.from(uniformAttr.slice(1));
+                uniformArray[0] = uniformArray[0].toLocaleLowerCase();
+                uniformAttr = uniformArray.join('');
+            }
+            this.uniform[uniformAttr] = v;
+        });
+    }
+
     public setShaderSource(vertexSource?: string, fragmentSource?: string) {
         this.vertexSource = vertexSource;
         this.fragmentSource = fragmentSource;

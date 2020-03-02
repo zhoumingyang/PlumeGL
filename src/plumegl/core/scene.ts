@@ -230,7 +230,7 @@ export class Scene {
 
         //矩阵更新同时转换到由shader管理
         this.rootNode.traverse((child: Node) => {
-            child.updateWoldMatrix();
+            child.updateWorldMatrix();
             if (child && child.enable && child.p3d) {
                 const drawObject = child.p3d;
                 if (drawObject.shader && !drawObject.shader.p3ds.has(drawObject.uid)) {

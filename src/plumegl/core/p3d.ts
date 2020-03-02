@@ -106,11 +106,12 @@ export class P3D {
         }
     }
 
+    //this method should be called after updateWorldMatrix
     public getModelMat(): Mat4 {
         const cloneModelMat: Mat4 = this.modelMatrix.clone();
         const primitiveModelMat: Mat4 = this.primitive.modelMatrix.clone();
-        if (this.refNode != undefined) {
-            return this.refNode.worldMatrix.multiply(cloneModelMat.multiply(primitiveModelMat));
+        if (this.refNode != undefined && this.refNode instanceof Node) {
+            return this.refNode.matrix.clone().multiply(cloneModelMat.multiply(primitiveModelMat));
         }
         return cloneModelMat.multiply(primitiveModelMat);
     }

@@ -111,7 +111,7 @@ export class Node extends BaseObject {
         }
     }
 
-    public updateWoldMatrix(): void {
+    public updateWorldMatrix(): void {
         if (!this._dirty) {
             return;
         }

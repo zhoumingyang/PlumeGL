@@ -39,5 +39,9 @@ export const Util = {
             default:
                 return 0;
         }
+    },
+
+    isEmptyObject: (obj: any): Boolean => {
+        return false;
     }
 };
