@@ -46,6 +46,10 @@ export const SampleObject = function () {
 
     const program = new PlumeGL.Shader(sampleObjectVertexSource, sampleObjectFragmentSource);
     program.initParameters();
+    program.initGlobalUniformValues({
+        'material.diffuse[0]': [0],
+        'material.diffuse[1]': [1]
+    });
 
     const positions: Float32Array = new Float32Array(posData);
     const texcoords: Float32Array = new Float32Array(uvData);
@@ -91,6 +95,7 @@ export const SampleObject = function () {
     sceneState.setClear(true, false, false);
 
     const p3d = new PlumeGL.P3D(mesh, texture);
+    p3d.setInstance(true, 1);
     p3d.shader = program;
     const node = new PlumeGL.Node(p3d);
     node.setWorldTransform(new PlumeGL.Vec3(0, 0, 0), new PlumeGL.Quat(0, 0, 0, 1), new PlumeGL.Vec3(0.8, 0.8, 0.8));
@@ -118,16 +123,7 @@ export const SampleObject = function () {
         if (!texture) {
             return;
         }
-        // scene.render();
-        program.use();
-        const matrix: Float32Array = new Float32Array(matData);
-        program.setUniformData('mvp', [matrix]);
-        program.setUniformData('material.diffuse[0]', [0]);
-        program.setUniformData('material.diffuse[1]', [1]);
-        p3d.prepare([0, 1]);
-        p3d.draw({ start: 0, cnt: 6 }, undefined, { instance: true, cnt: 1 });
-        p3d.dispose();
-        program.dispose();
+        scene.render();
     }
 
     ImageLoader.load('../res/Di-3d.png', (image: any) => {

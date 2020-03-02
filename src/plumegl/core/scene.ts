@@ -266,11 +266,21 @@ export class Scene {
                     }
                 }
 
+                shaderObj.setGlobalUniformValues();
+
                 drawObj.prepare();
                 if (drawObj.primitive.attributes[ATTRIBUTE.INDICES] && drawObj.primitive.attributes[ATTRIBUTE.INDICES].length) {
                     drawObj.draw(undefined, { cnt: drawObj.primitive.attributes[ATTRIBUTE.INDICES].length, type: TYPE.UNSIGNED_SHORT });
                 } else if (drawObj.primitive.attributes[ATTRIBUTE.POSITION] && drawObj.primitive.attributes[ATTRIBUTE.POSITION].length) {
-                    drawObj.draw({ start: 0, cnt: drawObj.primitive.attributes[ATTRIBUTE.POSITION].length / 3 });
+                    if (!drawObj.isInstance) {
+                        drawObj.draw({ start: 0, cnt: drawObj.primitive.attributes[ATTRIBUTE.POSITION].length / (drawObj.primitive.attributes[ATTRIBUTE.POSITION].size || 3) });
+                    } else {
+                        drawObj.draw(
+                            { start: 0, cnt: drawObj.primitive.attributes[ATTRIBUTE.POSITION].length / (drawObj.primitive.attributes[ATTRIBUTE.POSITION].size || 3) },
+                            undefined,
+                            { instance: true, cnt: drawObj.instanceCount || 1 });
+                    }
+
                 }
                 drawObj.unPrepare();
             });

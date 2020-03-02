@@ -17,6 +17,6 @@ out vec2 vUv;
 
 void main() {
     vUv = aUv;
-    gl_Position = mvp * vec4(aPosition, 0.0, 1.0) ;
+    gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aPosition, 0.0, 1.0) ;
 }`;
 

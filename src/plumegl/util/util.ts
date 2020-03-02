@@ -42,6 +42,9 @@ export const Util = {
     },
 
     isEmptyObject: (obj: any): Boolean => {
+        if (JSON.stringify(obj) === "{}") {
+            return true;
+        }
         return false;
     }
 };
