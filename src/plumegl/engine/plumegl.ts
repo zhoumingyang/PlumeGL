@@ -19,6 +19,9 @@ import { State } from '../core/state';
 import { P3D } from '../core/p3d';
 import { UniformBuffer } from '../buffer/uniformbuffer';
 import { Scene } from '../core/scene';
+import { Pass } from '../core/pass';
+import { Stage } from '../core/stage';
+import { Pipeline } from '../core/pipeline';
 import { Query } from '../aid/query';
 import { CONSTANT, STATE, ENVMAP, TYPE, ATTRIBUTE } from './constant';
 import { FeedBack } from '../aid/feedback';
@@ -99,6 +102,9 @@ export const PlumeGL = {
     State,
     P3D,
     Scene,
+    Pass,
+    Stage,
+    Pipeline,
     Query,
     CONSTANT,
     ATTRIBUTE,
