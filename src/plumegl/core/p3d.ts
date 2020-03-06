@@ -71,7 +71,7 @@ export class P3D {
     private _prepareInner(slots: number[] = [0]): void {
         this.primitive && this.primitive.prepare();
         if (this.texture) {
-            if (this.texture.samplers) {
+            if (this.texture.samplers && !Util.isEmptyObject(this.texture.samplers)) {
                 const len: number = Object.keys(this.texture.samplers).length;
                 for (let i = 0; i < len; i++) {
                     this.texture.bind(i);

@@ -163,7 +163,6 @@ const createFirstPassState = (): any => {
     state.setClear(true, true, false);
     state.setDepthTest(true);
     state.setCullFace(true, PlumeGL.STATE.CULLFACE_BACK);
-    state.setViewPort(0, 0, 256, 256);
     state.setClearColor(0.2, 0.2, 0.65, 1);
     return state;
 };
@@ -173,7 +172,6 @@ const createSecondPassState = (): any => {
     state.setClear(true, true, false);
     state.setDepthTest(true);
     state.setCullFace(true, PlumeGL.STATE.CULLFACE_BACK);
-    state.setViewPort(0, 0, PlumeGL.getSize().x, PlumeGL.getSize().y);
     state.setClearColor(0, 0, 0, 1);
     return state;
 }
@@ -269,6 +267,10 @@ const renderScene = (time: number) => {
     requestAnimationFrame(renderScene);
 }
 
+const _draw = () => {
+    stage.render();
+}
+
 const renderSceneWidthPipeline = (time: number) => {
 
     time *= 0.001;
@@ -278,7 +280,14 @@ const renderSceneWidthPipeline = (time: number) => {
     xRad += -0.7 * deltaTime;
     yRad += -0.4 * deltaTime;
 
+    let yrm = new PlumeGL.Mat4();
+    yrm = yrm.rotate(yRad, new PlumeGL.Vec3(0, 1, 0));
 
+    node1.worldMatrix = yrm;
+    node2.worldMatrix = yrm;
+
+    _draw();
+    requestAnimationFrame(renderSceneWidthPipeline);
 }
 
 export const DrawFrameBufferTest = () => {
@@ -291,6 +300,9 @@ export const DrawFrameBufferTest = () => {
 
     const shader = new PlumeGL.Shader(DrawFrameBufferVert, DrawFrameBufferFrag);
     shader.initParameters();
+    shader.initGlobalUniformValues({
+        'uTexture': [0]
+    });
     scene.add(shader);
 
     const aPosition = PlumeGL.ATTRIBUTE.POSITION;
@@ -304,18 +316,22 @@ export const DrawFrameBufferTest = () => {
     tagTexture = createTargetTexture();
 
     const p3d = new PlumeGL.P3D(mesh);
-    shader.addDrawObject(p3d);
+    // shader.addDrawObject(p3d);
 
     fbo = createFbo(tagTexture);
 
     let pass1, pass2;
     stage = new PlumeGL.Stage('fbo_test');
 
+    const _camera = createCamera();
+
     {
+        //pass1 draw to srcTexture
         const scene1 = initScene();
         scene1.state.setViewPort(0, 0, 256, 256);
         scene1.add(shader);
         scene1.setViewportRelated(true);
+        scene1.setActiveCamera(_camera);
         const _p3d = new PlumeGL.P3D(mesh, srcTexture);
         _p3d.shader = shader;
         node1 = new PlumeGL.Node(_p3d);
@@ -326,10 +342,12 @@ export const DrawFrameBufferTest = () => {
     }
 
     {
+        //pass2 draw to screen
         const scene2 = initScene();
         scene2.state.setViewPort(0, 0, PlumeGL.getSize().x, PlumeGL.getSize().y);
         scene2.add(shader);
         scene2.setViewportRelated(true);
+        scene2.setActiveCamera(_camera);
         const _p3d = new PlumeGL.P3D(mesh, tagTexture);
         _p3d.shader = shader;
         node2 = new PlumeGL.Node(_p3d);
@@ -339,5 +357,6 @@ export const DrawFrameBufferTest = () => {
         stage.addPass(pass2);
     }
 
-    requestAnimationFrame(renderScene);
+    // requestAnimationFrame(renderScene);
+    requestAnimationFrame(renderSceneWidthPipeline);
 };
