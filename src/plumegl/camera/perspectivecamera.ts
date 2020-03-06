@@ -50,4 +50,24 @@ export class PerspectiveCamera extends Camera {
         this.viewMatrix = new Mat4().lookAt(this.position, this.target, this.up);
         this.projectMatrix = new Mat4().perspective(this.fovy, this.aspect, this.near, this.far);
     }
+
+    public updateFov(fov: number): void {
+        this.fovy = fov;
+        this.updateMat();
+    }
+
+    public updateAspect(aspect: number): void {
+        this.aspect = aspect;
+        this.updateMat();
+    }
+
+    public updateNearClipPlane(near: number): void {
+        this.near = near;
+        this.updateMat();
+    }
+
+    public updateFarClipPlane(far: number): void {
+        this.far = far;
+        this.updateMat();
+    }
 }

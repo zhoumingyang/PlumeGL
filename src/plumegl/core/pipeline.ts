@@ -13,6 +13,7 @@ export class Pipeline {
         this.name = name;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 1000) uuid = 0;
+        this.stages = [];
     }
 
     public addStage(stage: Stage): void {
@@ -49,5 +50,9 @@ export class Pipeline {
         this.stages.forEach((stage: Stage) => {
             stage.render();
         });
+    }
+
+    public clear(): void {
+        this.stages = [];
     }
 }

@@ -97,4 +97,17 @@ export class Camera {
         const modelViewMatrix: Mat4 = this.getModelViewMat(modelMatrix);
         return projectMatrix.multiply(modelViewMatrix);
     }
+
+    public updateFov(fov: number): void {
+
+    }
+
+    public updateAspect(aspect: number): void {
+    }
+
+    public updateNearClipPlane(near: number): void {
+    }
+
+    public updateFarClipPlane(far: number): void {
+    }
 }

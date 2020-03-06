@@ -13,6 +13,7 @@ export class Stage {
         this.name = name;
         this.uid = Util.random13(13, uuid++);
         if (uuid >= 1000) uuid = 0;
+        this.passes = [];
     }
 
     public addPass(pass: Pass) {
@@ -49,5 +50,9 @@ export class Stage {
         this.passes.forEach((pass: Pass) => {
             pass.render();
         });
+    }
+
+    public clear(): void {
+        this.passes = [];
     }
 }

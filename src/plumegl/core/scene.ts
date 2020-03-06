@@ -26,6 +26,7 @@ export class Scene {
     public activeCamera: Camera;
     public cameras: any;
     public rootNode: Node = new Node();
+    private viewportRelated: boolean = false;
     static MAX_AMBIENT_LIGHTS = 10;
     static MAX_PARALLEL_LIGHTS = 10;
     static MAX_POINT_LIGHTS = 10;
@@ -40,6 +41,14 @@ export class Scene {
         this.parallelLights = {};
         this.spotLights = {};
         this.cameras = {};
+    }
+
+    public setViewportRelated(is: boolean): void {
+        this.viewportRelated = is;
+    }
+
+    public isViewportRelated(): boolean {
+        return this.viewportRelated;
     }
 
     public addLight(light: any): void {
@@ -242,6 +251,13 @@ export class Scene {
         this.forEachRender((shaderObj: Shader) => {
             if (!shaderObj) {
                 return;
+            }
+
+            if (this.viewportRelated) {
+                const viewport = this.state.viewport;
+                const { width, height } = viewport.value;
+                const newAspect = width / height;
+                this.activeCamera.updateAspect(newAspect);
             }
 
             shaderObj.forEachDraw((drawObj: P3D) => {

@@ -99,6 +99,9 @@ let fbo: any;
 let scene: any;
 let srcTexture: any;
 let tagTexture: any;
+let stage: any;
+let p3d1: any, p3d2: any;
+let node1: any, node2: any;
 
 const createGLContext = () => {
     cav = document.getElementById('main-canvas');
@@ -138,11 +141,42 @@ const createTargetTexture = (): any => {
 const initScene = (): any => {
     const scene = new PlumeGL.Scene();
     scene.setSceneState(new PlumeGL.State());
-    scene.state.setClear(true, true, false);
-    scene.state.setDepthTest(true);
-    scene.state.setCullFace(true, PlumeGL.STATE.CULLFACE_BACK);
+    // scene.state.setClear(true, true, false);
+    // scene.state.setDepthTest(true);
+    // scene.state.setCullFace(true, PlumeGL.STATE.CULLFACE_BACK);
     return scene;
 };
+
+const createStage = (): any => {
+    const stage = new PlumeGL.Stage('FrameBufferTest');
+    return stage;
+};
+
+const createPass = (scene: any, fbo: any, state: any): any => {
+    const pass = new PlumeGL.Pass(scene, fbo);
+    pass.setState(state);
+    return pass;
+};
+
+const createFirstPassState = (): any => {
+    const state = new PlumeGL.State();
+    state.setClear(true, true, false);
+    state.setDepthTest(true);
+    state.setCullFace(true, PlumeGL.STATE.CULLFACE_BACK);
+    state.setViewPort(0, 0, 256, 256);
+    state.setClearColor(0.2, 0.2, 0.65, 1);
+    return state;
+};
+
+const createSecondPassState = (): any => {
+    const state = new PlumeGL.State();
+    state.setClear(true, true, false);
+    state.setDepthTest(true);
+    state.setCullFace(true, PlumeGL.STATE.CULLFACE_BACK);
+    state.setViewPort(0, 0, PlumeGL.getSize().x, PlumeGL.getSize().y);
+    state.setClearColor(0, 0, 0, 1);
+    return state;
+}
 
 const createFbo = (attachTexture: any) => {
     const fb = new PlumeGL.FrameBuffer();
@@ -172,6 +206,21 @@ const getCameraProjectViewMat = (aspect: number): any => {
     const pvm = pm.clone().multiply(ivm);
 
     return pvm;
+}
+
+const createCamera = (): any => {
+
+    function degToRad(d: number) {
+        return d * Math.PI / 180;
+    }
+    let fieldOfViewRadians = degToRad(60);
+
+    const camera = new PlumeGL.PerspectiveCamera();
+    camera.setPersective(fieldOfViewRadians, 1, 1, 2000);
+    camera.setView(new PlumeGL.Vec3(0, 0, 2), new PlumeGL.Vec3(0, 0, 0), new PlumeGL.Vec3(0, 1, 0));
+    camera.updateMat();
+
+    return camera;
 }
 
 const draw = (aspect: number, blue: boolean) => {
@@ -220,6 +269,18 @@ const renderScene = (time: number) => {
     requestAnimationFrame(renderScene);
 }
 
+const renderSceneWidthPipeline = (time: number) => {
+
+    time *= 0.001;
+    let deltaTime = time - last;
+    last = time;
+
+    xRad += -0.7 * deltaTime;
+    yRad += -0.4 * deltaTime;
+
+
+}
+
 export const DrawFrameBufferTest = () => {
     gl = createGLContext();
     if (!gl) {
@@ -246,6 +307,37 @@ export const DrawFrameBufferTest = () => {
     shader.addDrawObject(p3d);
 
     fbo = createFbo(tagTexture);
+
+    let pass1, pass2;
+    stage = new PlumeGL.Stage('fbo_test');
+
+    {
+        const scene1 = initScene();
+        scene1.state.setViewPort(0, 0, 256, 256);
+        scene1.add(shader);
+        scene1.setViewportRelated(true);
+        const _p3d = new PlumeGL.P3D(mesh, srcTexture);
+        _p3d.shader = shader;
+        node1 = new PlumeGL.Node(_p3d);
+        scene1.addChild(node1);
+        const _state = createFirstPassState();
+        pass1 = createPass(scene1, fbo, _state);
+        stage.addPass(pass1);
+    }
+
+    {
+        const scene2 = initScene();
+        scene2.state.setViewPort(0, 0, PlumeGL.getSize().x, PlumeGL.getSize().y);
+        scene2.add(shader);
+        scene2.setViewportRelated(true);
+        const _p3d = new PlumeGL.P3D(mesh, tagTexture);
+        _p3d.shader = shader;
+        node2 = new PlumeGL.Node(_p3d);
+        const _state = createSecondPassState();
+        scene2.addChild(node2);
+        pass2 = createPass(scene2, undefined, _state);
+        stage.addPass(pass2);
+    }
 
     requestAnimationFrame(renderScene);
 };
