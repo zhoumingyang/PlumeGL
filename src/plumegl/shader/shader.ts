@@ -467,6 +467,10 @@ export class Shader {
         _gl.transformFeedbackVaryings(this.instance, varyings, operation);
     }
 
+    public clone() {
+
+    }
+
     public dispose(): void {
         const _gl: WGL | WGL2 = this.gl;
         this.unUse();

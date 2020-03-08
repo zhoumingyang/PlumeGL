@@ -303,7 +303,7 @@ export const DrawFrameBufferTest = () => {
     shader.initGlobalUniformValues({
         'uTexture': [0]
     });
-    scene.add(shader);
+    // scene.add(shader);
 
     const aPosition = PlumeGL.ATTRIBUTE.POSITION;
     const aUv = PlumeGL.ATTRIBUTE.UV;
@@ -312,10 +312,26 @@ export const DrawFrameBufferTest = () => {
     mesh.setGeometryAttribute(new Float32Array(cubeTexcoords), aUv, PlumeGL.TYPE.STATIC_DRAW, 2, PlumeGL.TYPE.FLOAT, false);
     mesh.initBufferAttributePoint(shader);
 
+
+     //TODO 关于shader的clone，如果不同的render pass用同一个shader，需要两个逻辑上的shader实例
+    //但对应一个program
+    const shader2 = new PlumeGL.Shader(DrawFrameBufferVert, DrawFrameBufferFrag);
+    shader2.initParameters();
+    shader2.initGlobalUniformValues({
+        'uTexture': [0]
+    });
+
+    const aPosition2 = PlumeGL.ATTRIBUTE.POSITION;
+    const aUv2 = PlumeGL.ATTRIBUTE.UV;
+    const mesh2 = new PlumeGL.Mesh();
+    mesh2.setGeometryAttribute(new Float32Array(cubePositions), aPosition2, PlumeGL.TYPE.STATIC_DRAW, 3, PlumeGL.TYPE.FLOAT, false);
+    mesh2.setGeometryAttribute(new Float32Array(cubeTexcoords), aUv2, PlumeGL.TYPE.STATIC_DRAW, 2, PlumeGL.TYPE.FLOAT, false);
+    mesh2.initBufferAttributePoint(shader2);
+
     srcTexture = createSourceTexture();
     tagTexture = createTargetTexture();
 
-    const p3d = new PlumeGL.P3D(mesh);
+    // const p3d = new PlumeGL.P3D(mesh);
     // shader.addDrawObject(p3d);
 
     fbo = createFbo(tagTexture);
@@ -344,12 +360,12 @@ export const DrawFrameBufferTest = () => {
     {
         //pass2 draw to screen
         const scene2 = initScene();
-        scene2.state.setViewPort(0, 0, PlumeGL.getSize().x, PlumeGL.getSize().y);
-        scene2.add(shader);
+        scene2.state.setViewPort(0, 0, PlumeGL.getSize().x, PlumeGL.getSize().y);+
+        scene2.add(shader2);
         scene2.setViewportRelated(true);
         scene2.setActiveCamera(_camera);
-        const _p3d = new PlumeGL.P3D(mesh, tagTexture);
-        _p3d.shader = shader;
+        const _p3d = new PlumeGL.P3D(mesh2, tagTexture);
+        _p3d.shader = shader2;
         node2 = new PlumeGL.Node(_p3d);
         const _state = createSecondPassState();
         scene2.addChild(node2);
