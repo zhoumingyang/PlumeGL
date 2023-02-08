@@ -60,5 +60,6 @@ const appRun = () => {
     // DrawImageProcess();
     // DrawTreeNode();
     // DrawBasicGeometryWithNode();
+    console.log('app run...');
 };
 appRun();
